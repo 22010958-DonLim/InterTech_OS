@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrawberryHub", "StrawberryHub\StrawberryHub.csproj", "{BC1ABAE1-25EC-4805-A380-D46A8B0872BF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BC1ABAE1-25EC-4805-A380-D46A8B0872BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC1ABAE1-25EC-4805-A380-D46A8B0872BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC1ABAE1-25EC-4805-A380-D46A8B0872BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC1ABAE1-25EC-4805-A380-D46A8B0872BF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8E65CDC3-9348-4055-B8C7-6B05BAA6BA5E}
+	EndGlobalSection
+EndGlobal
