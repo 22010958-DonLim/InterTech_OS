@@ -13,5 +13,7 @@ public partial class Article
 
     public DateTime PublishedDate { get; set; }
 
+
+    [ValidateNever]
     public virtual GoalType GoalType { get; set; } = null!;
 }

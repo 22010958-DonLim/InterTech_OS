@@ -13,5 +13,7 @@ public partial class EmergencySupport
 
     public string Message { get; set; } = null!;
 
+
+    [ValidateNever]
     public virtual User User { get; set; } = null!;
 }

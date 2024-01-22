@@ -21,13 +21,18 @@ public partial class User
 
     public int? RankId { get; set; }
 
+    [ValidateNever]
     public virtual ICollection<EmergencySupport> EmergencySupport { get; set; } = new List<EmergencySupport>();
 
+    [ValidateNever]
     public virtual ICollection<Goal> Goal { get; set; } = new List<Goal>();
 
+    [ValidateNever]
     public virtual Rank Rank { get; set; } = null!;
 
+    [ValidateNever]
     public virtual ICollection<Reflection> Reflection { get; set; } = new List<Reflection>();
 
+    [ValidateNever]
     public virtual ICollection<Task> Task { get; set; } = new List<Task>();
 }

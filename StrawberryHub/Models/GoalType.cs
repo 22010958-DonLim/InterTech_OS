@@ -9,7 +9,10 @@ public partial class GoalType
 
     public string Type { get; set; } = null!;
 
+
+    [ValidateNever]
     public virtual ICollection<Article> Article { get; set; } = new List<Article>();
 
+    [ValidateNever]
     public virtual ICollection<Goal> Goal { get; set; } = new List<Goal>();
 }

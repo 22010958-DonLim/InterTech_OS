@@ -13,5 +13,7 @@ public partial class Rank
 
     public int MaxPoints { get; set; }
 
+
+    [ValidateNever]
     public virtual ICollection<User> User { get; set; } = new List<User>();
 }

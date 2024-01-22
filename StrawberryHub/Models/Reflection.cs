@@ -13,5 +13,7 @@ public partial class Reflection
 
     public string Content { get; set; } = null!;
 
+
+    [ValidateNever]
     public virtual User User { get; set; } = null!;
 }

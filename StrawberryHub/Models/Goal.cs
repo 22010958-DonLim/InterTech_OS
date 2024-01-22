@@ -11,7 +11,10 @@ public partial class Goal
 
     public int? GoalTypeId { get; set; }
 
+
+    [ValidateNever]
     public virtual GoalType GoalType { get; set; } = null!;
 
+    [ValidateNever]
     public virtual User User { get; set; } = null!;
 }

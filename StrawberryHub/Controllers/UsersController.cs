@@ -63,8 +63,9 @@ namespace StrawberryHub.Controllers
             {
                 _context.Add(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
+
             ViewData["RankId"] = new SelectList(_context.Rank, "RankId", "RankId", user.RankId);
             return View(user);
         }
@@ -150,10 +151,15 @@ namespace StrawberryHub.Controllers
             {
                 return Problem("Entity set 'AppDbContext.User'  is null.");
             }
+
             var user = await _context.User.FindAsync(id);
             if (user != null)
             {
                 _context.User.Remove(user);
+
+                //Remove the UserID in Task as well (Task contain foregin Key of UserID)
+                var tasksToRemove = _context.Task.Where(t => t.UserId == id);
+                _context.Task.RemoveRange(tasksToRemove);
             }
             
             await _context.SaveChangesAsync();

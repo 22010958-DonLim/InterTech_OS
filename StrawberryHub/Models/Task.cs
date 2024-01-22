@@ -15,5 +15,7 @@ public partial class Task
 
     public int PointsReward { get; set; }
 
+
+    [ValidateNever]
     public virtual User User { get; set; } = null!;
 }
