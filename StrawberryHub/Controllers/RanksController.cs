@@ -60,6 +60,13 @@ namespace StrawberryHub.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Check if a Rank with the same RankName already exists
+                if (_context.Rank.Any(r => r.RankName == rank.RankName))
+                {
+                    ModelState.AddModelError("RankName", "Rank with this name already exists.");
+                    return View(rank);
+                }
+
                 _context.Add(rank);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
