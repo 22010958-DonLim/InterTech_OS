@@ -1,5 +1,8 @@
+using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using RP.SOI.DotNet.Services;
+using System.Text.Unicode;
+using System.Text;
 
 namespace StrawberryHub.Controllers;
 
@@ -40,7 +43,7 @@ public class AccountController : Controller
                   new ClaimsIdentity(
                      new Claim[] {
                         new Claim(ClaimTypes.NameIdentifier, appUser.Username),
-                        new Claim(ClaimTypes.Name, appUser.FirstName)
+                        new Claim(ClaimTypes.Name, appUser.Username)
                      },
                      "Basic"
                   )
@@ -61,7 +64,9 @@ public class AccountController : Controller
     [HttpPost]
     public IActionResult Login(User user)
     {
-        if (!AuthenticateUser(user.Username, user.Password,
+        // Convert byte array to string using UTF-8 encoding
+            string thePassword = Encoding.UTF8.GetString(user.Password);
+        if (!AuthenticateUser(user.Username, thePassword,
                 out ClaimsPrincipal? principal))
         {
             ViewData["Message"] = "Incorrect User Id or Password";

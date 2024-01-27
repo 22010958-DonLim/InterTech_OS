@@ -11,7 +11,7 @@ public partial class User
 
     public byte[] Password { get; set; } = null!;
 
-    public string FirstName { get; set; } = null!;
+    public string? FirstName { get; set; }
 
     public string? LastName { get; set; }
 
@@ -20,7 +20,6 @@ public partial class User
     public int? Points { get; set; }
 
     public int? RankId { get; set; }
-    public DateTime? LastLogin { get; set; }
 
     [ValidateNever]
     public virtual ICollection<EmergencySupport> EmergencySupport { get; set; } = new List<EmergencySupport>();
