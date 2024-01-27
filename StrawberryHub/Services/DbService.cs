@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 using System.Dynamic;
 using System.Reflection;
 
-namespace RP.SOI.DotNet.Services;
+namespace StrawberryHub.Services;
 
 public interface IDbService
 {
