@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 using StrawberryHub.Models;
 using StrawberryHub.Services;
 
@@ -13,6 +16,10 @@ namespace StrawberryHub.Controllers
     public class UsersController : Controller
     {
         private readonly AppDbContext _context;
+
+        private const string REGISTER_VIEW = "Register";
+        private const string REDIRECT_CNTR = "Users";
+        private const string REDIRECT_ACTN = "Index";
 
         public UsersController(AppDbContext context)
         {
@@ -68,6 +75,58 @@ namespace StrawberryHub.Controllers
 
             ViewData["RankId"] = new SelectList(_context.Rank, "RankId", "RankId", user.RankId);
             return View(user);
+        }
+
+        [AllowAnonymous]
+        public IActionResult Register(string returnUrl = null!)
+        {
+            TempData["ReturnUrl"] = returnUrl;
+            return View(REGISTER_VIEW);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult Register(RegisterUser user)
+        {
+            IFormCollection form = HttpContext.Request.Form;
+
+            string thePassword = form["Password"].ToString().Trim();
+            //string thePassword = user.UserPassword;
+
+            // Assuming user.UserPassword is a byte array
+            // byte[] passwordBytes = user.UserPassword;
+
+            // Convert byte array to string using UTF-8 encoding
+            //string thePassword = Encoding.UTF8.GetString(passwordBytes);
+
+
+            byte[] passwordHash;
+            using (var sha1 = SHA1.Create())
+            {
+                passwordHash =
+                    sha1.ComputeHash(Encoding.UTF8.GetBytes(thePassword));
+            }
+
+            User newUser = new User();
+
+            newUser.Password = passwordHash;
+            newUser.Email = user.Email;
+            newUser.FirstName = user.FirstName;
+            newUser.LastName = user.LastName;
+            newUser.Username = user.Username;
+            newUser.Points = 0;
+            newUser.RankId = 1;
+            //newUser.DateOfReg = DateTime.Now;
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(newUser);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction(REDIRECT_ACTN, REDIRECT_CNTR);
+
         }
 
         // GET: Users/Edit/5

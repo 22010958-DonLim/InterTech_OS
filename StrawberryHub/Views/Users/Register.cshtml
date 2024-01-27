@@ -1,0 +1,140 @@
+﻿@model RegisterUser
+@{
+    Layout = "_Layout";
+}
+
+<form asp-controller="Users" asp-action="Register" method="post">
+
+
+    <div class="container">
+
+        @if (ViewData["Message"] != null)
+        {
+            <div class="mb-3">
+                <div class="alert alert-secondary">
+                    <text>@ViewData["Message"]</text>
+                </div>
+            </div>
+        }
+
+        <h4><b>Register Employee</b></h4>
+
+        <div class="form-container">
+            <div class="mb-3">
+                <label asp-for="Username" class="form-label fw-bold"></label>
+                <input asp-for="Username" class="form-control form-control-sm" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="FirstName" class="form-label fw-bold">First Name :</label>
+                <input asp-for="FirstName" class="form-control form-control-sm" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="LastName" class="form-label fw-bold">Last Name :</label>
+                <input asp-for="LastName" class="form-control form-control-sm" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label fw-bold">Email Address :</label>
+                <input asp-for="Email" class="form-control form-control-sm" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label fw-bold">Password :</label>
+                <input asp-for="Password" class="form-control form-control-sm" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <input type="submit" class="btn btn-sm btn-primary" value="Register" />
+                <a asp-controller="Users" asp-action="Index" class="btn btn-back">Back to List</a>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+
+<style>
+    body {
+        background-color: #B9EBFF;
+        color: black;
+        font-family: 'Arial Rounded MT';
+    }
+
+    .container {
+        max-width: 800px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    h4 {
+        font-weight: bold;
+        margin-bottom: 20px;
+        margin-left: 240px;
+    }
+
+    .form-container {
+        background-color: white;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+        color: #495057;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 12px;
+        box-sizing: border-box;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        margin-top: 5px;
+    }
+
+    .btn-primary,
+    .btn-back {
+        width: 48%;
+        padding: 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+        font-size: 16px;
+        display: inline-block;
+    }
+
+    .btn-primary {
+        background-color: #3498db;
+        color: #ffffff;
+    }
+
+    .btn-back {
+        background-color: #5bc0de;
+        color: #ffffff;
+    }
+
+    .btn-primary:hover {
+        background-color: #2980b9;
+        color: black;
+    }
+
+    .btn-back:hover {
+        background-color: #46b8da;
+        color: black;
+    }
+</style>
