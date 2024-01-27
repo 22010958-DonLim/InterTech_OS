@@ -25,43 +25,77 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
+                @if (User.Identity!.IsAuthenticated)
+                {
+                    <div class="text-center my-2">
+                        <span class="fs-5">
+                            Welcome @User.Identity.Name<br>
+                        </span>
+                        <span class="fs-6">
+                            (@User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value Privilege)
+                        </span>
+                    </div>
+
+                    <div class="text-center">
+                        <a asp-controller="Account" asp-action="Logoff"
+                       asp-route-returnUrl="Home" class="btn btn-link fs-6">
+                            Sign Off
+                        </a>
+                    </div>
+
+                }
+                else
+                {
+                    <div class="text-center">
+                        <a asp-controller="Account" asp-action="Login"
+                       asp-route-returnUrl="Home" class="btn btn-link fs-6">
+                            Login
+                        </a>
+                    </div>
+                }
+
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
-                        </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Tasks" asp-action="Index">Tasks</a>
-                        </li>
+                        @if (User.Identity!.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Reflections" asp-action="Index">Reflections</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Tasks" asp-action="Index">Tasks</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Ranks" asp-action="Index">Ranks</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Reflections" asp-action="Index">Reflections</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="GoalTypes" asp-action="Index">Goal Types</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Ranks" asp-action="Index">Ranks</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Goals" asp-action="Index">Goals</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="GoalTypes" asp-action="Index">Goal Types</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="EmergencySupports" asp-action="Index">Emergency Supprots</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Goals" asp-action="Index">Goals</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Articles" asp-action="Index">Articles</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="EmergencySupports" asp-action="Index">Emergency Supprots</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Articles" asp-action="Index">Articles</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>
+                        }
+           
                     </ul>
                 </div>
             </div>

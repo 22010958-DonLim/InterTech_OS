@@ -229,5 +229,9 @@ namespace StrawberryHub.Controllers
         {
           return (_context.User?.Any(e => e.UserId == id)).GetValueOrDefault();
         }
+        public IActionResult Login()
+        {
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

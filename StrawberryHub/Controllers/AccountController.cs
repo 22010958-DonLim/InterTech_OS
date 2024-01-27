@@ -82,13 +82,6 @@ public class AccountController : Controller
                    IsPersistent = true
                });
 
-            var updateSQL =
-                @"UPDATE AppUser 
-                    SET LastLogin = GETDATE() 
-                    WHERE Id = '{0}'";
-            string sql = String.Format(updateSQL, user.UserId);
-            int _ = _dbCtx.Database.ExecuteSqlRaw(sql);
-
             string? returnUrl = TempData["returnUrl"]?.ToString();
             if (returnUrl != null && Url.IsLocalUrl(returnUrl))
             {
