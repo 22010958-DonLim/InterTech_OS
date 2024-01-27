@@ -70,7 +70,7 @@ public class AccountController : Controller
         {
             ViewData["Message"] = "Incorrect User Id or Password";
             ViewData["MsgType"] = "warning";
-            return View(LOGIN_VIEW);
+            return View(LOGIN_VIEW, user);
         }
         else
         {
