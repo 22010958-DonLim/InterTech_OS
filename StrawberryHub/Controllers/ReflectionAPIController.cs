@@ -22,9 +22,9 @@ namespace StrawberryHub.Controllers.API
 
         // GET: api/ReflectionsAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Reflection>>> GetReflections()
+        public async Task<ActionResult<IEnumerable<StrawberryReflection>>> GetReflections()
         {
-            var reflections = await _context.Reflection.ToListAsync();
+            var reflections = await _context.StrawberryReflection.ToListAsync();
 
             var jsonOptions = new JsonSerializerOptions
             {
@@ -38,9 +38,9 @@ namespace StrawberryHub.Controllers.API
 
         // GET: api/ReflectionsAPI/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Reflection>> GetReflection(int id)
+        public async Task<ActionResult<StrawberryReflection>> GetReflection(int id)
         {
-            var reflection = await _context.Reflection
+            var reflection = await _context.StrawberryReflection
                 .Include(r => r.User) // Include related User data if needed
                 .FirstOrDefaultAsync(m => m.ReflectionId == id);
 
@@ -54,7 +54,7 @@ namespace StrawberryHub.Controllers.API
 
         // PUT: api/ReflectionsAPI/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutReflection(int id, Reflection reflection)
+        public async Task<IActionResult> PutReflection(int id, StrawberryReflection reflection)
         {
             if (id != reflection.ReflectionId)
             {
@@ -84,9 +84,9 @@ namespace StrawberryHub.Controllers.API
 
         // POST: api/ReflectionsAPI
         [HttpPost]
-        public async Task<ActionResult<Reflection>> PostReflection(Reflection reflection)
+        public async Task<ActionResult<StrawberryReflection>> PostReflection(StrawberryReflection reflection)
         {
-            _context.Reflection.Add(reflection);
+            _context.StrawberryReflection.Add(reflection);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetReflection", new { id = reflection.ReflectionId }, reflection);
@@ -94,15 +94,15 @@ namespace StrawberryHub.Controllers.API
 
         // DELETE: api/ReflectionsAPI/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Reflection>> DeleteReflection(int id)
+        public async Task<ActionResult<StrawberryReflection>> DeleteReflection(int id)
         {
-            var reflection = await _context.Reflection.FindAsync(id);
+            var reflection = await _context.StrawberryReflection.FindAsync(id);
             if (reflection == null)
             {
                 return NotFound("Reflection not found");
             }
 
-            _context.Reflection.Remove(reflection);
+            _context.StrawberryReflection.Remove(reflection);
             await _context.SaveChangesAsync();
 
             return reflection;
@@ -110,7 +110,7 @@ namespace StrawberryHub.Controllers.API
 
         private bool ReflectionExists(int id)
         {
-            return _context.Reflection.Any(e => e.ReflectionId == id);
+            return _context.StrawberryReflection.Any(e => e.ReflectionId == id);
         }
     }
 }

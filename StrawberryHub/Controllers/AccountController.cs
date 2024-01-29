@@ -8,7 +8,7 @@ namespace StrawberryHub.Controllers;
 public class AccountController : Controller
 {
     private const string REDIRECT_CNTR = "Home";
-    private const string REDIRECT_ACTN = "Strawberry";
+    private const string REDIRECT_ACTN = "Index";
     private const string LOGIN_VIEW = "Login";
 
     private readonly AppDbContext _dbCtx;
@@ -20,18 +20,17 @@ public class AccountController : Controller
         _authSvc = authSvc;
     }
 
-    private bool AuthenticateUser(string uid, string pw,
-                                  out ClaimsPrincipal? principal)
+    private bool AuthenticateUser(string uid, string pw, out ClaimsPrincipal? principal)
     {
         principal = null;
 
         var sql = String.Format(
-            @"SELECT * FROM User 
+            @"SELECT * FROM StrawberryUser 
                WHERE Username = '{0}' 
                  AND Password = HASHBYTES('SHA1', '{1}')",
             uid.EscQuote(),  // prevent SQL Injection 
             pw.EscQuote());  // prevent SQL Injection
-        User? appUser = _dbCtx.User
+        StrawberryUser? appUser = _dbCtx.StrawberryUser
             .FromSqlRaw(sql)
             .FirstOrDefault();
 
@@ -42,7 +41,8 @@ public class AccountController : Controller
                   new ClaimsIdentity(
                      new Claim[] {
                         new Claim(ClaimTypes.NameIdentifier, appUser.Username),
-                        new Claim(ClaimTypes.Name, appUser.Username)
+                        new Claim(ClaimTypes.Name, appUser.FirstName),
+                        new Claim(ClaimTypes.Role, appUser.UserRole)
                      },
                      "Basic"
                   )
@@ -52,7 +52,7 @@ public class AccountController : Controller
         return false;
     }
 
-        [AllowAnonymous]
+    [AllowAnonymous]
     public IActionResult Login(string? returnUrl = null)
     {
         TempData["ReturnUrl"] = returnUrl;
@@ -61,11 +61,15 @@ public class AccountController : Controller
 
     [AllowAnonymous]
     [HttpPost]
-    public IActionResult Login(User user)
+    public IActionResult Login(LoginUser user)
     {
+        const string sqlLogin =
+                @"SELECT UserId, Username, UserRole FROM StrawberryUser WHERE Username = '{0}' 
+                 AND Password = HASHBYTES('SHA1', '{1}')";
+
         // Convert byte array to string using UTF-8 encoding
-            string thePassword = Encoding.UTF8.GetString(user.Password);
-        if (!AuthenticateUser(user.Username, thePassword,
+        //string thePassword = Encoding.UTF8.GetString(user.Password);
+        if (!_authSvc.Authenticate(sqlLogin, user.Username, user.Password,
                 out ClaimsPrincipal? principal))
         {
             ViewData["Message"] = "Incorrect User Id or Password";
@@ -82,12 +86,6 @@ public class AccountController : Controller
                    IsPersistent = true
                });
 
-            var updateSQL =
-                @"UPDATE AppUser 
-                    SET LastLogin = GETDATE() 
-                    WHERE Id = '{0}'";
-            string sql = String.Format(updateSQL, user.UserId);
-            int _ = _dbCtx.Database.ExecuteSqlRaw(sql);
 
             string? returnUrl = TempData["returnUrl"]?.ToString();
             if (returnUrl != null && Url.IsLocalUrl(returnUrl))
@@ -127,7 +125,7 @@ public class AccountController : Controller
     {
         var userid = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
         if (_dbCtx.Database.ExecuteSqlInterpolated(
-              $@"UPDATE User 
+              $@"UPDATE StrawberryUser 
                     SET Password = 
                         HASHBYTES('SHA1', CONVERT(VARCHAR, {pwd.NewPwd})) 
                   WHERE Username = {userid} 
@@ -146,9 +144,9 @@ public class AccountController : Controller
         var userid = 
             User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 
-        User? user = _dbCtx.User
+        StrawberryUser? user = _dbCtx.StrawberryUser
             .FromSqlInterpolated(
-                $@"SELECT * FROM User 
+                $@"SELECT * FROM StrawberryUser 
                     WHERE Username = {userid} 
                       AND Password = HASHBYTES('SHA1', 
                           CONVERT(VARCHAR, {CurrentPwd}))")
@@ -166,7 +164,7 @@ public class AccountController : Controller
         var userid = 
             User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 
-        User? user = _dbCtx.User
+        StrawberryUser? user = _dbCtx.StrawberryUser
             .FromSqlInterpolated(
                 $@"SELECT * FROM User 
                     WHERE Username = {userid} 
@@ -184,9 +182,9 @@ public class AccountController : Controller
     [Authorize]
     public JsonResult VerifyNewUsername(string NewUname)
     {
-        DbSet<User> dbs = _dbCtx.User;
+        DbSet<StrawberryUser> dbs = _dbCtx.StrawberryUser;
 
-        User? user = dbs
+        StrawberryUser? user = dbs
             .FromSqlInterpolated(
                 $"SELECT * FROM User WHERE Username = {NewUname}")
             .FirstOrDefault();

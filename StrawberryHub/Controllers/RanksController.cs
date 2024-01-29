@@ -22,20 +22,20 @@ namespace StrawberryHub.Controllers
         // GET: Ranks
         public async Task<IActionResult> Index()
         {
-              return _context.Rank != null ? 
-                          View(await _context.Rank.ToListAsync()) :
+              return _context.StrawberryRank != null ? 
+                          View(await _context.StrawberryRank.ToListAsync()) :
                           Problem("Entity set 'AppDbContext.Rank'  is null.");
         }
 
         // GET: Ranks/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Rank == null)
+            if (id == null || _context.StrawberryRank == null)
             {
                 return NotFound();
             }
 
-            var rank = await _context.Rank
+            var rank = await _context.StrawberryRank
                 .FirstOrDefaultAsync(m => m.RankId == id);
             if (rank == null)
             {
@@ -56,12 +56,12 @@ namespace StrawberryHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RankId,RankName,MinPoints,MaxPoints")] Rank rank)
+        public async Task<IActionResult> Create([Bind("RankId,RankName,MinPoints,MaxPoints")] StrawberryRank rank)
         {
             if (ModelState.IsValid)
             {
                 // Check if a Rank with the same RankName already exists
-                if (_context.Rank.Any(r => r.RankName == rank.RankName))
+                if (_context.StrawberryRank.Any(r => r.RankName == rank.RankName))
                 {
                     ModelState.AddModelError("RankName", "Rank with this name already exists.");
                     return View(rank);
@@ -77,12 +77,12 @@ namespace StrawberryHub.Controllers
         // GET: Ranks/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Rank == null)
+            if (id == null || _context.StrawberryRank == null)
             {
                 return NotFound();
             }
 
-            var rank = await _context.Rank.FindAsync(id);
+            var rank = await _context.StrawberryRank.FindAsync(id);
             if (rank == null)
             {
                 return NotFound();
@@ -95,7 +95,7 @@ namespace StrawberryHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RankId,RankName,MinPoints,MaxPoints")] Rank rank)
+        public async Task<IActionResult> Edit(int id, [Bind("RankId,RankName,MinPoints,MaxPoints")] StrawberryRank rank)
         {
             if (id != rank.RankId)
             {
@@ -128,12 +128,12 @@ namespace StrawberryHub.Controllers
         // GET: Ranks/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Rank == null)
+            if (id == null || _context.StrawberryRank == null)
             {
                 return NotFound();
             }
 
-            var rank = await _context.Rank
+            var rank = await _context.StrawberryRank
                 .FirstOrDefaultAsync(m => m.RankId == id);
             if (rank == null)
             {
@@ -148,14 +148,14 @@ namespace StrawberryHub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Rank == null)
+            if (_context.StrawberryRank == null)
             {
                 return Problem("Entity set 'AppDbContext.Rank'  is null.");
             }
-            var rank = await _context.Rank.FindAsync(id);
+            var rank = await _context.StrawberryRank.FindAsync(id);
             if (rank != null)
             {
-                _context.Rank.Remove(rank);
+                _context.StrawberryRank.Remove(rank);
             }
             
             await _context.SaveChangesAsync();
@@ -164,7 +164,7 @@ namespace StrawberryHub.Controllers
 
         private bool RankExists(int id)
         {
-          return (_context.Rank?.Any(e => e.RankId == id)).GetValueOrDefault();
+          return (_context.StrawberryRank?.Any(e => e.RankId == id)).GetValueOrDefault();
         }
     }
 }

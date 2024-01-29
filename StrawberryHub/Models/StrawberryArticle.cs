@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace StrawberryHub.Models;
 
-public partial class Article
+public partial class StrawberryArticle
 {
     public int ArticleId { get; set; }
 
@@ -13,7 +13,7 @@ public partial class Article
 
     public DateTime PublishedDate { get; set; }
 
-
     [ValidateNever]
-    public virtual GoalType GoalType { get; set; } = null!;
+    public virtual StrawberryGoalType GoalType { get; set; } = null!;
+
 }

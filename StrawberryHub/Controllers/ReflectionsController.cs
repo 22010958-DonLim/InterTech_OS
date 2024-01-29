@@ -22,19 +22,19 @@ namespace StrawberryHub.Controllers
         // GET: Reflections
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Reflection.Include(r => r.User);
+            var appDbContext = _context.StrawberryReflection.Include(r => r.User);
             return View(await appDbContext.ToListAsync());
         }
 
         // GET: Reflections/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Reflection == null)
+            if (id == null || _context.StrawberryReflection == null)
             {
                 return NotFound();
             }
 
-            var reflection = await _context.Reflection
+            var reflection = await _context.StrawberryReflection
                 .Include(r => r.User)
                 .FirstOrDefaultAsync(m => m.ReflectionId == id);
             if (reflection == null)
@@ -48,7 +48,7 @@ namespace StrawberryHub.Controllers
         // GET: Reflections/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserId");
+            ViewData["UserId"] = new SelectList(_context.StrawberryUser, "UserId", "UserId");
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace StrawberryHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReflectionId,UserId,Date,Content")] Reflection reflection)
+        public async Task<IActionResult> Create([Bind("ReflectionId,UserId,Date,Content")] StrawberryReflection reflection)
         {
             if (ModelState.IsValid)
             {
@@ -65,24 +65,24 @@ namespace StrawberryHub.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserId", reflection.UserId);
+            ViewData["UserId"] = new SelectList(_context.StrawberryUser, "UserId", "UserId", reflection.UserId);
             return View(reflection);
         }
 
         // GET: Reflections/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Reflection == null)
+            if (id == null || _context.StrawberryReflection == null)
             {
                 return NotFound();
             }
 
-            var reflection = await _context.Reflection.FindAsync(id);
+            var reflection = await _context.StrawberryReflection.FindAsync(id);
             if (reflection == null)
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserId", reflection.UserId);
+            ViewData["UserId"] = new SelectList(_context.StrawberryUser, "UserId", "UserId", reflection.UserId);
             return View(reflection);
         }
 
@@ -91,7 +91,7 @@ namespace StrawberryHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReflectionId,UserId,Date,Content")] Reflection reflection)
+        public async Task<IActionResult> Edit(int id, [Bind("ReflectionId,UserId,Date,Content")] StrawberryReflection reflection)
         {
             if (id != reflection.ReflectionId)
             {
@@ -118,19 +118,19 @@ namespace StrawberryHub.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserId", reflection.UserId);
+            ViewData["UserId"] = new SelectList(_context.StrawberryUser, "UserId", "UserId", reflection.UserId);
             return View(reflection);
         }
 
         // GET: Reflections/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Reflection == null)
+            if (id == null || _context.StrawberryReflection == null)
             {
                 return NotFound();
             }
 
-            var reflection = await _context.Reflection
+            var reflection = await _context.StrawberryReflection
                 .Include(r => r.User)
                 .FirstOrDefaultAsync(m => m.ReflectionId == id);
             if (reflection == null)
@@ -146,14 +146,14 @@ namespace StrawberryHub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Reflection == null)
+            if (_context.StrawberryReflection == null)
             {
                 return Problem("Entity set 'AppDbContext.Reflection'  is null.");
             }
-            var reflection = await _context.Reflection.FindAsync(id);
+            var reflection = await _context.StrawberryReflection.FindAsync(id);
             if (reflection != null)
             {
-                _context.Reflection.Remove(reflection);
+                _context.StrawberryReflection.Remove(reflection);
             }
             
             await _context.SaveChangesAsync();
@@ -162,7 +162,7 @@ namespace StrawberryHub.Controllers
 
         private bool ReflectionExists(int id)
         {
-          return (_context.Reflection?.Any(e => e.ReflectionId == id)).GetValueOrDefault();
+          return (_context.StrawberryReflection?.Any(e => e.ReflectionId == id)).GetValueOrDefault();
         }
     }
 }

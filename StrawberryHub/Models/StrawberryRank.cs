@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace StrawberryHub.Models;
 
-public partial class Rank
+public partial class StrawberryRank
 {
     public int RankId { get; set; }
 
@@ -15,5 +15,5 @@ public partial class Rank
 
 
     [ValidateNever]
-    public virtual ICollection<User> User { get; set; } = new List<User>();
+    public virtual ICollection<StrawberryUser> StrawberryUsers { get; set; } = new List<StrawberryUser>();
 }

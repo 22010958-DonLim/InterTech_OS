@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace StrawberryHub.Models;
 
-public partial class EmergencySupport
+public partial class StrawberryEmergencySupport
 {
     public int EmergencySupportId { get; set; }
 
@@ -15,5 +15,5 @@ public partial class EmergencySupport
 
 
     [ValidateNever]
-    public virtual User User { get; set; } = null!;
+    public virtual StrawberryUser User { get; set; } = null!;
 }

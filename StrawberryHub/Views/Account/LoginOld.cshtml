@@ -1,0 +1,33 @@
+﻿@model StrawberryUser
+
+<h4 color="red">OS Hub</h4>
+
+<div class="col-sm-5">
+    @if (ViewData["Message"] != null)
+    {
+        <div class="mb-3">
+            <div class="alert alert-secondary">
+                <text>@ViewData["Message"]</text>
+            </div>
+        </div>
+    }
+
+    <form asp-controller="Users" asp-action="Login" method="post">
+        <div class="mb-3">
+            <label asp-for="Username" class="form-label fw-bold">Username :</label>
+            <input asp-for="Username" class="form-control form-control-sm" placeholder="Registered Username" />
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label fw-bold">Password :</label>
+            <input asp-for="Password" class="form-control form-control-sm" placeholder="Password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <input type="submit" class="btn btn-sm btn-primary" value="Sign In" />
+        </div>
+    </form>
+
+</div>

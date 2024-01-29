@@ -22,9 +22,9 @@ namespace StrawberryHub.Controllers.API
 
         // GET: api/GoalsAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Goal>>> GetGoals()
+        public async Task<ActionResult<IEnumerable<StrawberryGoal>>> GetGoals()
         {
-            var goals = await _context.Goal
+            var goals = await _context.StrawberryGoal
                 .Include(g => g.GoalType)
                 .Include(g => g.User)
                 .ToListAsync();
@@ -41,9 +41,9 @@ namespace StrawberryHub.Controllers.API
 
         // GET: api/GoalsAPI/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Goal>> GetGoal(int id)
+        public async Task<ActionResult<StrawberryGoal>> GetGoal(int id)
         {
-            var goal = await _context.Goal
+            var goal = await _context.StrawberryGoal
                 .Include(g => g.GoalType)
                 .Include(g => g.User)
                 .FirstOrDefaultAsync(m => m.GoalId == id);
@@ -58,7 +58,7 @@ namespace StrawberryHub.Controllers.API
 
         // PUT: api/GoalsAPI/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutGoal(int id, Goal goal)
+        public async Task<IActionResult> PutGoal(int id, StrawberryGoal goal)
         {
             if (id != goal.GoalId)
             {
@@ -88,9 +88,9 @@ namespace StrawberryHub.Controllers.API
 
         // POST: api/GoalsAPI
         [HttpPost]
-        public async Task<ActionResult<Goal>> PostGoal(Goal goal)
+        public async Task<ActionResult<StrawberryGoal>> PostGoal(StrawberryGoal goal)
         {
-            _context.Goal.Add(goal);
+            _context.StrawberryGoal.Add(goal);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetGoal", new { id = goal.GoalId }, goal);
@@ -98,15 +98,15 @@ namespace StrawberryHub.Controllers.API
 
         // DELETE: api/GoalsAPI/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Goal>> DeleteGoal(int id)
+        public async Task<ActionResult<StrawberryGoal>> DeleteGoal(int id)
         {
-            var goal = await _context.Goal.FindAsync(id);
+            var goal = await _context.StrawberryGoal.FindAsync(id);
             if (goal == null)
             {
                 return NotFound("Goal not found");
             }
 
-            _context.Goal.Remove(goal);
+            _context.StrawberryGoal.Remove(goal);
             await _context.SaveChangesAsync();
 
             return goal;
@@ -114,7 +114,7 @@ namespace StrawberryHub.Controllers.API
 
         private bool GoalExists(int id)
         {
-            return _context.Goal.Any(e => e.GoalId == id);
+            return _context.StrawberryGoal.Any(e => e.GoalId == id);
         }
     }
 }

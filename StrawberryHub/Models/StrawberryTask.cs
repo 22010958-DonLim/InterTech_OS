@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace StrawberryHub.Models;
 
-public partial class Task
+public partial class StrawberryTask
 {
     public int TaskId { get; set; }
 
@@ -17,5 +17,5 @@ public partial class Task
 
 
     [ValidateNever]
-    public virtual User User { get; set; } = null!;
+    public virtual StrawberryUser User { get; set; } = null!;
 }

@@ -20,16 +20,16 @@ namespace StrawberryHub.Controllers.API
 
         // GET: api/GoalTypesAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GoalType>>> GetGoalTypes()
+        public async Task<ActionResult<IEnumerable<StrawberryGoalType>>> GetGoalTypes()
         {
-            return await _context.GoalType.ToListAsync();
+            return await _context.StrawberryGoalType.ToListAsync();
         }
 
         // GET: api/GoalTypesAPI/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<GoalType>> GetGoalType(int id)
+        public async Task<ActionResult<StrawberryGoalType>> GetGoalType(int id)
         {
-            var goalType = await _context.GoalType.FindAsync(id);
+            var goalType = await _context.StrawberryGoalType.FindAsync(id);
 
             if (goalType == null)
             {
@@ -41,7 +41,7 @@ namespace StrawberryHub.Controllers.API
 
         // PUT: api/GoalTypesAPI/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutGoalType(int id, GoalType goalType)
+        public async Task<IActionResult> PutGoalType(int id, StrawberryGoalType goalType)
         {
             if (id != goalType.GoalTypeId)
             {
@@ -71,9 +71,9 @@ namespace StrawberryHub.Controllers.API
 
         // POST: api/GoalTypesAPI
         [HttpPost]
-        public async Task<ActionResult<GoalType>> PostGoalType(GoalType goalType)
+        public async Task<ActionResult<StrawberryGoalType>> PostGoalType(StrawberryGoalType goalType)
         {
-            _context.GoalType.Add(goalType);
+            _context.StrawberryGoalType.Add(goalType);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetGoalType", new { id = goalType.GoalTypeId }, goalType);
@@ -81,15 +81,15 @@ namespace StrawberryHub.Controllers.API
 
         // DELETE: api/GoalTypesAPI/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<GoalType>> DeleteGoalType(int id)
+        public async Task<ActionResult<StrawberryGoalType>> DeleteGoalType(int id)
         {
-            var goalType = await _context.GoalType.FindAsync(id);
+            var goalType = await _context.StrawberryGoalType.FindAsync(id);
             if (goalType == null)
             {
                 return NotFound("GoalType not found");
             }
 
-            _context.GoalType.Remove(goalType);
+            _context.StrawberryGoalType.Remove(goalType);
             await _context.SaveChangesAsync();
 
             return goalType;
@@ -97,7 +97,7 @@ namespace StrawberryHub.Controllers.API
 
         private bool GoalTypeExists(int id)
         {
-            return _context.GoalType.Any(e => e.GoalTypeId == id);
+            return _context.StrawberryGoalType.Any(e => e.GoalTypeId == id);
         }
     }
 }

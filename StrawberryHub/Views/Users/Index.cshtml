@@ -1,4 +1,4 @@
-﻿@model IEnumerable<StrawberryHub.Models.User>
+﻿@model IEnumerable<StrawberryHub.Models.StrawberryUser>
 
 @{
     ViewData["Title"] = "Index";
@@ -31,7 +31,7 @@
                 @Html.DisplayNameFor(model => model.Points)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Rank)
+                @Html.DisplayNameFor(model => model.RankId)
             </th>
             <th></th>
         </tr>
@@ -58,7 +58,7 @@
                 @Html.DisplayFor(modelItem => item.Points)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Rank.RankId)
+                @Html.DisplayFor(modelItem => item.StrawberryRank)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |

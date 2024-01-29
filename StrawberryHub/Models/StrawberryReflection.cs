@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace StrawberryHub.Models;
 
-public partial class Reflection
+public partial class StrawberryReflection
 {
     public int ReflectionId { get; set; }
 
@@ -14,5 +14,5 @@ public partial class Reflection
     public string Content { get; set; } = null!;
 
     [ValidateNever]
-    public virtual User User { get; set; } = null!;
+    public virtual StrawberryUser User { get; set; } = null!;
 }

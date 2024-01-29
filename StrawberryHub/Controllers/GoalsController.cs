@@ -22,19 +22,19 @@ namespace StrawberryHub.Controllers
         // GET: Goals
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Goal.Include(g => g.GoalType).Include(g => g.User);
+            var appDbContext = _context.StrawberryGoal.Include(g => g.GoalType).Include(g => g.User);
             return View(await appDbContext.ToListAsync());
         }
 
         // GET: Goals/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Goal == null)
+            if (id == null || _context.StrawberryGoal == null)
             {
                 return NotFound();
             }
 
-            var goal = await _context.Goal
+            var goal = await _context.StrawberryGoal
                 .Include(g => g.GoalType)
                 .Include(g => g.User)
                 .FirstOrDefaultAsync(m => m.GoalId == id);
@@ -49,8 +49,8 @@ namespace StrawberryHub.Controllers
         // GET: Goals/Create
         public IActionResult Create()
         {
-            ViewData["GoalTypeId"] = new SelectList(_context.GoalType, "GoalTypeId", "GoalTypeId");
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserId");
+            ViewData["GoalTypeId"] = new SelectList(_context.StrawberryGoalType, "GoalTypeId", "GoalTypeId");
+            ViewData["UserId"] = new SelectList(_context.StrawberryUser, "UserId", "UserId");
             return View();
         }
 
@@ -59,7 +59,7 @@ namespace StrawberryHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("GoalId,UserId,GoalTypeId")] Goal goal)
+        public async Task<IActionResult> Create([Bind("GoalId,UserId,GoalTypeId")] StrawberryGoal goal)
         {
             if (ModelState.IsValid)
             {
@@ -67,26 +67,26 @@ namespace StrawberryHub.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GoalTypeId"] = new SelectList(_context.GoalType, "GoalTypeId", "GoalTypeId", goal.GoalTypeId);
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserId", goal.UserId);
+            ViewData["GoalTypeId"] = new SelectList(_context.StrawberryGoalType, "GoalTypeId", "GoalTypeId", goal.GoalTypeId);
+            ViewData["UserId"] = new SelectList(_context.StrawberryUser, "UserId", "UserId", goal.UserId);
             return View(goal);
         }
 
         // GET: Goals/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Goal == null)
+            if (id == null || _context.StrawberryGoal == null)
             {
                 return NotFound();
             }
 
-            var goal = await _context.Goal.FindAsync(id);
+            var goal = await _context.StrawberryGoal.FindAsync(id);
             if (goal == null)
             {
                 return NotFound();
             }
-            ViewData["GoalTypeId"] = new SelectList(_context.GoalType, "GoalTypeId", "GoalTypeId", goal.GoalTypeId);
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserId", goal.UserId);
+            ViewData["GoalTypeId"] = new SelectList(_context.StrawberryGoalType, "GoalTypeId", "GoalTypeId", goal.GoalTypeId);
+            ViewData["UserId"] = new SelectList(_context.StrawberryUser, "UserId", "UserId", goal.UserId);
             return View(goal);
         }
 
@@ -95,7 +95,7 @@ namespace StrawberryHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("GoalId,UserId,GoalTypeId")] Goal goal)
+        public async Task<IActionResult> Edit(int id, [Bind("GoalId,UserId,GoalTypeId")] StrawberryGoal goal)
         {
             if (id != goal.GoalId)
             {
@@ -122,20 +122,20 @@ namespace StrawberryHub.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GoalTypeId"] = new SelectList(_context.GoalType, "GoalTypeId", "GoalTypeId", goal.GoalTypeId);
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserId", goal.UserId);
+            ViewData["GoalTypeId"] = new SelectList(_context.StrawberryGoalType, "GoalTypeId", "GoalTypeId", goal.GoalTypeId);
+            ViewData["UserId"] = new SelectList(_context.StrawberryUser, "UserId", "UserId", goal.UserId);
             return View(goal);
         }
 
         // GET: Goals/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Goal == null)
+            if (id == null || _context.StrawberryGoal == null)
             {
                 return NotFound();
             }
 
-            var goal = await _context.Goal
+            var goal = await _context.StrawberryGoal
                 .Include(g => g.GoalType)
                 .Include(g => g.User)
                 .FirstOrDefaultAsync(m => m.GoalId == id);
@@ -152,14 +152,14 @@ namespace StrawberryHub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Goal == null)
+            if (_context.StrawberryGoal == null)
             {
                 return Problem("Entity set 'AppDbContext.Goal'  is null.");
             }
-            var goal = await _context.Goal.FindAsync(id);
+            var goal = await _context.StrawberryGoal.FindAsync(id);
             if (goal != null)
             {
-                _context.Goal.Remove(goal);
+                _context.StrawberryGoal.Remove(goal);
             }
             
             await _context.SaveChangesAsync();
@@ -168,7 +168,7 @@ namespace StrawberryHub.Controllers
 
         private bool GoalExists(int id)
         {
-          return (_context.Goal?.Any(e => e.GoalId == id)).GetValueOrDefault();
+          return (_context.StrawberryGoal?.Any(e => e.GoalId == id)).GetValueOrDefault();
         }
     }
 }

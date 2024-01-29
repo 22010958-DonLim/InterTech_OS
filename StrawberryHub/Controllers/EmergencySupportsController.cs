@@ -22,19 +22,19 @@ namespace StrawberryHub.Controllers
         // GET: EmergencySupports
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.EmergencySupport.Include(e => e.User);
+            var appDbContext = _context.StrawberryEmergencySupport.Include(e => e.User);
             return View(await appDbContext.ToListAsync());
         }
 
         // GET: EmergencySupports/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.EmergencySupport == null)
+            if (id == null || _context.StrawberryEmergencySupport == null)
             {
                 return NotFound();
             }
 
-            var emergencySupport = await _context.EmergencySupport
+            var emergencySupport = await _context.StrawberryEmergencySupport
                 .Include(e => e.User)
                 .FirstOrDefaultAsync(m => m.EmergencySupportId == id);
             if (emergencySupport == null)
@@ -48,7 +48,7 @@ namespace StrawberryHub.Controllers
         // GET: EmergencySupports/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserId");
+            ViewData["UserId"] = new SelectList(_context.StrawberryUser, "UserId", "UserId");
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace StrawberryHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmergencySupportId,UserId,Timestamp,Message")] EmergencySupport emergencySupport)
+        public async Task<IActionResult> Create([Bind("EmergencySupportId,UserId,Timestamp,Message")] StrawberryEmergencySupport emergencySupport)
         {
             if (ModelState.IsValid)
             {
@@ -65,24 +65,24 @@ namespace StrawberryHub.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserId", emergencySupport.UserId);
+            ViewData["UserId"] = new SelectList(_context.StrawberryUser, "UserId", "UserId", emergencySupport.UserId);
             return View(emergencySupport);
         }
 
         // GET: EmergencySupports/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.EmergencySupport == null)
+            if (id == null || _context.StrawberryEmergencySupport == null)
             {
                 return NotFound();
             }
 
-            var emergencySupport = await _context.EmergencySupport.FindAsync(id);
+            var emergencySupport = await _context.StrawberryEmergencySupport.FindAsync(id);
             if (emergencySupport == null)
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserId", emergencySupport.UserId);
+            ViewData["UserId"] = new SelectList(_context.StrawberryUser, "UserId", "UserId", emergencySupport.UserId);
             return View(emergencySupport);
         }
 
@@ -91,7 +91,7 @@ namespace StrawberryHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmergencySupportId,UserId,Timestamp,Message")] EmergencySupport emergencySupport)
+        public async Task<IActionResult> Edit(int id, [Bind("EmergencySupportId,UserId,Timestamp,Message")] StrawberryEmergencySupport emergencySupport)
         {
             if (id != emergencySupport.EmergencySupportId)
             {
@@ -118,19 +118,19 @@ namespace StrawberryHub.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserId", emergencySupport.UserId);
+            ViewData["UserId"] = new SelectList(_context.StrawberryUser, "UserId", "UserId", emergencySupport.UserId);
             return View(emergencySupport);
         }
 
         // GET: EmergencySupports/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.EmergencySupport == null)
+            if (id == null || _context.StrawberryEmergencySupport == null)
             {
                 return NotFound();
             }
 
-            var emergencySupport = await _context.EmergencySupport
+            var emergencySupport = await _context.StrawberryEmergencySupport
                 .Include(e => e.User)
                 .FirstOrDefaultAsync(m => m.EmergencySupportId == id);
             if (emergencySupport == null)
@@ -146,14 +146,14 @@ namespace StrawberryHub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.EmergencySupport == null)
+            if (_context.StrawberryEmergencySupport == null)
             {
                 return Problem("Entity set 'AppDbContext.EmergencySupport'  is null.");
             }
-            var emergencySupport = await _context.EmergencySupport.FindAsync(id);
+            var emergencySupport = await _context.StrawberryEmergencySupport.FindAsync(id);
             if (emergencySupport != null)
             {
-                _context.EmergencySupport.Remove(emergencySupport);
+                _context.StrawberryEmergencySupport.Remove(emergencySupport);
             }
             
             await _context.SaveChangesAsync();
@@ -162,7 +162,7 @@ namespace StrawberryHub.Controllers
 
         private bool EmergencySupportExists(int id)
         {
-          return (_context.EmergencySupport?.Any(e => e.EmergencySupportId == id)).GetValueOrDefault();
+          return (_context.StrawberryEmergencySupport?.Any(e => e.EmergencySupportId == id)).GetValueOrDefault();
         }
     }
 }
