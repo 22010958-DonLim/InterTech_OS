@@ -70,7 +70,7 @@ public class AccountController : Controller
         // Convert byte array to string using UTF-8 encoding
         //string thePassword = Encoding.UTF8.GetString(user.Password);
         if (!_authSvc.Authenticate(sqlLogin, user.Username, user.Password,
-                out ClaimsPrincipal? principal))
+                out ClaimsPrincipal? principal)) //changes
         {
             ViewData["Message"] = "Incorrect User Id or Password";
             ViewData["MsgType"] = "warning";
