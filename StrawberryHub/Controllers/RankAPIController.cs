@@ -20,16 +20,16 @@ namespace StrawberryHub.Controllers.API
 
         // GET: api/RanksAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Rank>>> GetRanks()
+        public async Task<ActionResult<IEnumerable<StrawberryRank>>> GetRanks()
         {
-            return await _context.Rank.ToListAsync();
+            return await _context.StrawberryRank.ToListAsync();
         }
 
         // GET: api/RanksAPI/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Rank>> GetRank(int id)
+        public async Task<ActionResult<StrawberryRank>> GetRank(int id)
         {
-            var rank = await _context.Rank.FindAsync(id);
+            var rank = await _context.StrawberryRank.FindAsync(id);
 
             if (rank == null)
             {
@@ -41,7 +41,7 @@ namespace StrawberryHub.Controllers.API
 
         // PUT: api/RanksAPI/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRank(int id, Rank rank)
+        public async Task<IActionResult> PutRank(int id, StrawberryRank rank)
         {
             if (id != rank.RankId)
             {
@@ -71,9 +71,9 @@ namespace StrawberryHub.Controllers.API
 
         // POST: api/RanksAPI
         [HttpPost]
-        public async Task<ActionResult<Rank>> PostRank(Rank rank)
+        public async Task<ActionResult<StrawberryRank>> PostRank(StrawberryRank rank)
         {
-            _context.Rank.Add(rank);
+            _context.StrawberryRank.Add(rank);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetRank", new { id = rank.RankId }, rank);
@@ -81,15 +81,15 @@ namespace StrawberryHub.Controllers.API
 
         // DELETE: api/RanksAPI/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Rank>> DeleteRank(int id)
+        public async Task<ActionResult<StrawberryRank>> DeleteRank(int id)
         {
-            var rank = await _context.Rank.FindAsync(id);
+            var rank = await _context.StrawberryRank.FindAsync(id);
             if (rank == null)
             {
                 return NotFound("Rank not found");
             }
 
-            _context.Rank.Remove(rank);
+            _context.StrawberryRank.Remove(rank);
             await _context.SaveChangesAsync();
 
             return rank;
@@ -97,7 +97,7 @@ namespace StrawberryHub.Controllers.API
 
         private bool RankExists(int id)
         {
-            return _context.Rank.Any(e => e.RankId == id);
+            return _context.StrawberryRank.Any(e => e.RankId == id);
         }
     }
 }

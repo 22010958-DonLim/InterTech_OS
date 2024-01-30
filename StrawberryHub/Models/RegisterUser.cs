@@ -23,6 +23,8 @@ public class RegisterUser
 
     public int? RankId { get; set; }
 
+    public int? GoalTypeId { get; set; }
+
 
 
 }

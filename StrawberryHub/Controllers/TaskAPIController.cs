@@ -22,7 +22,7 @@ public class TasksAPIController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<string>> GetTasks()
     {
-        var tasks = await _context.Task.Include(t => t.User).ToListAsync();
+        var tasks = await _context.StrawberryTask.Include(t => t.User).ToListAsync();
 
         // Configure JsonSerializerOptions to handle object cycles
         var jsonOptions = new JsonSerializerOptions
@@ -40,9 +40,9 @@ public class TasksAPIController : ControllerBase
 
     // GET: api/TasksAPI/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<StrawberryHub.Models.Task>> GetTask(int id)
+    public async Task<ActionResult<StrawberryHub.Models.StrawberryTask>> GetTask(int id)
     {
-        var task = await _context.Task.Include(t => t.User).FirstOrDefaultAsync(m => m.TaskId == id);
+        var task = await _context.StrawberryTask.Include(t => t.User).FirstOrDefaultAsync(m => m.TaskId == id);
 
         if (task == null)
         {
@@ -54,7 +54,7 @@ public class TasksAPIController : ControllerBase
 
     // PUT: api/TasksAPI/5
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutTask(int id, StrawberryHub.Models.Task task)
+    public async Task<IActionResult> PutTask(int id, StrawberryHub.Models.StrawberryTask task)
     {
         if (id != task.TaskId)
         {
@@ -84,9 +84,9 @@ public class TasksAPIController : ControllerBase
 
     // POST: api/TasksAPI
     [HttpPost]
-    public async Task<ActionResult<StrawberryHub.Models.Task>> PostTask(StrawberryHub.Models.Task task)
+    public async Task<ActionResult<StrawberryHub.Models.StrawberryTask>> PostTask(StrawberryHub.Models.StrawberryTask task)
     {
-        _context.Task.Add(task);
+        _context.StrawberryTask.Add(task);
         await _context.SaveChangesAsync();
 
         return CreatedAtAction("GetTask", new { id = task.TaskId }, task);
@@ -94,15 +94,15 @@ public class TasksAPIController : ControllerBase
 
     // DELETE: api/TasksAPI/5
     [HttpDelete("{id}")]
-    public async Task<ActionResult<StrawberryHub.Models.Task>> DeleteTask(int id)
+    public async Task<ActionResult<StrawberryHub.Models.StrawberryTask>> DeleteTask(int id)
     {
-        var task = await _context.Task.FindAsync(id);
+        var task = await _context.StrawberryTask.FindAsync(id);
         if (task == null)
         {
             return NotFound();
         }
 
-        _context.Task.Remove(task);
+        _context.StrawberryTask.Remove(task);
         await _context.SaveChangesAsync();
 
         return task;
@@ -110,6 +110,6 @@ public class TasksAPIController : ControllerBase
 
     private bool TaskExists(int id)
     {
-        return _context.Task.Any(e => e.TaskId == id);
+        return _context.StrawberryTask.Any(e => e.TaskId == id);
     }
 }

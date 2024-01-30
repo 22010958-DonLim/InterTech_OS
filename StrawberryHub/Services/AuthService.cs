@@ -1,7 +1,7 @@
 using System.Data;
 using System.Security.Claims;
 
-namespace RP.SOI.DotNet.Services;
+namespace StrawberryHub.Services;
 
 public interface IAuthService
 {

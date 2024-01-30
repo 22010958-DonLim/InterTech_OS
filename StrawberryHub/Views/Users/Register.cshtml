@@ -1,4 +1,4 @@
-﻿@model RegisterUser
+﻿@model StrawberryUser
 @{
     Layout = "_Layout";
 }
@@ -45,6 +45,25 @@
             </div>
 
             <div class="mb-3">
+                <label class="form-label fw-bold">Select Goal Types :</label>
+
+                @{
+                    var goalTypes = ViewData["GoalTypes"] as List<StrawberryGoalType>;
+
+                    if (goalTypes != null)
+                    {
+                        foreach (var goalType in goalTypes)
+                        {
+                            <div class="form-check">
+                                <input type="checkbox" name="GoalTypeIds" class="form-check-input" value="@goalType.GoalTypeId" />
+                                <label class="form-check-label">@goalType.Type</label>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+
+            <div class="mb-3">
                 <label asp-for="Password" class="form-label fw-bold">Password :</label>
                 <input asp-for="Password" class="form-control form-control-sm" />
                 <span asp-validation-for="Password" class="text-danger"></span>
@@ -58,83 +77,3 @@
 
     </div>
 </form>
-
-
-<style>
-    body {
-        background-color: #B9EBFF;
-        color: black;
-        font-family: 'Arial Rounded MT';
-    }
-
-    .container {
-        max-width: 800px;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-
-    h4 {
-        font-weight: bold;
-        margin-bottom: 20px;
-        margin-left: 240px;
-    }
-
-    .form-container {
-        background-color: white;
-        border-radius: 5px;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    label {
-        font-weight: bold;
-        color: #495057;
-    }
-
-    input[type="text"] {
-        width: 100%;
-        padding: 12px;
-        box-sizing: border-box;
-        border: 1px solid #ced4da;
-        border-radius: 4px;
-        margin-top: 5px;
-    }
-
-    .btn-primary,
-    .btn-back {
-        width: 48%;
-        padding: 12px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        text-decoration: none;
-        font-size: 16px;
-        display: inline-block;
-    }
-
-    .btn-primary {
-        background-color: #3498db;
-        color: #ffffff;
-    }
-
-    .btn-back {
-        background-color: #5bc0de;
-        color: #ffffff;
-    }
-
-    .btn-primary:hover {
-        background-color: #2980b9;
-        color: black;
-    }
-
-    .btn-back:hover {
-        background-color: #46b8da;
-        color: black;
-    }
-</style>

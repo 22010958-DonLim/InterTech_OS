@@ -12,110 +12,91 @@ public partial class AppDbContext : DbContext
     {
     }
 
-    public virtual DbSet<Article> Article { get; set; } = default!;
+    public virtual DbSet<StrawberryArticle> StrawberryArticle { get; set; }
 
-    public virtual DbSet<EmergencySupport> EmergencySupport { get; set; } = default!;
+    public virtual DbSet<StrawberryEmergencySupport> StrawberryEmergencySupport { get; set; }
 
-    public virtual DbSet<Goal> Goal { get; set; } = default!;
+    public virtual DbSet<StrawberryGoal> StrawberryGoal { get; set; }
 
-    public virtual DbSet<GoalType> GoalType { get; set; } = default!;
+    public virtual DbSet<StrawberryGoalType> StrawberryGoalType { get; set; }
 
-    public virtual DbSet<Rank> Rank { get; set; } = default!;
+    public virtual DbSet<StrawberryRank> StrawberryRank { get; set; }
 
-    public virtual DbSet<Reflection> Reflection { get; set; } = default!;
+    public virtual DbSet<StrawberryReflection> StrawberryReflection { get; set; }
 
-    public virtual DbSet<StrawberryHub.Models.Task> Task { get; set; } = default!;
+    public virtual DbSet<StrawberryTask> StrawberryTask { get; set; }
 
-    public virtual DbSet<User> User { get; set; } = default!;
+    public virtual DbSet<StrawberryUser> StrawberryUser { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Article>(entity =>
+        modelBuilder.Entity<StrawberryArticle>(entity =>
         {
-            entity.HasKey(e => e.ArticleId).HasName("PK__Article__9C6270E88056FA81");
+            entity.HasKey(e => e.ArticleId).HasName("PK__Strawber__9C6270E840FD6ED4");
 
             entity.Property(e => e.ArticleContent).IsUnicode(false);
             entity.Property(e => e.PublishedDate).HasColumnType("datetime");
 
-            entity.HasOne(d => d.GoalType).WithMany(p => p.Article)
-                .HasForeignKey(d => d.GoalTypeId)
-                .HasConstraintName("FK__Article__GoalTyp__3D5E1FD2");
+            entity.HasOne(d => d.GoalType)
+                    .WithMany(p => p.StrawberryArticles)
+                    .HasForeignKey(d => d.GoalTypeId)
+                    .HasConstraintName("FK_StrawberryArticle_StrawberryGoalType");
         });
 
-        modelBuilder.Entity<EmergencySupport>(entity =>
+        modelBuilder.Entity<StrawberryEmergencySupport>(entity =>
         {
-            entity.HasKey(e => e.EmergencySupportId).HasName("PK__Emergenc__812C07C524050E3F");
+            entity.HasKey(e => e.EmergencySupportId).HasName("PK__Strawber__812C07C5E1A56D8D");
 
             entity.Property(e => e.Message).IsUnicode(false);
             entity.Property(e => e.Timestamp).HasColumnType("datetime");
-
-            entity.HasOne(d => d.User).WithMany(p => p.EmergencySupport)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Emergency__UserI__36B12243");
         });
 
-        modelBuilder.Entity<Goal>(entity =>
+        modelBuilder.Entity<StrawberryGoal>(entity =>
         {
-            entity.HasKey(e => e.GoalId).HasName("PK__Goal__8A4FFFD1D250A82C");
-
-            entity.HasOne(d => d.GoalType).WithMany(p => p.Goal)
-                .HasForeignKey(d => d.GoalTypeId)
-                .HasConstraintName("FK__Goal__GoalTypeId__30F848ED");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Goal)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Goal__UserId__300424B4");
+            entity.HasKey(e => e.GoalId).HasName("PK__Strawber__8A4FFFD171B438F2");
         });
 
-        modelBuilder.Entity<GoalType>(entity =>
+        modelBuilder.Entity<StrawberryGoalType>(entity =>
         {
-            entity.HasKey(e => e.GoalTypeId).HasName("PK__GoalType__20722C9298E438C7");
+            entity.HasKey(e => e.GoalTypeId).HasName("PK__Strawber__20722C92A4940FF9");
 
-            entity.HasIndex(e => e.Type, "UQ__GoalType__F9B8A48BADB79F6E").IsUnique();
+            entity.HasIndex(e => e.Type, "UQ__Strawber__F9B8A48B13E8CECF").IsUnique();
 
             entity.Property(e => e.Type).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<Rank>(entity =>
+        modelBuilder.Entity<StrawberryRank>(entity =>
         {
-            entity.HasKey(e => e.RankId).HasName("PK__Rank__B37AF876153D76AB");
+            entity.HasKey(e => e.RankId).HasName("PK__Strawber__B37AF87686DBA7B8");
 
-            entity.HasIndex(e => e.RankName, "UQ__Rank__1FC2E658BE35335E").IsUnique();
+            entity.HasIndex(e => e.RankName, "UQ__Strawber__1FC2E658EF30FBB1").IsUnique();
 
             entity.Property(e => e.RankName)
                 .HasMaxLength(50)
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<Reflection>(entity =>
+        modelBuilder.Entity<StrawberryReflection>(entity =>
         {
-            entity.HasKey(e => e.ReflectionId).HasName("PK__Reflecti__5D73947A233E507B");
+            entity.HasKey(e => e.ReflectionId).HasName("PK__Strawber__5D73947ADF9ADBDA");
 
             entity.Property(e => e.Content).IsUnicode(false);
             entity.Property(e => e.Date).HasColumnType("date");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Reflection)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Reflectio__UserI__33D4B598");
         });
 
-        modelBuilder.Entity<StrawberryHub.Models.Task>(entity => // Use fully qualified name here
+        modelBuilder.Entity<StrawberryTask>(entity =>
         {
-            entity.HasKey(e => e.TaskId).HasName("PK__Task__7C6949B1F4F061F9");
+            entity.HasKey(e => e.TaskId).HasName("PK__Strawber__7C6949B1ADE6F83B");
 
             entity.Property(e => e.IsCompleted).HasDefaultValueSql("((0))");
             entity.Property(e => e.TaskDescription).IsUnicode(false);
-
-            entity.HasOne(d => d.User).WithMany(p => p.Task)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Task__UserId__398D8EEE");
         });
 
-        modelBuilder.Entity<User>(entity =>
+        modelBuilder.Entity<StrawberryUser>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__User__1788CC4C83DD2A55");
+            entity.HasKey(e => e.UserId).HasName("PK__Strawber__1788CC4C6A73F7B8");
 
-            entity.HasIndex(e => e.Username, "UQ__User__536C85E427FA4252").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__Strawber__536C85E45EEFCBDB").IsUnique();
 
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
@@ -129,13 +110,26 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Password).HasMaxLength(50);
             entity.Property(e => e.Points).HasDefaultValueSql("((0))");
             entity.Property(e => e.RankId).HasDefaultValueSql("((1))");
+            entity.Property(e => e.UserRole)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.Username)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.GoalTypeId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
 
-            entity.HasOne(d => d.Rank).WithMany(p => p.User)
+            entity.HasOne(d => d.StrawberryGoalType).WithMany(p => p.StrawberryUsers)
+                .HasForeignKey(d => d.GoalTypeId)
+                .HasConstraintName("FK__Strawberr__GoalT__7F2BE32F");
+
+            entity.HasOne(d => d.StrawberryRank)
+                .WithMany(p => p.StrawberryUsers)
                 .HasForeignKey(d => d.RankId)
-                .HasConstraintName("FK__User__RankId__2A4B4B5E");
+                .HasConstraintName("FK_StrawberryUser_StrawberryRank");
+
+
         });
 
         OnModelCreatingPartial(modelBuilder);

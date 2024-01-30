@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace StrawberryHub.Models;
 
-public partial class Goal
+public partial class StrawberryGoal
 {
     public int GoalId { get; set; }
 
@@ -13,8 +13,8 @@ public partial class Goal
 
 
     [ValidateNever]
-    public virtual GoalType GoalType { get; set; } = null!;
+    public virtual StrawberryGoalType GoalType { get; set; } = null!;
 
     [ValidateNever]
-    public virtual User User { get; set; } = null!;
+    public virtual StrawberryUser User { get; set; } = null!;
 }
