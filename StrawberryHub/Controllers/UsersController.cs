@@ -111,7 +111,7 @@ namespace StrawberryHub.Controllers
 
             newUser.Password = passwordHash;
             newUser.Email = user.Email;
-            newUser.FirstName = user.FirstName;
+            newUser.FirstName = user.FirstName!;
             newUser.LastName = user.LastName;
             newUser.Username = user.Username;
             newUser.Points = 0;
