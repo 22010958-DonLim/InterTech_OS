@@ -27,6 +27,7 @@ namespace StrawberryHub.Controllers
         }
 
         // GET: Users
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var appDbContext = _context.StrawberryUser.Include(u => u.StrawberryRank);
@@ -118,7 +119,7 @@ namespace StrawberryHub.Controllers
             newUser.Email = user.Email;
             newUser.FirstName = user.FirstName!;
             newUser.LastName = user.LastName!;
-            newUser.Username = user.Username;
+            newUser.Username = user.Username; //changes
             newUser.Points = 0;
             newUser.RankId = 1;
             newUser.GoalTypeId = user.GoalTypeId;
@@ -127,6 +128,7 @@ namespace StrawberryHub.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(newUser);
+                _context.SaveChanges();
 
                 // Iterate over goalTypeIds list
                 foreach (var goalTypeId in goalTypeIds)

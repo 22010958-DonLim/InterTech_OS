@@ -40,7 +40,7 @@ namespace StrawberryHub.Controllers.API
         }
 
         // GET: api/GoalsAPI/5
-        [HttpGet("{id}")]
+        [HttpGet("{Username}")]
         public async Task<ActionResult<StrawberryGoal>> GetGoal(int id)
         {
             var goal = await _context.StrawberryGoal
