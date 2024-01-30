@@ -161,6 +161,9 @@ namespace StrawberryHub.Controllers
             {
                 return NotFound();
             }
+            var goalTypes = _context.StrawberryGoalType.ToList();
+            ViewData["GoalTypes"] = goalTypes;
+
             ViewData["RankId"] = new SelectList(_context.StrawberryRank, "RankId", "RankId", user.RankId);
             return View(user);
         }
@@ -197,6 +200,8 @@ namespace StrawberryHub.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            var goalTypes = _context.StrawberryGoalType.ToList();
+            ViewData["GoalTypes"] = goalTypes;
             ViewData["RankId"] = new SelectList(_context.StrawberryRank, "RankId", "RankId", user.RankId);
             return View(user);
         }
