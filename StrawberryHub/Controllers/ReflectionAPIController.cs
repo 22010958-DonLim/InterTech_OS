@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace StrawberryHub.Controllers.API
 {
-    [Route("OSHub/[controller]")]
+    [Route("api/reflection")]
     [ApiController]
     public class ReflectionsAPIController : ControllerBase
     {

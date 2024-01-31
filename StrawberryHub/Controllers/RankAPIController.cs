@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StrawberryHub.Controllers.API
 {
-    [Route("OSHub/[controller]")]
+    [Route("api/rank")]
     [ApiController]
     public class RanksAPIController : ControllerBase
     {

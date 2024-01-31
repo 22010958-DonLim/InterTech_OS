@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StrawberryHub.Controllers.API
 {
-    [Route("OSHub/[controller]")]
+    [Route("api/goaltype")]
     [ApiController]
     public class GoalTypesAPIController : ControllerBase
     {

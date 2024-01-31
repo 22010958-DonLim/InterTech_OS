@@ -1,7 +1,12 @@
 {
   "dependencies": {
     "mssql1": {
+      "type": "mssql"
+    },
+    "mssql2": {
       "type": "mssql",
+      "connectionId": "ConnectionStrings:DBStrawberry",
+      "dynamicId": null
     }
   }
 }
