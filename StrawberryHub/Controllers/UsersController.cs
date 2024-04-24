@@ -27,7 +27,7 @@ namespace StrawberryHub.Controllers
         }
 
         // GET: Users
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var appDbContext = _context.StrawberryUser.Include(u => u.StrawberryRank);
