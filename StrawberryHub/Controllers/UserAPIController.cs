@@ -117,7 +117,7 @@ public class UsersAPIController : ControllerBase
                 Email = email,
                 //GoalTypeId = goalTypeId,
                 Points = 0,
-                RankId = 1,
+                RankId = 4,
                 UserRole = "User"
                 // Add other properties as needed
             };
@@ -152,6 +152,7 @@ public class UsersAPIController : ControllerBase
                 _context.Add(newGoal3);  // Add new goal to context
             }
 
+            _context.SaveChanges();
             return Ok("User registered successfully");
         }
         catch (Exception ex)

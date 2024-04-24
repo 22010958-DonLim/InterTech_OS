@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StrawberryHub.Models;
 
@@ -14,6 +15,7 @@ public partial class StrawberryArticle
     public DateTime PublishedDate { get; set; }
 
     [Required(ErrorMessage = "Please select a photo.")]
+    [NotMapped]
     public IFormFile Photo { get; set; } = null!;
 
     public string Picture { get; set; } = null!;

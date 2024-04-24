@@ -26,6 +26,13 @@
                 <input asp-for="PublishedDate" class="form-control" />
                 <span asp-validation-for="PublishedDate" class="text-danger"></span>
             </div>
+            <div class="col-6 mb-3">
+                <label asp-for="Photo">Add an image</label>
+                <input asp-for="Photo" class="mb-3 form-control"
+                       onchange="preview()">
+                <span asp-validation-for="Photo" class="text-danger"></span>
+                <img class="d-none" style="max-height:250px;" id="frame" src="" />
+            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

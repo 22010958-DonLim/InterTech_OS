@@ -35,7 +35,12 @@ public partial class AppDbContext : DbContext
             entity.HasKey(e => e.ArticleId).HasName("PK__Strawber__9C6270E840FD6ED4");
 
             entity.Property(e => e.ArticleContent).IsUnicode(false);
+            entity.Property(e => e.Picture)
+               .HasMaxLength(70)
+               .IsUnicode(false);
             entity.Property(e => e.PublishedDate).HasColumnType("datetime");
+            modelBuilder.Entity<StrawberryArticle>()
+                .Ignore(e => e.Photo);
 
             entity.HasOne(d => d.GoalType).WithMany(p => p.StrawberryArticles)
                 .HasForeignKey(d => d.GoalTypeId)
