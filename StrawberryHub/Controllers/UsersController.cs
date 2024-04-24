@@ -122,8 +122,8 @@ namespace StrawberryHub.Controllers
             newUser.Username = user.Username; //changes
             newUser.Points = 0;
             newUser.RankId = 1;
-            newUser.GoalTypeId = user.GoalTypeId;
             newUser.UserRole = "User";
+            //newUser.GoalTypeId = 1;
 
             if (ModelState.IsValid)
             {

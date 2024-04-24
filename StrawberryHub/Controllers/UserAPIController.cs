@@ -115,7 +115,7 @@ public class UsersAPIController : ControllerBase
                 FirstName = firstname,
                 LastName = lastname,
                 Email = email,
-                GoalTypeId = goalTypeId,
+                //GoalTypeId = goalTypeId,
                 Points = 0,
                 RankId = 1,
                 UserRole = "User"
@@ -154,7 +154,7 @@ public class UsersAPIController : ControllerBase
             var username = usernameClaim.Value;
 
             // Fetch the user from the database, including their preferences
-            var user = _context.StrawberryUser.Include(u => u.StrawberryGoalType).FirstOrDefault(u => u.Username == username);
+            var user = _context.StrawberryUser.Include(u => u.Goal).FirstOrDefault(u => u.Username == username);
 
             if (user == null)
             {
@@ -202,7 +202,7 @@ public class UsersAPIController : ControllerBase
         try
         {
             var user = _context.StrawberryUser
-                .Include(u => u.StrawberryGoalType)
+                .Include(u => u.Goal)
                 .FirstOrDefault(u => u.Username.ToLower() == Username.ToLower());
 
 
@@ -227,11 +227,11 @@ public class UsersAPIController : ControllerBase
 
             // Separate preferred and remaining articles
             var preferredArticles = articleDtos
-                .Where(article => article.GoalTypeId == user.StrawberryGoalType.GoalTypeId)
+                .Where(article => user.Goal.Any(goal => goal.GoalTypeId == article.GoalTypeId))
                 .ToList();
 
             var remainingArticles = articleDtos
-                .Where(article => article.GoalTypeId != user.StrawberryGoalType.GoalTypeId)
+                .Where(article => !user.Goal.Any(goal => goal.GoalTypeId == article.GoalTypeId))
                 .ToList();
 
             // Combine the preferred articles and remaining articles

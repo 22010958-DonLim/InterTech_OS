@@ -135,7 +135,7 @@ namespace StrawberryHub.Controllers.API
 
         // Add this method to your ArticlesAPIController
         // GET: api/ArticlesAPI/Search?query=Stress
-        [HttpGet("Search")]
+        [HttpGet("Search/{query}")]
         public async Task<ActionResult<IEnumerable<StrawberryArticle>>> SearchArticles(string query)
         {
             if (string.IsNullOrWhiteSpace(query))
@@ -144,21 +144,21 @@ namespace StrawberryHub.Controllers.API
                 return BadRequest("Invalid search query");
             }
 
+            var jsonOptions = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve,
+            };
+
             var matchingArticles = await _context.StrawberryArticle
                 .Include(a => a.GoalType)
-                .Where(a => a.ArticleContent.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-                            a.GoalType.Type.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .Where(a => a.ArticleContent.Contains(query.ToLower()) ||
+                            a.GoalType.Type.Contains(query.ToLower()))
                 .ToListAsync();
 
             if (matchingArticles == null || matchingArticles.Count == 0)
             {
                 return NotFound("No articles found for the given query");
             }
-
-            var jsonOptions = new JsonSerializerOptions
-            {
-                ReferenceHandler = ReferenceHandler.Preserve,
-            };
 
             var jsonString = JsonSerializer.Serialize(matchingArticles, jsonOptions);
 

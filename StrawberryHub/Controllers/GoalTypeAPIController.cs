@@ -99,5 +99,15 @@ namespace StrawberryHub.Controllers.API
         {
             return _context.StrawberryGoalType.Any(e => e.GoalTypeId == id);
         }
+
+        // GET: api/GoalTypesAPI/Type
+        [HttpGet("Type")]
+        public async Task<ActionResult<IEnumerable<object>>> GetGoalTypeAndId()
+        {
+            return await _context.StrawberryGoalType
+                .Select(g => new { g.GoalTypeId, g.Type })
+                .ToListAsync();
+        }
+
     }
 }

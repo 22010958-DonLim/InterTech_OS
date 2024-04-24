@@ -23,11 +23,11 @@ public partial class StrawberryUser
 
     public int? RankId { get; set; }
 
-    public int? GoalTypeId { get; set; }
+    //public int? GoalTypeId { get; set; }
 
     public string UserRole { get; set; } = null!;
 
-    public virtual StrawberryGoalType StrawberryGoalType { get; set; } = null!;
+    public virtual ICollection<StrawberryGoalType> StrawberryGoalType { get; set; } = new List<StrawberryGoalType>();
 
     public virtual StrawberryRank StrawberryRank { get; set; } = null!;
 

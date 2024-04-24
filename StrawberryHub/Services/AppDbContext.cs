@@ -37,10 +37,9 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.ArticleContent).IsUnicode(false);
             entity.Property(e => e.PublishedDate).HasColumnType("datetime");
 
-            entity.HasOne(d => d.GoalType)
-                    .WithMany(p => p.StrawberryArticles)
-                    .HasForeignKey(d => d.GoalTypeId)
-                    .HasConstraintName("FK_StrawberryArticle_StrawberryGoalType");
+            entity.HasOne(d => d.GoalType).WithMany(p => p.StrawberryArticles)
+                .HasForeignKey(d => d.GoalTypeId)
+                .HasConstraintName("FK__Strawberr__GoalT__72C60C4A");
         });
 
         modelBuilder.Entity<StrawberryEmergencySupport>(entity =>
@@ -94,9 +93,9 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<StrawberryUser>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Strawber__1788CC4C6A73F7B8");
+            entity.HasKey(e => e.UserId).HasName("PK__tmp_ms_x__1788CC4CEE66DDA2");
 
-            entity.HasIndex(e => e.Username, "UQ__Strawber__536C85E45EEFCBDB").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__tmp_ms_x__536C85E4DBCE093D").IsUnique();
 
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
@@ -116,20 +115,17 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Username)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.GoalTypeId)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            //entity.Property(e => e.GoalTypeId)
+                //.HasMaxLength(50)
+                //.IsUnicode(false);
 
-            entity.HasOne(d => d.StrawberryGoalType).WithMany(p => p.StrawberryUsers)
-                .HasForeignKey(d => d.GoalTypeId)
-                .HasConstraintName("FK__Strawberr__GoalT__7F2BE32F");
+            //entity.HasOne(d => d.StrawberryGoalType).WithMany(p => p.StrawberryUsers)
+                //.HasForeignKey(d => d.GoalTypeId)
+                //.HasConstraintName("FK__Strawberr__GoalT__7F2BE32F");
 
-            entity.HasOne(d => d.StrawberryRank)
-                .WithMany(p => p.StrawberryUsers)
+            entity.HasOne(d => d.StrawberryRank).WithMany(p => p.StrawberryUsers)
                 .HasForeignKey(d => d.RankId)
-                .HasConstraintName("FK_StrawberryUser_StrawberryRank");
-
-
+                .HasConstraintName("FK__Strawberr__RankI__04E4BC85");
         });
 
         OnModelCreatingPartial(modelBuilder);
