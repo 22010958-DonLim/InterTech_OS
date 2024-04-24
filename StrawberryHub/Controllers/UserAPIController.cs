@@ -94,8 +94,8 @@ public class UsersAPIController : ControllerBase
     }
 
     // POST: api/UsersAPI
-    [HttpPost("Register/{username}/{password}/{firstname}/{lastname}/{email}/{goalTypeId}")]
-    public IActionResult Register(string username, string password, string firstname, string lastname, string email, int goalTypeId)
+    [HttpPost("Register/{username}/{password}/{firstname}/{lastname}/{email}/{goalTypeId1}/{goalTypeId2}/{goalTypeId3}")]
+    public IActionResult Register(string username, string password, string firstname, string lastname, string email, int goalTypeId1, int goalTypeId2, int goalTypeId3)
     {
         try
         {
@@ -124,6 +124,33 @@ public class UsersAPIController : ControllerBase
 
             _context.StrawberryUser.Add(newUser);
             _context.SaveChanges();
+
+            if (goalTypeId1 == 1)
+            {
+                StrawberryGoal newGoal = new StrawberryGoal();
+                newGoal.UserId = newUser.UserId;  // Assuming newUser.UserId is set after adding newUser to context
+                newGoal.GoalTypeId = 1;
+
+                _context.Add(newGoal);  // Add new goal to context
+            }
+
+            if (goalTypeId2 == 1)
+            {
+                StrawberryGoal newGoal2 = new StrawberryGoal();
+                newGoal2.UserId = newUser.UserId;  // Assuming newUser.UserId is set after adding newUser to context
+                newGoal2.GoalTypeId = 2;
+
+                _context.Add(newGoal2);  // Add new goal to context
+            }
+
+            if (goalTypeId3 == 1)
+            {
+                StrawberryGoal newGoal3 = new StrawberryGoal();
+                newGoal3.UserId = newUser.UserId;  // Assuming newUser.UserId is set after adding newUser to context
+                newGoal3.GoalTypeId = 3;
+
+                _context.Add(newGoal3);  // Add new goal to context
+            }
 
             return Ok("User registered successfully");
         }

@@ -105,7 +105,9 @@ namespace StrawberryHub.Controllers.API
         public async Task<ActionResult<IEnumerable<object>>> GetGoalTypeAndId()
         {
             return await _context.StrawberryGoalType
-                .Select(g => new { g.GoalTypeId, g.Type })
+                .Select(g => new { 
+                    g.GoalTypeId, 
+                    g.Type })
                 .ToListAsync();
         }
 

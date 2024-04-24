@@ -13,6 +13,11 @@ public partial class StrawberryArticle
 
     public DateTime PublishedDate { get; set; }
 
+    [Required(ErrorMessage = "Please select a photo.")]
+    public IFormFile Photo { get; set; } = null!;
+
+    public string Picture { get; set; } = null!;
+
     [ValidateNever]
     public virtual StrawberryGoalType GoalType { get; set; } = null!;
 

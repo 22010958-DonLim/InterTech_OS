@@ -13,10 +13,12 @@ namespace StrawberryHub.Controllers
     public class ArticlesController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public ArticlesController(AppDbContext context)
+        public ArticlesController(AppDbContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         // GET: Articles
@@ -163,6 +165,19 @@ namespace StrawberryHub.Controllers
         private bool ArticleExists(int id)
         {
           return (_context.StrawberryArticle?.Any(e => e.ArticleId == id)).GetValueOrDefault();
+        }
+
+        private string DoPhotoUpload(IFormFile photo)
+        {
+            string fext = Path.GetExtension(photo.FileName);
+            string uname = Guid.NewGuid().ToString();
+            string fname = uname + fext;
+            string fullpath = Path.Combine(_env.WebRootPath, "photos/" + fname);
+            using (FileStream fs = new(fullpath, FileMode.Create))
+            {
+                photo.CopyTo(fs);
+            }
+            return fname;
         }
     }
 }

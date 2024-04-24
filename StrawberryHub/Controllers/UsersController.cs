@@ -215,7 +215,7 @@ namespace StrawberryHub.Controllers
             }
 
             var user = await _context.StrawberryUser
-                .Include(u => u.StrawberryRank)
+                //.Include(u => u.StrawberryRank)
                 .FirstOrDefaultAsync(m => m.UserId == id);
             if (user == null)
             {
@@ -238,11 +238,15 @@ namespace StrawberryHub.Controllers
             var user = await _context.StrawberryUser.FindAsync(id);
             if (user != null)
             {
-                _context.StrawberryUser.Remove(user);
+                // Remove related goals
+                var goalsToRemove = _context.StrawberryGoal.Where(g => g.UserId == id);
+                _context.StrawberryGoal.RemoveRange(goalsToRemove);
 
                 //Remove the UserID in Task as well (Task contain foregin Key of UserID)
                 var tasksToRemove = _context.StrawberryTask.Where(t => t.UserId == id);
                 _context.StrawberryTask.RemoveRange(tasksToRemove);
+
+                _context.StrawberryUser.Remove(user);
             }
             
             await _context.SaveChangesAsync();

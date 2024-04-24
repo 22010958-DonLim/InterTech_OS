@@ -9,7 +9,25 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+
+@section BootstrapTableScripts {
+    <link href="~/lib/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#jsRankTable').DataTable({
+                scrollY: 500,
+                ordering: true,
+                searching: true,
+                stateSave: true
+            });
+        });
+    </script>
+}
+
+<table id="jsRankTable" class="table table-condensed table-hover">
     <thead>
         <tr>
             <th>
@@ -25,23 +43,24 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RankName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MinPoints)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaxPoints)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.RankId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RankId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RankId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RankName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MinPoints)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaxPoints)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.RankId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.RankId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.RankId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
