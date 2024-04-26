@@ -39,22 +39,29 @@ namespace StrawberryHub.Controllers.API
             return Ok(jsonString);
         }
 
-        // GET: api/GoalsAPI/5
-        [HttpGet("{Username}")]
-        public async Task<ActionResult<StrawberryGoal>> GetGoal(int id)
+        // GET: api/goal/5        // GET: api/goal/User/{UserId}
+        [HttpGet("User/{UserId}")]
+        public async Task<ActionResult<IEnumerable<StrawberryGoal>>> GetGoalsByUser(int userId)
         {
-            var goal = await _context.StrawberryGoal
-                .Include(g => g.GoalType)
-                .Include(g => g.User)
-                .FirstOrDefaultAsync(m => m.GoalId == id);
+            var goals = await _context.StrawberryGoal
+                .Where(m => m.UserId == userId)
+                .ToListAsync();
 
-            if (goal == null)
+            if (goals == null || !goals.Any())
             {
-                return NotFound("Goal not found");
+                return NotFound("No goals found for this user");
             }
+            var result = goals.Select(g => new
+            {
+                GoalTypeId = g.GoalTypeId,
+                GoalId = g.GoalId
+            });
 
-            return goal;
+            var jsonString = JsonSerializer.Serialize(result);
+
+            return Ok(jsonString);
         }
+
 
         // PUT: api/GoalsAPI/5
         [HttpPut("{id}")]
@@ -116,5 +123,6 @@ namespace StrawberryHub.Controllers.API
         {
             return _context.StrawberryGoal.Any(e => e.GoalId == id);
         }
+
     }
 }

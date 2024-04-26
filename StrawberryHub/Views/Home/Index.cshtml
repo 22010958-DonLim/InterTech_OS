@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@model List<StrawberryArticle>
 
 <style>
     body {
@@ -47,4 +48,7 @@
     </p>
 
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<div class="text-center">
+    <a asp-controller="Articles" asp-action="ShowArticle" class="btn btn-primary">View All Articles</a>
 </div>

@@ -24,8 +24,11 @@ namespace StrawberryHub.Controllers
         // GET: Articles
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.StrawberryArticle.Include(a => a.GoalType);
-            return View(await appDbContext.ToListAsync());
+            var articles = _context.StrawberryArticle
+                .Include(a => a.GoalType)
+                .Include(a => a.StrawberryUser) // Assuming there's a property named User in StrawberryArticle representing the user who created the article
+                .ToListAsync();
+            return View(await articles);
         }
 
         // GET: Articles/Details/5
@@ -38,6 +41,7 @@ namespace StrawberryHub.Controllers
 
             var article = await _context.StrawberryArticle
                 .Include(a => a.GoalType)
+                .Include(a => a.StrawberryUser)
                 .FirstOrDefaultAsync(m => m.ArticleId == id);
             if (article == null)
             {
@@ -59,13 +63,34 @@ namespace StrawberryHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ArticleId,GoalTypeId,ArticleContent,PublishedDate")] StrawberryArticle article)
+        public async Task<IActionResult> Create([Bind("ArticleId,GoalTypeId,Title,ArticleContent,PublishedDate,Photo,Picture,UserId")] StrawberryArticle article, IFormFile photo)
         {
+            ModelState.Remove("Picture");     // No Need to Validate "Picture" - derived from "Photo".
+            ModelState.Remove("UserId");
+            ModelState.Remove("PublishDate");
             if (ModelState.IsValid)
             {
-                _context.Add(article);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.Name);
+                int userId = 0;
+                if (userIdClaim != null)
+                {
+                    string username = userIdClaim.Value; // Extract the value of the claim
+                    userId = await _context.StrawberryUser
+                        .Where(u => u.Username == username)
+                        .Select(u => u.UserId)
+                        .FirstOrDefaultAsync();
+
+                    // Now userId contains the UserId of the user with the specified username
+                }
+
+                    string picfilename = DoPhotoUpload(article.Photo);
+                    article.Picture = picfilename.EscQuote();
+                    article.UserId = userId; // Assign the retrieved user id to the article
+                    article.PublishedDate = DateTime.Now;
+                    _context.Add(article);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                
             }
             ViewData["GoalTypeId"] = new SelectList(_context.StrawberryGoalType, "GoalTypeId", "GoalTypeId", article.GoalTypeId);
             return View(article);
@@ -85,6 +110,7 @@ namespace StrawberryHub.Controllers
                 return NotFound();
             }
             ViewData["GoalTypeId"] = new SelectList(_context.StrawberryGoalType, "GoalTypeId", "GoalTypeId", article.GoalTypeId);
+
             return View(article);
         }
 
@@ -93,8 +119,10 @@ namespace StrawberryHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ArticleId,GoalTypeId,ArticleContent,PublishedDate")] StrawberryArticle article)
+        public async Task<IActionResult> Edit(int id, [Bind("ArticleId,GoalTypeId,Title,ArticleContent,PublishedDate,Photo,Picture,UserId")] StrawberryArticle article, IFormFile photo)
         {
+            ModelState.Remove("Photo");       // No Need to Validate "Photo"
+            ModelState.Remove("UserId");
             if (id != article.ArticleId)
             {
                 return NotFound();
@@ -104,6 +132,12 @@ namespace StrawberryHub.Controllers
             {
                 try
                 {
+                    if (photo != null)
+                    {
+                        string picfilename = DoPhotoUpload(photo);
+                        article.Picture = picfilename.EscQuote();
+                    }
+                    article.PublishedDate = DateTime.Now;
                     _context.Update(article);
                     await _context.SaveChangesAsync();
                 }
@@ -155,6 +189,10 @@ namespace StrawberryHub.Controllers
             var article = await _context.StrawberryArticle.FindAsync(id);
             if (article != null)
             {
+                string photoFile = article.Picture;
+                string fullpath = Path.Combine(_env.WebRootPath, "photos/" + photoFile);
+                System.IO.File.Delete(fullpath);
+
                 _context.StrawberryArticle.Remove(article);
             }
             
@@ -179,5 +217,17 @@ namespace StrawberryHub.Controllers
             }
             return fname;
         }
+
+        // GET: Articles/Recent
+        public async Task<IActionResult> ShowArticle()
+        {
+            var articles = await _context.StrawberryArticle
+                .OrderBy(a => a.PublishedDate)
+                .Take(3)
+                .ToListAsync();
+
+            return View("ShowArticle", articles);
+        }
+
     }
 }

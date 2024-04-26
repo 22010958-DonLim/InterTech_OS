@@ -7,6 +7,12 @@
 		<RootNamespace>StrawberryHub</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Compile Remove="wwwroot\NewFolder\**" />
+	  <Content Remove="wwwroot\NewFolder\**" />
+	  <EmbeddedResource Remove="wwwroot\NewFolder\**" />
+	  <None Remove="wwwroot\NewFolder\**" />
+	</ItemGroup>
+	<ItemGroup>
 	  <None Include="wwwroot\css\site.css" />
 	  <None Include="wwwroot\favicon.ico" />
 	  <None Include="wwwroot\js\site.js" />

@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ArticleContent)
+                @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PublishedDate)
@@ -21,27 +21,34 @@
             <th>
                 @Html.DisplayNameFor(model => model.GoalType)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ArticleContent)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PublishedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GoalType.GoalTypeId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ArticleId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ArticleId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ArticleId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PublishedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GoalType.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StrawberryUser.Username)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ArticleId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ArticleId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ArticleId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

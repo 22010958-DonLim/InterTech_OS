@@ -45,6 +45,10 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.GoalType).WithMany(p => p.StrawberryArticles)
                 .HasForeignKey(d => d.GoalTypeId)
                 .HasConstraintName("FK__Strawberr__GoalT__72C60C4A");
+
+            entity.HasOne(d => d.StrawberryUser).WithMany(p => p.StrawberryArticle)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__Strawberr__UserI__2739D489");
         });
 
         modelBuilder.Entity<StrawberryEmergencySupport>(entity =>

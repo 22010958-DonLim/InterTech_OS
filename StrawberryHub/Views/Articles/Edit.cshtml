@@ -9,29 +9,42 @@
 <h4>Article</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div class="col-md-8">
+        <form asp-action="Edit" enctype="multipart/form-data" novalidate>
+            <input asp-for="Picture" hidden />
+            <input asp-for="UserId" hidden />
+            <input asp-for="PublishedDate" hidden />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ArticleId" />
             <div class="form-group">
-                <label asp-for="GoalTypeId" class="control-label"></label>
+                <label asp-for="GoalTypeId" class="control-label">Goal Type</label>
                 <select asp-for="GoalTypeId" class="form-control" asp-items="ViewBag.GoalTypeId"></select>
                 <span asp-validation-for="GoalTypeId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ArticleContent" class="control-label"></label>
-                <input asp-for="ArticleContent" class="form-control" />
-                <span asp-validation-for="ArticleContent" class="text-danger"></span>
+                <label asp-for="Title" class="control-label">Title</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PublishedDate" class="control-label"></label>
-                <input asp-for="PublishedDate" class="form-control" />
-                <span asp-validation-for="PublishedDate" class="text-danger"></span>
+                <label asp-for="ArticleContent" class="control-label">Article Content</label>
+                <textarea asp-for="ArticleContent" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="ArticleContent" class="text-danger"></span>
+            </div>
+            <div class="col-6 mb-3">
+                <label asp-for="Photo">Edit image</label>
+                <input asp-for="Photo" class="mb-3 form-control" onchange="previewImage(this)" data-val="false">
+                <span asp-validation-for="Photo" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
+    </div>
+    <div class="col-md-4">
+        <div class="mb-3">
+            <img id="ImgPhoto" src="~/Photos/@Model.Picture" style="height: 350px;" />
+        </div>
     </div>
 </div>
 
@@ -40,5 +53,18 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('ImgPhoto').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

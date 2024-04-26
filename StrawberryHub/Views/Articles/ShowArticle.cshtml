@@ -1,0 +1,90 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model List<StrawberryArticle>
+
+<style>
+    body {
+        background-image: url('/Images/strawberryImage.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        margin: 0;
+        padding: 0;
+    }
+
+    .text-center {
+        color: white; /* Set text color to white for elements with class 'text-center' */
+    }
+
+    /* Additional styles for specific elements if needed */
+    h1, h4, p {
+        color: white; /* Set text color to white for h1 and h4 elements */
+    }
+
+    h1, h4 {
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    /* Add this style to control the size of the images */
+    .card-img-top {
+        width: 100%; /* Make the image take up the full width of the card */
+        height: 200px; /* Set a fixed height for the image */
+        object-fit: cover; /* Resize the image to cover the area while maintaining aspect ratio */
+    }
+</style>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+
+    <h4 class="display-4">About Us</h4>
+    <p>
+        Welcome to our Strawberry Generation Wellness App!
+        Dedicated to individuals born in strawberry years who may experience breakdowns and feel like giving up. But we are here
+        to help you overcome these hurdles!
+
+        Our purpose is to Empower “strawberries” with tips and activities to overcome vulnerability and cultivate resilience.
+    </p>
+
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<h2 class="text-center">Recent Articles</h2>
+<div class="row">
+    @foreach (StrawberryArticle article in Model)
+    {
+        <div class="col-sm-4">
+            <div class="card">
+                <a asp-controller="Articles" asp-action="Details" asp-route-id="@article.ArticleId">
+                    <img src="~/photos/@article.Picture" class="card-img-top" />
+                </a>
+                <div class="card-body">
+                    <div class="card-title">
+                        @article.Title (@String.Format("{0:yyyy MMM}", article.PublishedDate))
+                    </div>
+                    <div>
+                        <small>
+                            @((article.ArticleContent.Length <= 30) ? article.ArticleContent : article.ArticleContent.Substring(0, 20) + "...")
+                            <a asp-controller="Articles"
+                           asp-action="Update"
+                           asp-route-id="@article.ArticleId">
+                                Edit
+                            </a> |
+                            <a asp-controller="Articles"
+                           asp-action="Delete"
+                           asp-route-id="@article.ArticleId"
+                               onclick="return confirm('Delete Article [@article.Title]')">
+                                Delete
+                            </a>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

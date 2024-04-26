@@ -42,6 +42,40 @@ public class UsersAPIController : ControllerBase
         }
     }
 
+    // GET: api/users/search/{username}
+    [HttpGet("search/{username}")]
+    public async Task<ActionResult<IEnumerable<StrawberryUser>>> SearchByUsername(string username)
+    {
+        var users = await _context.StrawberryUser
+            .Where(u => EF.Functions.Like(u.Username, $"%{username}%"))
+            .Include(u => u.Goal)
+            .ThenInclude(u => u.GoalType)
+            .ToListAsync();
+
+        if (!users.Any())
+        {
+            return NotFound("No users found with the given username.");
+        }
+
+        var result = users.Select(u => new
+        {
+            UserId = u.UserId,
+            Username = u.Username,
+            FirstName = u.FirstName,
+            LastName = u.LastName,
+            Email = u.Email,
+            Points = u.Points,
+            RankId = u.RankId,
+            Goals = u.Goal.Select(g => new
+            {
+                GoalId = g.GoalId,
+                GoalTypeId = g.GoalType.GoalTypeId
+            })
+        });
+
+        return Ok(result);
+    }
+
     // GET: api/UsersAPI
     [HttpGet]
     public async Task<ActionResult<IEnumerable<StrawberryUser>>> GetUsers()

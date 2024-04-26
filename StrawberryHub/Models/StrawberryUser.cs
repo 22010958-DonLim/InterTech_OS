@@ -42,4 +42,7 @@ public partial class StrawberryUser
 
     [ValidateNever]
     public virtual ICollection<StrawberryTask> Task { get; set; } = new List<StrawberryTask>();
+
+    [ValidateNever]
+    public virtual ICollection<StrawberryArticle> StrawberryArticle { get; set; } = new List<StrawberryArticle>();
 }

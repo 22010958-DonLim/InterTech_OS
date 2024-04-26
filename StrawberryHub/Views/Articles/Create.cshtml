@@ -10,18 +10,25 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-controller="Articles" asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <!-- Add a hidden input field for UserId -->
+            <input type="hidden" asp-for="UserId" />
             <div class="form-group">
                 <label asp-for="GoalTypeId" class="control-label"></label>
-                <select asp-for="GoalTypeId" class ="form-control" asp-items="ViewBag.GoalTypeId"></select>
+                <select asp-for="GoalTypeId" class="form-control" asp-items="ViewBag.GoalTypeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ArticleContent" class="control-label"></label>
-                <input asp-for="ArticleContent" class="form-control" />
+                <textarea asp-for="ArticleContent" class="form-control" rows="6" style="resize: vertical;"></textarea>
                 <span asp-validation-for="ArticleContent" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="PublishedDate" class="control-label"></label>
                 <input asp-for="PublishedDate" class="form-control" />
                 <span asp-validation-for="PublishedDate" class="text-danger"></span>
@@ -33,6 +40,7 @@
                 <span asp-validation-for="Photo" class="text-danger"></span>
                 <img class="d-none" style="max-height:250px;" id="frame" src="" />
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -44,6 +52,21 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+<script>
+    function preview() {
+        document.getElementById("frame").className = "d-md-block";
+        frame.src = URL.createObjectURL(event.target.files[0]);
+    }
+
+    function clearImage() {
+        document.getElementById('formFile').value = null;
+        frame.src = "";
+        document.getElementById("frame").className = "d-none d-md-block";
+    }
+</script>
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
