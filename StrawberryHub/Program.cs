@@ -20,6 +20,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
                 });
 builder.Services.AddScoped<IDbService, DbService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<TgService>();
 
 builder.Services.AddDbContext<AppDbContext>(
    options => options.UseSqlServer(

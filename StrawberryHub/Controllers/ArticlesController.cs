@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -54,7 +55,7 @@ namespace StrawberryHub.Controllers
         // GET: Articles/Create
         public IActionResult Create()
         {
-            ViewData["GoalTypeId"] = new SelectList(_context.StrawberryGoalType, "GoalTypeId", "GoalTypeId");
+            ViewData["GoalTypeId"] = new SelectList(_context.StrawberryGoalType, "GoalTypeId", "Type");
             return View();
         }
 
@@ -109,7 +110,7 @@ namespace StrawberryHub.Controllers
             {
                 return NotFound();
             }
-            ViewData["GoalTypeId"] = new SelectList(_context.StrawberryGoalType, "GoalTypeId", "GoalTypeId", article.GoalTypeId);
+            ViewData["GoalTypeId"] = new SelectList(_context.StrawberryGoalType, "GoalTypeId", "Type", article.GoalTypeId);
 
             return View(article);
         }
@@ -222,7 +223,7 @@ namespace StrawberryHub.Controllers
         public async Task<IActionResult> ShowArticle()
         {
             var articles = await _context.StrawberryArticle
-                .OrderBy(a => a.PublishedDate)
+                .OrderByDescending(a => a.PublishedDate)
                 .Take(3)
                 .ToListAsync();
 

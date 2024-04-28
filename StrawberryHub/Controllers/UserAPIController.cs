@@ -265,6 +265,7 @@ public class UsersAPIController : ControllerBase
         {
             var user = _context.StrawberryUser
                 .Include(u => u.Goal)
+                .ThenInclude(u => u.GoalType)
                 .FirstOrDefault(u => u.Username.ToLower() == Username.ToLower());
 
 
@@ -274,7 +275,10 @@ public class UsersAPIController : ControllerBase
             }
 
             // Fetch all articles from the database
-            var allArticles = _context.StrawberryArticle.ToList();
+            var allArticles = _context.StrawberryArticle
+                .Include(u => u.GoalType)
+                .Include(u => u.StrawberryUser)
+                .ToList();
 
             // Project articles into custom object
             var articleDtos = allArticles
@@ -282,8 +286,11 @@ public class UsersAPIController : ControllerBase
                 {
                     ArticleId = article.ArticleId,
                     GoalTypeId = article.GoalTypeId,
+                    Title = article.Title,
                     ArticleContent = article.ArticleContent,
-                    PublishedDate = article.PublishedDate
+                    PublishedDate = article.PublishedDate,
+                    UserId = article.UserId,
+                    Picture = article.Picture
                 })
                 .ToList();
 

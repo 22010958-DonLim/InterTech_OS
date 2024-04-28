@@ -33,7 +33,7 @@
             </div>
             <div class="col-6 mb-3">
                 <label asp-for="Photo">Edit image</label>
-                <input asp-for="Photo" class="mb-3 form-control" onchange="previewImage(this)" data-val="false">
+                <input value="~/Photos/@Model.Picture" asp-for="Photo" class="mb-3 form-control" onchange="previewImage(this)" data-val="false">
                 <span asp-validation-for="Photo" class="text-danger"></span>
             </div>
             <div class="form-group">

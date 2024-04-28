@@ -88,6 +88,7 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.11" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+		<PackageReference Include="Telegram.Bot" Version="19.0.0" />
 	</ItemGroup>
 
 </Project>

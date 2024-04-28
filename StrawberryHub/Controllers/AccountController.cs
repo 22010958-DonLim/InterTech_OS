@@ -2,6 +2,8 @@ using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Unicode;
 using System.Text;
+using System.Data;
+using Telegram.Bot.Types;
 
 namespace StrawberryHub.Controllers;
 
@@ -13,11 +15,13 @@ public class AccountController : Controller
 
     private readonly AppDbContext _dbCtx;
     private readonly IAuthService _authSvc;
+    private readonly IDbService _dbSvc;
 
-    public AccountController(IAuthService authSvc, AppDbContext dbContext)
+    public AccountController(IAuthService authSvc, AppDbContext dbContext, IDbService dbSvc)
     {
         _dbCtx = dbContext;
         _authSvc = authSvc;
+        _dbSvc = dbSvc; 
     }
 
     private bool AuthenticateUser(string uid, string pw, out ClaimsPrincipal? principal)
@@ -64,36 +68,119 @@ public class AccountController : Controller
     public IActionResult Login(LoginUser user)
     {
         const string sqlLogin =
-                @"SELECT UserId, Username, UserRole FROM StrawberryUser WHERE Username = '{0}' 
+                @"SELECT TelegramId FROM StrawberryUser WHERE Username = '{0}' 
                  AND Password = HASHBYTES('SHA1', '{1}')";
 
-        // Convert byte array to string using UTF-8 encoding
-        //string thePassword = Encoding.UTF8.GetString(user.Password);
-        if (!_authSvc.Authenticate(sqlLogin, user.Username, user.Password,
-                out ClaimsPrincipal? principal)) //changes
+        var rows = _dbSvc.GetTable(sqlLogin, user.Username, user.Password).Rows;
+        var used = _dbCtx.StrawberryUser
+            .Where(u => u.Username == user.Username)
+            .FirstOrDefault();
+
+        if (used == null)
         {
+            // No matching user found in the database
             ViewData["Message"] = "Incorrect User Id or Password";
             ViewData["MsgType"] = "warning";
             return View(LOGIN_VIEW, user);
         }
+        // Convert byte array to string using UTF-8 encoding
+        //string thePassword = Encoding.UTF8.GetString(user.Password);
+        //if (!_authSvc.Authenticate(sqlLogin, user.Username, user.Password,
+                //out ClaimsPrincipal? principal)) //changes
+        //{
+            //ViewData["Message"] = "Incorrect User Id or Password";
+            //ViewData["MsgType"] = "warning";
+            //return View(LOGIN_VIEW, user);
+        //}
         else
         {
-            HttpContext.SignInAsync(
-               CookieAuthenticationDefaults.AuthenticationScheme,
-               principal!,
-               new AuthenticationProperties
-               {
-                   IsPersistent = true
-               });
-
+            //HttpContext.SignInAsync(
+            //CookieAuthenticationDefaults.AuthenticationScheme,
+            //principal!,
+            //new AuthenticationProperties
+            //{
+            //IsPersistent = true
+            //});
 
             string? returnUrl = TempData["returnUrl"]?.ToString();
             if (returnUrl != null && Url.IsLocalUrl(returnUrl))
             {
+                TempData["LoginUser"] = user; // Store the LoginUser data in TempData
                 return Redirect(returnUrl);
             }
 
-            return RedirectToAction(REDIRECT_ACTN, REDIRECT_CNTR);
+            var otp = new Random().Next(100000, 999999).ToString();
+            const string sqlSaveOtp = @"UPDATE StrawberryUser SET Otp='{1}', OtpCount=0 WHERE UserId='{0}'";
+            _dbSvc.ExecSQL(sqlSaveOtp, used.UserId, otp);
+            if (int.TryParse(used.TelegramId, out int telegramIdInt))
+            {
+                long telegramId = telegramIdInt;
+                Task.Run(async () =>
+                    await TgService.SendMessageAsync(telegramId,
+                        $"Your 2FA Pin is {otp}"));
+            }
+            return View("Login2FA", new LoginOTP { UserId = used.UserId, Username = user.Username, Password = user.Password });
+
+            //return RedirectToAction(REDIRECT_ACTN, REDIRECT_CNTR);
+        }
+    }
+
+    [HttpPost]
+    public IActionResult VerifyOTP(LoginOTP userOtp)
+    {
+        const string sqlVerifyOtp = @"
+    SELECT COUNT(*) FROM StrawberryUser
+    WHERE UserId = '{0}' AND Otp = '{1}'";
+
+        var rows = _dbSvc.GetTable(sqlVerifyOtp, userOtp.UserId, userOtp.OTP).Rows;
+
+        if (rows.Count > 0)
+        {
+            const string sqlResetOtp = @"
+        UPDATE StrawberryUser SET Otp = 0, OtpCount = 0
+        WHERE UserId = '{0}'";
+
+            // Use parameters directly in the ExecSQL method
+            _dbSvc.ExecSQL(sqlResetOtp, userOtp.UserId);
+
+            // Login successful, redirect to home page or any other desired page
+            const string sqlLogin =
+                           @"SELECT UserId, Username, UserRole FROM StrawberryUser WHERE Username = '{0}' 
+                 AND Password = HASHBYTES('SHA1', '{1}')";
+
+            // Convert byte array to string using UTF-8 encoding
+            //string thePassword = Encoding.UTF8.GetString(user.Password);
+            if (!_authSvc.Authenticate(sqlLogin, userOtp.Username, userOtp.Password,
+                    out ClaimsPrincipal? principal)) //changes
+            {
+                ViewData["Message"] = "Incorrect User Id or Password";
+                ViewData["MsgType"] = "warning";
+                return View(LOGIN_VIEW, userOtp);
+            }
+            else
+            {
+                HttpContext.SignInAsync(
+                   CookieAuthenticationDefaults.AuthenticationScheme,
+                   principal!,
+                   new AuthenticationProperties
+                   {
+                       IsPersistent = true
+                   });
+
+
+                string? returnUrl = TempData["returnUrl"]?.ToString();
+                if (returnUrl != null && Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+
+                return RedirectToAction(REDIRECT_ACTN, REDIRECT_CNTR);
+            }
+        }
+        else
+        {
+            // ModelState.AddModelError("OTP", "Invalid OTP");
+            return View("Login2FA", userOtp);
         }
     }
 

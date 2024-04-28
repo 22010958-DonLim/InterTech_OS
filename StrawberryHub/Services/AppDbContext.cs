@@ -115,9 +115,16 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.LastName)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.Otp)
+                .HasMaxLength(6)
+                .IsUnicode(false);
+            entity.Property(e => e.OtpCount).HasDefaultValueSql("((0))");
             entity.Property(e => e.Password).HasMaxLength(50);
             entity.Property(e => e.Points).HasDefaultValueSql("((0))");
             entity.Property(e => e.RankId).HasDefaultValueSql("((1))");
+            entity.Property(e => e.TelegramId)
+               .HasMaxLength(50)
+               .IsUnicode(false);
             entity.Property(e => e.UserRole)
                 .HasMaxLength(50)
                 .IsUnicode(false);

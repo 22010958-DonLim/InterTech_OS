@@ -27,6 +27,10 @@ public partial class StrawberryUser
 
     public string UserRole { get; set; } = null!;
 
+    public int? Otp { get; set; } // One-time password
+    public int? OtpCount { get; set; } // OTP attempt count
+    public string? TelegramId { get; set; } // Telegram user ID
+
     public virtual ICollection<StrawberryGoalType> StrawberryGoalType { get; set; } = new List<StrawberryGoalType>();
 
     public virtual StrawberryRank StrawberryRank { get; set; } = null!;

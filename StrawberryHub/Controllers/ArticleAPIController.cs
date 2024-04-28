@@ -26,6 +26,7 @@ namespace StrawberryHub.Controllers.API
         {
             var articles = await _context.StrawberryArticle
                 .Include(a => a.GoalType)
+                .Include(a => a.StrawberryUser)
                 .ToListAsync();
 
             var jsonOptions = new JsonSerializerOptions
@@ -45,6 +46,7 @@ namespace StrawberryHub.Controllers.API
         {
             var article = await _context.StrawberryArticle
                 .Include(a => a.GoalType)
+                .Include(a => a.StrawberryUser)
                 .FirstOrDefaultAsync(m => m.ArticleId == id);
 
             if (article == null)
