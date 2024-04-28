@@ -286,10 +286,12 @@ public class UsersAPIController : ControllerBase
                 {
                     ArticleId = article.ArticleId,
                     GoalTypeId = article.GoalTypeId,
+                    Type = article.GoalType.Type,
                     Title = article.Title,
                     ArticleContent = article.ArticleContent,
                     PublishedDate = article.PublishedDate,
                     UserId = article.UserId,
+                    Username = article.StrawberryUser.Username,
                     Picture = article.Picture
                 })
                 .ToList();
