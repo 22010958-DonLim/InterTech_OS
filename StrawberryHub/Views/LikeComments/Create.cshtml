@@ -1,0 +1,52 @@
+﻿@model StrawberryHub.Models.StrawberryLikeComment
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Creating a new Like/Comment</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="ArticleId" class="control-label"></label>
+                <select asp-for="ArticleId" class="form-control" asp-items="ViewBag.ArticleId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CommentText" class="control-label"></label>
+                <input asp-for="CommentText" class="form-control" />
+                <span asp-validation-for="CommentText" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Like</label>
+                <div class="form-check">
+                    <input type="radio" asp-for="Likes" class="form-check-input" value="1" />
+                    <label class="form-check-label">Liked</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" asp-for="Likes" class="form-check-input" value="" />
+                    <label class="form-check-label">Disliked</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

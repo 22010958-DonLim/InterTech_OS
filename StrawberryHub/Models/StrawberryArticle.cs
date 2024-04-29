@@ -29,4 +29,7 @@ public partial class StrawberryArticle
     [ValidateNever]
     public virtual StrawberryUser StrawberryUser { get; set; } = null!;
 
+    [ValidateNever]
+    public virtual ICollection<StrawberryLikeComment> StrawberryLikeComments { get; set; } = new List<StrawberryLikeComment>();
+
 }

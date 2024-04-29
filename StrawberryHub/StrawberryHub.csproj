@@ -13,6 +13,11 @@
 	  <None Remove="wwwroot\NewFolder\**" />
 	</ItemGroup>
 	<ItemGroup>
+	  <None Include="Views\LikeComments\Create.cshtml" />
+	  <None Include="Views\LikeComments\Delete.cshtml" />
+	  <None Include="Views\LikeComments\Details.cshtml" />
+	  <None Include="Views\LikeComments\Edit.cshtml" />
+	  <None Include="Views\LikeComments\Index.cshtml" />
 	  <None Include="wwwroot\css\site.css" />
 	  <None Include="wwwroot\favicon.ico" />
 	  <None Include="wwwroot\js\site.js" />

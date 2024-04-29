@@ -20,6 +20,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<StrawberryGoalType> StrawberryGoalType { get; set; }
 
+    public virtual DbSet<StrawberryLikeComment> StrawberryLikeComment { get; set; }
+
     public virtual DbSet<StrawberryRank> StrawberryRank { get; set; }
 
     public virtual DbSet<StrawberryReflection> StrawberryReflection { get; set; }
@@ -71,6 +73,24 @@ public partial class AppDbContext : DbContext
             entity.HasIndex(e => e.Type, "UQ__Strawber__F9B8A48B13E8CECF").IsUnique();
 
             entity.Property(e => e.Type).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<StrawberryLikeComment>(entity =>
+        {
+            entity.HasKey(e => e.CommentId).HasName("PK__Strawber__C3B4DFCA69D54E85");
+
+            entity.Property(e => e.CommentText).IsUnicode(false);
+            entity.Property(e => e.CommentTimestamp).HasColumnType("datetime");
+            entity.Property(e => e.LikeTimestamp).HasColumnType("datetime");
+            entity.Property(e => e.Likes).HasDefaultValueSql("((0))");
+
+            entity.HasOne(d => d.StrawberryArticle).WithMany(p => p.StrawberryLikeComments)
+                .HasForeignKey(d => d.ArticleId)
+                .HasConstraintName("FK__Strawberr__Artic__2CF2ADDF");
+
+            entity.HasOne(d => d.StrawberryUser).WithMany(p => p.StrawberryLikeComment)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__Strawberr__UserI__2BFE89A6");
         });
 
         modelBuilder.Entity<StrawberryRank>(entity =>

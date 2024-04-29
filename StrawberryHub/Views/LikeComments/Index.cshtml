@@ -1,0 +1,65 @@
+﻿@model IEnumerable<StrawberryHub.Models.StrawberryLikeComment>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>User record of likes and comments</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CommentText)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Likes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CommentTimestamp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LikeTimestamp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StrawberryArticle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StrawberryUser)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CommentText)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Likes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CommentTimestamp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LikeTimestamp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StrawberryArticle.ArticleId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StrawberryUser.UserId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.CommentId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.CommentId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.CommentId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
