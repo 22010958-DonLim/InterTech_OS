@@ -1,0 +1,29 @@
+﻿@model UserProfileViewModel
+
+<div class="container mt-5">
+    <!-- User Profile -->
+    <div class="card mb-4 shadow">
+        <div class="card-body text-center">
+            <h2 class="card-title">@Model.Username</h2>
+            <p class="card-text">Rank: @Model.RankName</p>
+        </div>
+    </div>
+
+    <!-- User Posts -->
+    <h2 class="mb-4">Posts</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var post in Model.Posts)
+        {
+            <div class="col-sm-4">
+                <div class="card h-100 shadow">
+                    <a asp-controller="Articles" asp-action="Details" asp-route-id="@post.ArticleId">
+                        <img src="~/photos/@post.Picture" class="card-img-top" />
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">@post.Title</h5>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,53 @@
+/* 2.13 - Pagination Nav Style - start
+================================================== */
+.pagination_nav {
+	margin: -2px;
+	li {
+		padding: 2px;
+	}
+	a {
+		height: 56px;
+		padding: 5px;
+		display: flex;
+		color: #000;
+		min-width: 56px;
+		font-size: 21px;
+		font-weight: 500;
+		align-items: center;
+		justify-content: center;
+		font-family: $secondary_font;
+	}
+	li {
+		&:hover,
+		&.active {
+			a {
+				background-color: #303030;
+				color: #fff;
+			}
+		}
+
+		&:first-child {
+			margin-right: 10px;
+		}
+		&:last-child {
+			margin-left: 10px;
+		}
+
+		&:first-child,
+		&:last-child {
+			a {
+				padding: 0px;
+				height: auto;
+				min-width: auto;
+			}
+			&:hover {
+				a {
+					color: $default_color;
+					background-color: transparent;
+				}
+			}
+		}
+	}
+}
+/* 2.13 - Pagination Nav Style - end
+================================================== */

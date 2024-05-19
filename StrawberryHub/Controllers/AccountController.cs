@@ -155,7 +155,8 @@ public class AccountController : Controller
             {
                 ViewData["Message"] = "Incorrect User Id or Password";
                 ViewData["MsgType"] = "warning";
-                return View(LOGIN_VIEW, userOtp);
+                var user = new LoginUser { Username = userOtp.Username, Password = userOtp.Password };
+                return View(LOGIN_VIEW, user);
             }
             else
             {

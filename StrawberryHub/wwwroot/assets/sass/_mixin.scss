@@ -1,0 +1,18 @@
+// background image mixin
+@mixin bg-image-property($bg_repeat: no-repeat, $bg_size: cover, $bg_position: center center) {
+	background-size: $bg_size;
+	background-repeat: $bg_repeat;
+	background-position: $bg_position;
+}
+
+@mixin widther( $length ) {
+    @media screen and (min-width: $length)  {
+        @content;
+    }
+}
+
+@mixin media-query( $length ) {
+    @media (max-width: $length) {
+        @content;
+    }
+}

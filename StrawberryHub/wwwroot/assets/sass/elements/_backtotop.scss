@@ -1,0 +1,36 @@
+/* 2.2 - BackToTop Button Style - start
+================================================== */
+.backtotop {
+	left: 10px;
+	z-index: 999;
+	bottom: 145px;
+	display: none;
+	position: fixed;
+	padding-right: 100px;
+
+	@include media-query(991px) {
+		display: none !important;
+	}
+
+	&:before {
+		top: 11px;
+		left: 104px;
+		width: 39px;
+		height: 1px;
+		content: '';
+		position: absolute;
+		background-color: #ffffff;
+	}
+
+
+	-webkit-transform: rotate(-90deg);
+	.scroll {
+		color: #ffffff;
+		line-height: 1;
+		font-size: 18px;
+		//padding-right: 55px;
+		position: relative;
+	}
+}
+/* 2.2 - BackToTop Button Style - end
+================================================== */

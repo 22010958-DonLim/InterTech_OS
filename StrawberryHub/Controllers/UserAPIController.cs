@@ -268,7 +268,6 @@ public class UsersAPIController : ControllerBase
                 .ThenInclude(u => u.GoalType)
                 .FirstOrDefault(u => u.Username.ToLower() == Username.ToLower());
 
-
             if (user == null)
             {
                 return NotFound("User not found");
@@ -278,6 +277,7 @@ public class UsersAPIController : ControllerBase
             var allArticles = _context.StrawberryArticle
                 .Include(u => u.GoalType)
                 .Include(u => u.StrawberryUser)
+                .Include(u => u.StrawberryLikeComments)
                 .ToList();
 
             // Project articles into custom object
@@ -292,7 +292,9 @@ public class UsersAPIController : ControllerBase
                     PublishedDate = article.PublishedDate,
                     UserId = article.UserId,
                     Username = article.StrawberryUser.Username,
-                    Picture = article.Picture
+                    Picture = article.Picture,
+                    TotalLikes = article.StrawberryLikeComments.Count(l => l.Likes == 1), // Count the likes
+                    TotalComments = article.StrawberryLikeComments.Count(c => c.CommentText != null) // Count the comments
                 })
                 .ToList();
 
@@ -315,5 +317,6 @@ public class UsersAPIController : ControllerBase
             return StatusCode(500, ex.Message);
         }
     }
+
 
 }

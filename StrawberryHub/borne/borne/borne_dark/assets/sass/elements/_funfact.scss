@@ -1,0 +1,26 @@
+/* 2.17 - Funfact - start
+================================================== */
+.funfact_list {
+	margin-bottom: -22px;
+	li {
+		margin-top: 60px;
+		display: inline-flex;
+		align-items: flex-end;
+		&:not(:last-child) {
+			margin-right: 50px;
+		}
+	}
+	h4 {
+		font-size: 90px;
+		line-height: .84;
+		margin-right: 15px;
+		margin-bottom: 0px;
+	}
+	p {
+		font-size: 18px;
+		line-height: 1.02;
+		margin-bottom: 22px;
+	}
+}
+/* 2.17 - Funfact - end
+================================================== */

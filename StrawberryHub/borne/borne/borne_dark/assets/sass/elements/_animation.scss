@@ -1,0 +1,48 @@
+/* 2.18 - CSS Animation - start
+================================================== */
+.pulse {
+	z-index: 1;
+	width: 64px;
+	height: 64px;
+	color: #ffffff;
+	font-size: 10px;
+	position: relative;
+	border-radius: 100%;
+	align-items: center;
+	display: inline-flex;
+	justify-content: center;
+	background-color: #A67C00;
+	&:before,
+	&:after {
+		top: 0px;
+		left: 0px;
+		right: 0px;
+		bottom: 0px;
+		z-index: -1;
+		content: '';
+		position: absolute;
+		border-radius: 100%;
+		background-color: $default_black;
+	}
+	&:before {
+		animation: pulse 3s cubic-bezier(0.16, 1, 0.3, 1) infinite both;
+	}
+	&:after {
+		animation: pulse 3s 0.6s cubic-bezier(0.16, 1, 0.3, 1) infinite both;
+	}
+	svg {
+		margin-left: 3px;
+	}
+}
+@keyframes pulse {
+	0% {
+		opacity: 0.15;
+		transform: scale(1);
+	}
+	100% {
+		opacity: 0;
+		transform: scale(2.1);
+	}
+}
+/* 2.18 - CSS Animation - end
+================================================== */

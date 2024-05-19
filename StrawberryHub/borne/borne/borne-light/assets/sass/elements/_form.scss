@@ -1,0 +1,172 @@
+/* 2.11 - Form Style - start
+================================================== */
+.form_item {
+	position: relative;
+	margin-bottom: 24px;
+	textarea,input {
+		width: 100%;
+		outline: none;
+		display: block;
+		color: #000;
+		font-size: 16px;
+		box-shadow: none;
+		font-weight: 400;
+		border-radius: 0px;
+		border: 1px solid #6B6B6B;
+		background-color: transparent;
+		transition: $default_transition;
+		&:focus {
+			outline: none;
+			box-shadow: none;
+			border-color: #000;
+		}
+	}
+
+	label .fa-search {
+		color: #000;
+	}
+	input {
+		height: 56px;
+		padding: 20px 30px 15px;
+	}
+	textarea {
+		min-height: 120px;
+		padding: 25px 30px;
+	}
+
+	.form_icon {
+		top: 50%;
+		right: 25px;
+		margin: 0px;
+		padding: 0px;
+		position: absolute;
+		transform: translateY(-50%);
+	}
+	.form_field_title {
+		line-height: 1;
+		font-size: 15px;
+		font-weight: 400;
+		margin-bottom: 15px;
+		color: $default_black;
+		font-family: $body_font;
+		sup {
+			top: -2px;
+		}
+	}
+}
+
+:-moz-placeholder {
+	color: #9d9a9a;
+	text-transform: capitalize;
+}
+::-moz-placeholder {
+	color: #9d9a9a;
+	text-transform: capitalize;
+}
+:-ms-input-placeholder {
+	color: #9d9a9a;
+	text-transform: capitalize;
+}
+::-webkit-input-placeholder {
+	color: #9d9a9a;
+	text-transform: capitalize;
+}
+
+.form_select {
+	margin-bottom: 24px;
+	.nice-select {
+		width: 100%;
+		float: none;
+		height: 56px;
+		color: #9d9a9a;
+		font-size: 16px;
+		border-radius: 0;
+		padding: 0px 30px;
+		line-height: 50px;
+		border: 1px solid #6B6B6B;
+		font-family: $secondary_font;
+		background-color: transparent;
+		transition: $default_transition;
+		&:after {
+			margin: 0px;
+			width: auto;
+			height: auto;
+			border: none;
+			content: '\f107';
+			font-weight: 500;
+			position: static;
+			transform: unset;
+			margin-left: 10px;
+			display: inline-block;
+			transform-origin: unset;
+			font-family: 'Font Awesome 5 Pro';
+		}
+
+		.list {
+			width: 100%;
+			margin-top: 1px;
+			padding: 12px 0;
+			border-radius: 0px;
+			background-color: #2B2B2B;
+		}
+
+		.option {
+			height: 45px;
+			font-size: 15px;
+			padding: 0 30px;
+			font-weight: 400;
+			line-height: 45px;
+			&:not(:last-child) {
+				border-bottom: 1px solid $default_black;
+			}
+			&:hover,
+			&.selected {
+				color: #ffffff;
+				background-color: $default_black;
+			}
+		}
+	}
+}
+
+.form_checkbox {
+	position: relative;
+	margin-bottom: 24px;
+	input {
+		float: left;
+		width: 20px;
+		height: 20px;
+		outline: none;
+		cursor: pointer;
+		appearance: none;
+		position: relative;
+		margin-right: 10px;
+		border: 1px solid #6B6B6B;
+		&:before {
+			top: 50%;
+			left: 50%;
+			opacity: 0;
+			color: #ffffff;
+			font-size: 12px;
+			content: '\f00c';
+			font-weight: 400;
+			position: absolute;
+			transition: $default_transition;
+			transform: translate(-50%, -50%);
+			font-family: 'Font Awesome 5 Pro';
+		}
+		&:checked {
+			border-color: #ffffff;
+			&:before {
+				opacity: 1;
+			}
+		}
+	}
+	label {
+		margin: 0px;
+		display: table;
+		cursor: pointer;
+		font-size: 18px;
+	}
+}
+/* 2.11 - Form Style - end
+================================================== */

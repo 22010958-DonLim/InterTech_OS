@@ -41,7 +41,7 @@ namespace StrawberryHub.Controllers.API
 
 
         // GET: api/ArticlesAPI/5
-        [HttpGet("{id}")]
+        [HttpGet("Retrieve/{id}")]
         public async Task<ActionResult<StrawberryArticle>> GetArticle(int id)
         {
             var article = await _context.StrawberryArticle
@@ -85,7 +85,7 @@ namespace StrawberryHub.Controllers.API
         }
 
         // PUT: api/ArticlesAPI/5
-        [HttpPut("{id}")]
+        [HttpPut("Update/{id}")]
         public async Task<IActionResult> PutArticle(int id, StrawberryArticle article)
         {
             if (id != article.ArticleId)
@@ -137,35 +137,51 @@ namespace StrawberryHub.Controllers.API
 
         // Add this method to your ArticlesAPIController
         // GET: api/ArticlesAPI/Search?query=Stress
-        [HttpGet("Search/{query}")]
-        public async Task<ActionResult<IEnumerable<StrawberryArticle>>> SearchArticles(string query)
+        // Add this method to your ArticlesAPIController
+// GET: api/ArticlesAPI/Search?query=Stress
+[HttpGet("Search/{query}")]
+public async Task<ActionResult<IEnumerable<StrawberryArticle>>> SearchArticles(string query)
+{
+    if (string.IsNullOrWhiteSpace(query))
+    {
+        // Handle invalid or empty search queries
+        return BadRequest("Invalid search query");
+    }
+
+    var jsonOptions = new JsonSerializerOptions
+    {
+        ReferenceHandler = ReferenceHandler.Preserve,
+
+    };
+
+    var matchingArticles = await _context.StrawberryArticle
+        .Include(a => a.GoalType)
+        .Where(a => a.ArticleContent.Contains(query.ToLower()) ||
+                    a.GoalType.Type.Contains(query.ToLower()))
+        .Select(a => new 
         {
-            if (string.IsNullOrWhiteSpace(query))
-            {
-                // Handle invalid or empty search queries
-                return BadRequest("Invalid search query");
-            }
+            ArticleId = a.ArticleId,
+            GoalTypeId = a.GoalTypeId,
+            ArticleContent = a.ArticleContent,
+            PublishedDate = a.PublishedDate,
+            Picture = a.Picture,
+            Title = a.Title,
+            UserId = a.UserId
+        })
+        .ToListAsync();
 
-            var jsonOptions = new JsonSerializerOptions
-            {
-                ReferenceHandler = ReferenceHandler.Preserve,
-            };
+    if (matchingArticles == null || matchingArticles.Count == 0)
+    {
+        return NotFound("No articles found for the given query");
+    }
 
-            var matchingArticles = await _context.StrawberryArticle
-                .Include(a => a.GoalType)
-                .Where(a => a.ArticleContent.Contains(query.ToLower()) ||
-                            a.GoalType.Type.Contains(query.ToLower()))
-                .ToListAsync();
+    var jsonString = JsonSerializer.Serialize(matchingArticles, jsonOptions);
 
-            if (matchingArticles == null || matchingArticles.Count == 0)
-            {
-                return NotFound("No articles found for the given query");
-            }
+            var jsonObject = JsonDocument.Parse(jsonString).RootElement;
 
-            var jsonString = JsonSerializer.Serialize(matchingArticles, jsonOptions);
+    return Ok(matchingArticles);
+}
 
-            return Ok(jsonString);
-        }
 
     }
 }

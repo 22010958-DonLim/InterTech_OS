@@ -18,7 +18,12 @@ namespace StrawberryHub.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+		public IActionResult About() // Add this method
+		{
+			return View();
+		}
+
+		public IActionResult Privacy()
         {
             return View();
         }

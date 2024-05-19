@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "mssql2": {
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/strawberrywellness/databases/DBStrawberry",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:DBStrawberry"
+    }
+  }
+}

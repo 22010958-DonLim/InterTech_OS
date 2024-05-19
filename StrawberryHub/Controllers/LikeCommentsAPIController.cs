@@ -81,6 +81,8 @@ namespace StrawberryHub.Controllers
 
                 newLikeComment.UserId = userId;
                 newLikeComment.ArticleId = articleId;
+                newLikeComment.Likes = likes;
+                newLikeComment.CommentText = commentText; 
 
                 _context.StrawberryLikeComment.Add(newLikeComment);
                 await _context.SaveChangesAsync();

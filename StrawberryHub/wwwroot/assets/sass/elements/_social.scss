@@ -1,0 +1,51 @@
+/* 2.10 - Social Links Style - start
+================================================== */
+.social_primary {
+	li {
+		&:not(:last-child) {
+			margin-right: 25px;
+		}
+	}
+	a {
+		color: #C6C6C6;
+		font-size: 15px;
+		
+		&:hover {
+			color: #ffffff;
+		}
+	}
+}
+
+.social_text_layout {
+	li {
+		&:not(:last-child) {
+			margin-bottom: 5px;
+		}
+	}
+	a {
+		line-height: 1;
+		color: #BABABA;
+		position: relative;
+		&:before {
+			width: 0;
+			left: auto;
+			right: 0;
+			bottom: 0;
+			height: 1px;
+			content: '';
+			position: absolute;
+			background-color: #ffffff;
+			transition: $default_transition;
+		}
+		&:hover {
+			color: #ffffff;
+			&:before {
+				left: 0;
+				width: 100%;
+				right: auto;
+			}
+		}
+	}
+}
+/* 2.10 - Social Links Style - end
+================================================== */

@@ -1,0 +1,53 @@
+/* 3.6 - Banner - start
+================================================== */
+.banner_section {
+
+	.banner_image {
+		width: 648px;
+		padding: 36px;
+		margin-left: -30px;
+		position: relative;
+		background-color: #a9a9a9;
+	}
+
+	.round_text {
+		bottom: 0;
+		left: -175px;
+		position: absolute;
+
+		path {
+			fill: #000;
+		}
+
+		circle {
+			fill: #dedede;
+		}
+	}
+
+	.banner_content {
+		max-width: 550px;
+	}
+	.banner_title {
+		line-height: 1;
+		font-size: 120px;
+		font-weight: 600;
+		margin-bottom: 60px;
+		.text_effect_wrap1 {
+			margin: -10px 0;
+		}
+	}
+	.text_outline {
+		color: #000;
+		-webkit-text-stroke-width: 1px;
+		-webkit-text-stroke-color: #000;
+		-webkit-text-fill-color: transparent;
+	}
+}
+
+.banar-section-hm3 .banner_title {
+	line-height: 0.95em;
+}
+
+
+/* 3.6 - Banner - end
+================================================== */

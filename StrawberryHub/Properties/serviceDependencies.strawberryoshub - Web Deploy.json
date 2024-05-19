@@ -4,13 +4,6 @@
       "ignored": "true",
       "type": "mssql",
       "connectionId": "ConnectionStrings:DefaultConnection"
-    },
-    "mssql2": {
-      "secretStore": "AzureAppSettings",
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/strawberryoshub/databases/DBStrawberry",
-      "type": "mssql.azure",
-      "connectionId": "ConnectionStrings:DBStrawberry",
-      "dynamicId": null
     }
   }
 }

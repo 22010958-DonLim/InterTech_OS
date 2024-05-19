@@ -1,0 +1,49 @@
+/* 3.8 - Service - start
+================================================== */
+.service_sec_bg {
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	height: 65%;
+	background-color: #000000;
+}
+
+.service_box_layout {
+	margin-bottom: 24px;
+	background-color: #252525;
+	padding: 110px 60px 45px 60px;
+	transition: $default_transition;
+	&:hover {
+		transform: translateY(-12px);
+	}
+	.item_icon {
+		height: 85px;
+		margin-bottom: 40px;
+	}
+	.item_title_wrap {
+		display: flex;
+		color: #DEDEDE;
+		line-height: 1;
+		font-size: 36px;
+		margin-bottom: 30px;
+		padding-bottom: 20px;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+	}
+	.serial_number {
+		margin-right: 25px;
+	}
+	.item_title {
+		font-size: 36px;
+		font-weight: 400;
+		line-height: 1em;
+		color: #DEDEDE;
+	}
+	p {
+		color: #ADADAD;
+		font-size: 20px;
+		font-weight: 500;
+		line-height: .84;
+	}
+}
+/* 3.8 - Service - end
+================================================== */

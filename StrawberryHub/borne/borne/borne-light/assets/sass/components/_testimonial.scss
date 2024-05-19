@@ -1,0 +1,50 @@
+/* 3.9 - Testimonial - start
+================================================== */
+.testimonial_section {
+	padding: 105px 0 105px;
+
+	@include media-query(1199px) {
+		padding: 75px 0 100px !important;
+	}
+}
+
+.testimonial_carousel_wrap {
+	width: 1060px;
+	padding-right: 30px;
+}
+.testimonial_item {
+	padding: 0px 15px;
+	.quote_icon {
+		margin-bottom: 30px;
+	}
+	p {
+		font-size: 22px;
+		font-weight: 300;
+		line-height: 1.28;
+		margin-bottom: 35px;
+		color: #404040;
+	}
+	.client_info {
+		position: relative;
+		padding-left: 60px;
+	}
+	.line {
+		top: 5.5px;
+		left: 0px;
+		height: 1px;
+		width: 35px;
+		position: absolute;
+		background-color: #505050;
+	}
+	.client_name {
+		font-size: 16px;
+		line-height: 1.2;
+		margin-bottom: 0px;
+	}
+	.client_title {
+		line-height: 1;
+		font-size: 16px;
+	}
+}
+/* 3.9 - Testimonial - end
+================================================== */

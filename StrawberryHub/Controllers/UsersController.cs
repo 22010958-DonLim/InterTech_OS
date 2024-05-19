@@ -262,5 +262,40 @@ namespace StrawberryHub.Controllers
         {
             return View("Index", "Home");
         }
+
+        [Authorize]
+        public IActionResult UserProfile()
+        {
+            var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.Name);
+
+            // Retrieve the user's details and posts from the database
+            if (userIdClaim != null)
+            {
+                string username = userIdClaim.Value; // Extract the value of the claim
+                var user = _context.StrawberryUser
+                    .Include(u => u.StrawberryArticle)
+                    .Include(u => u.StrawberryRank)
+                    .FirstOrDefault(u => u.Username == username);
+
+                if (user == null)
+                {
+                    // Handle the case where the user was not found
+                    return NotFound();
+                }
+
+                // Create the ViewModel
+                var viewModel = new UserProfileViewModel
+                {
+                    Username = user.Username,
+                    RankName = user.StrawberryRank.RankName, // Get the rank name from the StrawberryRank
+                    Posts = user.StrawberryArticle.ToList()
+                };
+
+                return View(viewModel);
+            }
+
+            // Pass the ViewModel to the view
+            return View();
+        }
     }
 }
