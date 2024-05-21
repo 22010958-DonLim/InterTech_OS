@@ -9,17 +9,24 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <!-- Include site-specific CSS -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <!-- Include theme-specific CSS -->
-    <link rel="stylesheet" href="~/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="~/assets/css/animate.min.css" />
-    <link rel="stylesheet" href="~/assets/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="~/assets/css/icofont.min.css" />
-    <link rel="stylesheet" href="~/assets/css/magnific-popup.css" />
-    <link rel="stylesheet" href="~/assets/css/meanmenu.min.css" />
-    <link rel="stylesheet" href="~/assets/css/owl.carousel.min.css" />
-    <link rel="stylesheet" href="~/assets/css/odometer.min.css" />
-    <link rel="stylesheet" href="~/assets/css/style.css" />
-    <link rel="stylesheet" href="~/assets/css/responsive.css" />
+    <!-- fraimwork - css include -->
+    <link rel="stylesheet" type="text/css" href="~/assets/css/bootstrap.min.css">
+
+    <!-- icon font - css include -->
+    <link rel="stylesheet" type="text/css" href="~/assets/css/fontawesome.css">
+
+    <!-- carousel - css include -->
+    <link rel="stylesheet" type="text/css" href="~/assets/css/slick.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/slick-theme.css">
+
+    <!-- popup - css include -->
+    <link rel="stylesheet" type="text/css" href="~/assets/css/magnific-popup.css">
+
+    <!-- nice select - css include -->
+    <link rel="stylesheet" type="text/css" href="~/assets/css/nice-select.css">
+
+    <!-- custom - css include -->
+    <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
     <!-- Include Quill stylesheet -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <!-- Include Quill library -->
@@ -30,9 +37,11 @@
             --bg-color-dark: black;
             --text-color-light: black;
             --bg-color-light: white;
-            --one-berry-color: pink;
+            --one-berry-color: #fc5a8d;
             --link-color-light: black; /* Add this line */
             --link-color-dark: white; /* Add this line */
+            --navbar-color-light: dimgrey; /* Add this line */
+            --navbar-color-dark: white; /* Add this line */
         }
 
         body {
@@ -55,14 +64,16 @@
             color: var(--text-color-dark);
         }
 
-        .theme-text .text_effect_wrap3 {
-            -webkit-text-fill-color: pink;
-            -webkit-text-stroke-width: 2px;
-            -webkit-text-stroke-color: pink;
+        .navbar-item {
+            color: black;
         }
         
         .one-berry {
             color: var(--one-berry-color);
+        }
+
+        .grey-button {
+            color: grey;
         }
     </style>
 
@@ -96,27 +107,27 @@
                             <div class="main_menu_inner collapse navbar-collapse" id="main_menu_dropdown">
                                 <ul class="main_menu_list ul_li">
                                     <li class="dropdown">
-                                        <a class="nav-link text-uppercase" href="#" id="user_submenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            User Profile
+                                        <a class="nav-link text-uppercase navbar-item" href="#" id="user_submenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            User
                                         </a>
                                         <ul class="submenu dropdown-menu" aria-labelledby="user_submenu">
-                                            <li><a href="profile.html">Profile</a></li>
+                                            <li><a asp-area="" asp-controller="Users" asp-action="UserProfile">Profile</a></li>
                                             <!-- Add more user profile related pages here -->
                                         </ul>
                                     </li>
                                     <li class="dropdown">
-                                        <a class="nav-link text-uppercase" href="#" id="articles_submenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Articles
+                                        <a class="nav-link text-uppercase navbar-item" href="#" id="articles_submenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Article
                                         </a>
                                         <ul class="submenu dropdown-menu" aria-labelledby="articles_submenu">
-                                            <li><a href="articles.html">Articles</a></li>
+                                            <li><a asp-area="" asp-controller="Articles" asp-action="ArticlePage"> Read Articles</a></li>
                                             <!-- Add more articles related pages here -->
                                         </ul>
                                     </li>
                                     @if (User.IsInRole("Admin"))
                                     {
                                         <li class="dropdown">
-                                            <a class="nav-link text-uppercase" href="#" id="admin_submenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <a class="nav-link text-uppercase navbar-item" href="#" id="admin_submenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 Admin
                                             </a>
                                             <ul class="submenu dropdown-menu" aria-labelledby="admin_submenu">
@@ -142,14 +153,14 @@
                         <ul class="header_contact_info ul_li_block">
                             <li>
                                 <a href="#!">
-                                    <span class="fs-5" style="color: palevioletred; font-family: 'Arial', sans-serif;">
+                                    <span class="fs-5" style="color: hotpink; font-family: 'Arial', sans-serif;">
                                         Welcome @User.Identity.Name<br>
                                     </span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#!" style="text-align: center; display: block;">
-                                    <span class="fs-6" style="color: palevioletred; font-family: 'Arial', sans-serif;">
+                                    <span class="fs-6" style="color: hotpink; font-family: 'Arial', sans-serif;">
                                         (@User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value)
                                     </span>
                                 </a>
@@ -157,7 +168,7 @@
                         </ul>
                         <div class="text-center">
                             <a asp-controller="Account" asp-action="Logoff"
-                           asp-route-returnUrl="Home" class="btn btn-link fs-6">
+                           asp-route-returnUrl="Home" class="btn btn-link fs-6 grey-button">
                                 Sign Off
                             </a>
                         </div>
@@ -166,7 +177,7 @@
                     {
                         <div class="text-center">
                             <a asp-controller="Account" asp-action="Login"
-                           asp-route-returnUrl="Home" class="btn btn-link fs-6">
+                           asp-route-returnUrl="Home" class="btn btn-link fs-6 grey-button">
                                 Login
                             </a>
                         </div>
@@ -198,7 +209,7 @@
         });
     </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!--<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> -->
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
         document.getElementById('theme-switcher').addEventListener('click', function () {

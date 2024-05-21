@@ -230,5 +230,16 @@ namespace StrawberryHub.Controllers
             return View("ShowArticle", articles);
         }
 
+
+        public async Task<IActionResult> ArticlePage()
+        {
+
+			var articles = _context.StrawberryArticle
+				 .Include(a => a.GoalType)
+				 .Include(a => a.StrawberryUser) // Assuming there's a property named User in StrawberryArticle representing the user who created the article
+				 .ToListAsync();
+
+			return View("ArticlePage", await articles);
+		}
     }
 }

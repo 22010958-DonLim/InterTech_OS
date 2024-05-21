@@ -6,6 +6,8 @@ public class UserProfileViewModel
 {
     public string Username { get; set; } = null!;
     public string RankName { get; set; } = null!; // Changed from Rank to RankName
+
+    public int? Points { get; set; }
     public List<StrawberryArticle> Posts { get; set; } = null!;
 }
 

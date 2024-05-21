@@ -1,29 +1,71 @@
 ﻿@model UserProfileViewModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Modern CSS Basics - Instagram Profile Page (Syntax - Class)</title>
+    <link rel="stylesheet" href="~/css/styles.css" />
 
-<div class="container mt-5">
-    <!-- User Profile -->
-    <div class="card mb-4 shadow">
-        <div class="card-body text-center">
-            <h2 class="card-title">@Model.Username</h2>
-            <p class="card-text">Rank: @Model.RankName</p>
-        </div>
-    </div>
+<style>
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Changed from center to flex-start */
+            justify-content: center;
+        }
+        .user-articles {
+            border-top: 1px solid grey; /* Change color as needed */
+            padding-top: 20px; /* Add some space between the border and the content */
 
-    <!-- User Posts -->
-    <h2 class="mb-4">Posts</h2>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        @foreach (var post in Model.Posts)
-        {
-            <div class="col-sm-4">
-                <div class="card h-100 shadow">
-                    <a asp-controller="Articles" asp-action="Details" asp-route-id="@post.ArticleId">
-                        <img src="~/photos/@post.Picture" class="card-img-top" />
-                    </a>
-                    <div class="card-body">
-                        <h5 class="card-title">@post.Title</h5>
+        }
+</style>
+</head>
+
+<body>
+    <main>
+        <header>
+            <div class="header-wrap">
+                <div class="profile-pic">
+                    <img src="~/images/user.jpeg" alt="profile-logo" />
+                </div>
+                <div class="profile-info">
+                    <div class="title row">
+                        <h2>@Model.Username</h2>
+                        <button class="primary primary-sh">Edit Profile</button>
+                    </div>
+                    <div class="desktop-only">
+                        <div class="details row">
+                            <ul>
+                                <li><span>Rank:</span> @Model.RankName</li>
+                                <li><span>Points:</span> @Model.Points</li>
+                            </ul>
+                        </div>
+                        <div class="descriptions row last">
+                            <span><b>@Model.Username</b></span>
+                            <span>
+                                Hello!
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
-        }
-    </div>
-</div>
+        </header>
+            <div class="gallery user-articles">
+                @foreach (var article in ViewBag.Articles)
+                {
+
+                <div class="element-item category gallery-item">
+                    <a class="portfolio_fullimage_layout" href="@Url.Action("Details", "Articles", new { id = article.ArticleId })">
+                        <img src="~/photos/@article.Picture" alt="gallery-post">
+                        <span class="item_content item-content">
+                            <strong class="item_title">@article.Title</strong>
+                        </span>
+                    </a>
+                </div>
+                }
+            </div>
+    </main>
+</body>
+</html>

@@ -283,11 +283,20 @@ namespace StrawberryHub.Controllers
                     return NotFound();
                 }
 
+                // Retrieve all articles from the user
+                var articles = _context.StrawberryArticle
+                    .Where(a => a.UserId == user.UserId)
+                    .ToList();
+
+                // Store the articles in ViewBag
+                ViewBag.Articles = articles;
+
                 // Create the ViewModel
                 var viewModel = new UserProfileViewModel
                 {
                     Username = user.Username,
                     RankName = user.StrawberryRank.RankName, // Get the rank name from the StrawberryRank
+                    Points = user.Points,
                     Posts = user.StrawberryArticle.ToList()
                 };
 

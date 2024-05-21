@@ -1,0 +1,175 @@
+﻿@model List<StrawberryArticle>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+
+	<title>Strawberry Articles</title>
+	<style>
+		/* This will set the color of the item title and categories in light mode */
+		body .item_title, body .item_categories {
+			color: black;
+		}
+
+		/* This will set the color of the item title and categories in dark mode */
+		body.dark-mode .item_title, body.dark-mode .item_categories {
+			color: black;
+		}
+	</style>
+
+</head>
+
+
+<body>
+		<!-- backtotop - start -->
+		<div class="backtotop">
+			<a href="#" class="scroll">
+				Back to top
+			</a>
+		</div>
+		<!-- backtotop - end -->
+		<!-- header_section - start
+		================================================== -->
+		
+		<!-- main body - start
+		================================================== -->
+		<main>
+
+			<!-- breadcrumb_section - start
+			================================================== -->
+			<section class="breadcrumb_section">
+				<div class="container">
+					<h1 class="page_title text-white">
+						<span class="d-block">Our </span>
+						<span class="d-block">Articles</span>
+					</h1>
+					<p class="mb-0">
+						Strawberry User's Articles
+					</p>
+				</div>
+			</section>
+			<!-- breadcrumb_section - end
+			================================================== -->
+			<!-- portfolio_section - start
+			================================================== -->
+			<section class="portfolio_section section_space pt-0">
+				<div class="container">
+					<div class="filter_nav_wrap">
+					@{
+						var stressManagementCount = Model.Count(a => a.GoalTypeId == 1);
+						var mentalWellnessCount = Model.Count(a => a.GoalTypeId == 2);
+						var newHobbiesCount = Model.Count(a => a.GoalTypeId == 3);
+						// Add more counts as needed
+					}
+						<h3 class="filter_nav_title text-uppercase">Filter by:</h3>
+						<ul class="filter-btns-group button-group ul_li">
+							<li><button class="button active" data-filter="*">All<sup>@Model.Count</sup></button></li>
+						<li><button class="button" data-filter=".stressManagement">Stress Management<sup>@stressManagementCount</sup></button></li>
+						<li><button class="button" data-filter=".mentalWellness">Mental Wellness<sup>@mentalWellnessCount</sup></button></li>
+						<li><button class="button" data-filter=".newHobbies">New Interest<sup></sup>@newHobbiesCount</button></li>
+						</ul>
+					</div>
+					<div class="element_grid">
+					@foreach (var article in Model)
+					{
+						string category = "";
+						switch (article.GoalTypeId)
+						{
+							case 1:
+								category = "stressManagement";
+								break;
+							case 2:
+								category = "mentalWellness";
+								break;
+							case 3:
+								category = "newHobbies";
+								break;
+								// Add more cases as needed
+						}
+						<div class="element-item category" data-category=@category>
+							<a class="portfolio_fullimage_layout" href="@Url.Action("Details", "Articles", new { id = article.ArticleId })">
+								<img src="~/photos/@article.Picture" alt="image_not_found" style="max-width: 1260px; max-height: 900px;">
+								<span class="item_content item-content">
+									<strong class="item_title">@article.Title</strong>
+									<small class="item_categories text-uppercase">@category</small>
+								</span>
+							</a>
+						</div>
+					}
+					</div>
+				</div>
+			</section>
+			<!-- portfolio_section - end
+			================================================== -->
+
+		</main>
+		<!-- main body - end
+		================================================== -->
+		<!-- footer_section - start
+		================================================== -->
+		<footer class="footer_section">
+			<div class="container">
+
+				<h2 class="biggest_title text-center">A modern creative agency</h2>
+
+				<div class="footer_widget_area">
+					<div class="row">
+						<div class="col-lg-5 col-md-12">
+							<div class="footer_widget">
+								<div class="footer_copyright">
+									<div class="footer-logo">
+										<img src="assets/images/logo/logo_white_1x.png" srcset="assets/images/logo/logo_white_2x.png 2x" alt="logo_not_found">
+									</div>
+									<p class="mb-0">© 2021  all right reserved</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-3 col-md-4 col-sm-4">
+							<div class="footer_widget footer_contact_info">
+								<h3 class="footer_widget_title text-uppercase">Contact</h3>
+								<ul class="ul_li_block">
+									<li>
+										<span class="d-block">Gullu nitroso antanito st,</span> 110 Catania, New york
+									</li>
+									<li><a href="#!">+39 348 9195991</a></li>
+									<li><a href="#!">hello@danilodemarco.com</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-lg-2 col-md-4 col-sm-4">
+							<div class="footer_widget footer_office_time">
+								<h3 class="footer_widget_title text-uppercase">Office Time</h3>
+								<ul class="ul_li_block">
+									<li>9AM - 5PM</li>
+									<li>(sunday closed)</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-lg-2 col-md-4 col-sm-4">
+							<div class="footer_widget social_text_layout">
+								<h3 class="footer_widget_title text-uppercase">Social Links</h3>
+								<ul class="ul_li_block">
+									<li><a href="#!">Facebook</a></li>
+									<li><a href="#!">Twitter</a></li>
+									<li><a href="#!">Linkedin</a></li>
+									<li><a href="#!">Pinterest</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</footer>
+		<!-- footer_section - end
+		================================================== -->
+
+</body>
+</html>
