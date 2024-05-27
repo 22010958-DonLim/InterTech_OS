@@ -90,8 +90,8 @@ namespace StrawberryHub.Controllers.API
         }
 
         // POST: api/ArticlesAPI
-        [HttpPost("Create/{GoalTypeId}/{Title}/{ArticleContent}/{UserId}")]
-        public async Task<ActionResult<StrawberryArticle>> PostArticle(int GoalTypeId, string Title, string ArticleContent, IFormFile photo, int UserId)
+        [HttpPost("Create/{GoalTypeId}/{Title}/{ArticleContent}/{Username}/{Photo}")]
+        public async Task<ActionResult<StrawberryArticle>> PostArticle(int GoalTypeId, string Title, string ArticleContent, IFormFile photo, string Username)
         {
 
                 StrawberryArticle article = new StrawberryArticle();
@@ -114,7 +114,7 @@ namespace StrawberryHub.Controllers.API
 
                 string picfilename = DoPhotoUpload(photo);
                 article.Picture = picfilename.EscQuote();
-                article.UserId = UserId; // Assign the retrieved user id to the article
+                article.UserId = userId; // Assign the retrieved user id to the article
                 article.PublishedDate = DateTime.Now;
                 article.Title = Title;
                 article.ArticleContent = ArticleContent;
