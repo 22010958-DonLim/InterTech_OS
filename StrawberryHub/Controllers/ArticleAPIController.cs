@@ -14,10 +14,12 @@ namespace StrawberryHub.Controllers.API
     public class ArticlesAPIController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public ArticlesAPIController(AppDbContext context)
+        public ArticlesAPIController(AppDbContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         // GET: api/ArticlesAPI
@@ -74,14 +76,55 @@ namespace StrawberryHub.Controllers.API
             return article;
         }
 
-        // POST: api/ArticlesAPI
-        [HttpPost]
-        public async Task<ActionResult<StrawberryArticle>> PostArticle(StrawberryArticle article)
+        private string DoPhotoUpload(IFormFile photo)
         {
-            _context.StrawberryArticle.Add(article);
-            await _context.SaveChangesAsync();
+            string fext = Path.GetExtension(photo.FileName);
+            string uname = Guid.NewGuid().ToString();
+            string fname = uname + fext;
+            string fullpath = Path.Combine(_env.WebRootPath, "photos/" + fname);
+            using (FileStream fs = new(fullpath, FileMode.Create))
+            {
+                photo.CopyTo(fs);
+            }
+            return fname;
+        }
 
-            return CreatedAtAction("GetArticle", new { id = article.ArticleId }, article);
+        // POST: api/ArticlesAPI
+        [HttpPost("Create/{GoalTypeId}/{Title}/{ArticleContent}/{UserId}")]
+        public async Task<ActionResult<StrawberryArticle>> PostArticle(int GoalTypeId, string Title, string ArticleContent, IFormFile photo, int UserId)
+        {
+
+                StrawberryArticle article = new StrawberryArticle();
+                ModelState.Remove("Picture");     // No Need to Validate "Picture" - derived from "Photo".
+                ModelState.Remove("UserId");
+                ModelState.Remove("PublishDate");
+
+                var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.Name);
+                int userId = 0;
+                if (userIdClaim != null)
+                {
+                    string username = userIdClaim.Value; // Extract the value of the claim
+                    userId = await _context.StrawberryUser
+                        .Where(u => u.Username == username)
+                        .Select(u => u.UserId)
+                        .FirstOrDefaultAsync();
+
+                    // Now userId contains the UserId of the user with the specified username
+                }
+
+                string picfilename = DoPhotoUpload(photo);
+                article.Picture = picfilename.EscQuote();
+                article.UserId = UserId; // Assign the retrieved user id to the article
+                article.PublishedDate = DateTime.Now;
+                article.Title = Title;
+                article.ArticleContent = ArticleContent;
+                article.GoalTypeId = GoalTypeId;
+                _context.StrawberryArticle.Add(article);
+                _context.SaveChanges();
+
+                return Ok("Article Created Successfully");
+
+
         }
 
         // PUT: api/ArticlesAPI/5

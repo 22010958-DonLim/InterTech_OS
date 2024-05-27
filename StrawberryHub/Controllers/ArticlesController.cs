@@ -241,5 +241,52 @@ namespace StrawberryHub.Controllers
 
 			return View("ArticlePage", await articles);
 		}
+
+		public IActionResult CreateArticlePage()
+		{
+			ViewData["GoalTypeId"] = new SelectList(_context.StrawberryGoalType, "GoalTypeId", "Type");
+			return View();
+		}
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateArticlePage([Bind("ArticleId,GoalTypeId,Title,ArticleContent,PublishedDate,Photo,Picture,UserId")] StrawberryArticle article, IFormFile photo)
+        {
+            ModelState.Remove("Picture");     // No Need to Validate "Picture" - derived from "Photo".
+            ModelState.Remove("UserId");
+            ModelState.Remove("PublishDate");
+            if (ModelState.IsValid)
+            {
+                var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.Name);
+                int userId = 0;
+                if (userIdClaim != null)
+                {
+                    string username = userIdClaim.Value; // Extract the value of the claim
+                    userId = await _context.StrawberryUser
+                        .Where(u => u.Username == username)
+                        .Select(u => u.UserId)
+                        .FirstOrDefaultAsync();
+
+                    // Now userId contains the UserId of the user with the specified username
+                }
+
+                string picfilename = DoPhotoUpload(article.Photo);
+                article.Picture = picfilename.EscQuote();
+                article.UserId = userId; // Assign the retrieved user id to the article
+                article.PublishedDate = DateTime.Now;
+                _context.Add(article);
+                await _context.SaveChangesAsync();
+
+                TempData["Success"] = "Article uploaded successfully!"; // Add this line
+				TempData["MsgType"] = "Success";
+
+				return RedirectToAction("Index", "Home");
+
+            }
+            ViewData["GoalTypeId"] = new SelectList(_context.StrawberryGoalType, "GoalTypeId", "GoalTypeId", article.GoalTypeId);
+            return View(article);
+        }
+
+
     }
 }

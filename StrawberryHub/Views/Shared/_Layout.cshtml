@@ -7,6 +7,7 @@
     <title>StrawberryHub</title>
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
     <!-- Include site-specific CSS -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <!-- fraimwork - css include -->
@@ -77,6 +78,26 @@
         }
     </style>
 
+    <script>
+        const WEB_RPNOTES = '@(Url.Content("~/RPNotes"))';
+        const EP_RPN_API = '@(Url.Content("~/api/RPNotes"))';
+        const EP_EX_API = '@(Url.Content("~/api/Ex"))';
+        const WEB_ROOT = '@(Url.Content("~/"))';
+
+        $(document).ready(function () {
+            $("#btnSaveNotes").click(c286Lesson12.updateNotes);
+            $("#btnNewModule").click(c286Lesson12.addNewModule);
+            $("#btnSaveTopic").click(c286Lesson12.addNewTopic);
+            $("#btnNewAttachment").click(c286Lesson12.uploadNewAttachment);
+
+            $("#btnNewTopic").click(function () {
+                c286Lesson12.loadModulesForTopic();
+                $("#txtNewTopicId").val("");
+                $("#txtNewTopicTitle").val("");
+            });
+
+        })
+    </script>
 </head>
 
 <body>
@@ -121,7 +142,7 @@
                                         </a>
                                         <ul class="submenu dropdown-menu" aria-labelledby="articles_submenu">
                                             <li><a asp-area="" asp-controller="Articles" asp-action="ArticlePage"> Read Articles</a></li>
-                                            <!-- Add more articles related pages here -->
+                                            <li><a asp-area="" asp-controller="Articles" asp-action="CreateArticlePage"> Create Articles</a></li>
                                         </ul>
                                     </li>
                                     @if (User.IsInRole("Admin"))

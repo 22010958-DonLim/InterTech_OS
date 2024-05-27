@@ -1,4 +1,4 @@
-﻿using System;
+﻿           using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -181,15 +181,16 @@ namespace StrawberryHub.Controllers
         public async Task<ActionResult<StrawberryLikeComment>> GetArticleComments(int articleId)
         {
             var articleComments = await _context.StrawberryLikeComment
+                .Include(c => c.StrawberryUser)
                 .Where(c => c.ArticleId == articleId)
                 .Select(c => new
                 {
                     CommentId = c.CommentId,
-                    UserId = c.UserId,
-                    CommentText = c.CommentText,
-                    CommentTimestamp = c.CommentTimestamp,
+                    UserId = c.StrawberryUser.Username,
+                    CommentText = c.CommentText != "0" ? c.CommentText : "",
+                    CommentTimestamp = c.CommentText != "0" ? c.CommentTimestamp : null,
                     Likes = c.Likes,
-                    LikeTimestamp = c.LikeTimestamp
+                    LikeTimestamp = c.Likes != 0 ? c.LikeTimestamp : null
                 })
                 .ToListAsync();
 

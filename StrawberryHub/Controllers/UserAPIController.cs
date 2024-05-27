@@ -48,6 +48,7 @@ public class UsersAPIController : ControllerBase
     {
         var users = await _context.StrawberryUser
             .Where(u => EF.Functions.Like(u.Username, $"%{username}%"))
+            .Include(u => u.StrawberryRank)
             .Include(u => u.Goal)
             .ThenInclude(u => u.GoalType)
             .ToListAsync();
@@ -66,6 +67,7 @@ public class UsersAPIController : ControllerBase
             Email = u.Email,
             Points = u.Points,
             RankId = u.RankId,
+            Rankname = u.StrawberryRank.RankName,
             Goals = u.Goal.Select(g => new
             {
                 GoalId = g.GoalId,

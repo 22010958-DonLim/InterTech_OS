@@ -1,0 +1,82 @@
+﻿@model StrawberryHub.Models.StrawberryArticle
+
+@{
+	ViewData["Title"] = "Create";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Create Article - Borne - Agency Portfolio Template</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container" style="font-family: 'Calibre';">
+            <h1 class="page_title text-white">
+                <span class="d-block">Create </span>
+                <span class="d-block">An Article.</span>
+            </h1>
+        </div>
+    <div class="container pt-1">
+        <div class="row">
+            <div class="col-md-6">
+                <form asp-controller="Articles" asp-action="CreateArticlePage" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input type="hidden" asp-for="UserId" />
+
+                    <div class="form-group">
+                        <label asp-for="GoalTypeId" class="control-label">Goal Type ID</label>
+                        <select asp-for="GoalTypeId" class="form-control" asp-items="ViewBag.GoalTypeId"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Title" class="control-label">Title</label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ArticleContent" class="control-label">Article Content</label>
+                        <textarea asp-for="ArticleContent" class="form-control" rows="6"></textarea>
+                        <span asp-validation-for="ArticleContent" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="PublishedDate" class="control-label">Published Date</label>
+                        <input asp-for="PublishedDate" class="form-control" />
+                        <span asp-validation-for="PublishedDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Photo" class="control-label">Add an image</label>
+                        <input asp-for="Photo" class="form-control-file" onchange="preview()">
+                        <span asp-validation-for="Photo" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-md-6">
+                <img id="frame" src="" class="img-fluid mt-3 d-none" />
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function preview() {
+            var frame = document.getElementById("frame");
+            frame.src = URL.createObjectURL(event.target.files[0]);
+            frame.className = "img-fluid mt-3";
+        }
+    </script>
+</body>
+
+</html>

@@ -3,6 +3,14 @@
 }
 @model List<StrawberryArticle>
 
+<!-- Check if TempData["Success"] exists -->
+@if (TempData["Success"] != null)
+{
+	<!-- Display the success message -->
+	<div class="alert alert-success">
+		@TempData["Success"]
+	</div>
+}
 
 <!-- Include the new theme's HTML content -->
 <!-- You can replace the dummy text with data from your model -->
@@ -179,115 +187,38 @@
 					</div>
 				</div>
 
-				<div class="row">
-					<div class="col-lg-3">
-						<div class="section_title style_2">
-							<h2 class="small_title mb-0">
-								portfolio
-								<span class="line"></span>
-							</h2>
+				<div class="portfolio_split_layout">
+					<div class="row align-items-center">
+						<div class="col-lg-8 col-md-7">
+							<a class="item_image" href="portfolio_details.html">
+								<img src="assets/images/banner/Singaporebooth.jpg" alt="image_not_found">
+							</a>
 						</div>
-					</div>
-
-					<div class="col-lg-5">
-						<div class="section_title style_2">
-							<h3 class="big_title text_effect_wrap">
-								<span class="text_effect_wrap1">
-									<span class="text_effect_wrap2">
-										<span class="text_effect_wrap3">Check </span>
-									</span>
-								</span>
-								<span class="text_effect_wrap1">
-									<span class="text_effect_wrap2">
-										<span class="text_effect_wrap3">our creative </span>
-									</span>
-								</span>
-								<span class="text_effect_wrap1">
-									<span class="text_effect_wrap2">
-										<span class="text_effect_wrap3">works</span>
-									</span>
-								</span>
-							</h3>
-						</div>
-					</div>
-				</div>
-
-				<div class="row justify-content-lg-end">
-					<div class="col-lg-9">
-						<div class="row align-items-lg-start align-items-md-center">
-							<div class="col-lg-6 col-md-5 col-sm-6">
-								<ul class="portfolio_tab_nav ul_li_block nav" role="tablist">
-									<li role="presentation">
-										<button class="active" data-bs-toggle="tab" data-bs-target="#tab_1" type="button" role="tab" aria-controls="tab_1" aria-selected="true">
-											01. Monospace
-										</button>
-									</li>
-									<li role="presentation">
-										<button data-bs-toggle="tab" data-bs-target="#tab_2" type="button" role="tab" aria-controls="tab_2" aria-selected="false">
-											02. Branding
-										</button>
-									</li>
-									<li role="presentation">
-										<button data-bs-toggle="tab" data-bs-target="#tab_3" type="button" role="tab" aria-controls="tab_3" aria-selected="false">
-											03. Vardani Arina
-										</button>
-									</li>
-									<li role="presentation">
-										<button data-bs-toggle="tab" data-bs-target="#tab_4" type="button" role="tab" aria-controls="tab_4" aria-selected="false">
-											04. Amili Kerlane
-										</button>
-									</li>
-									<li role="presentation">
-										<button data-bs-toggle="tab" data-bs-target="#tab_5" type="button" role="tab" aria-controls="tab_5" aria-selected="false">
-											05. Futura Nilhumbij
-										</button>
-									</li>
-									<li role="presentation">
-										<button data-bs-toggle="tab" data-bs-target="#tab_6" type="button" role="tab" aria-controls="tab_6" aria-selected="false">
-											06. Salina Amelia
-										</button>
-									</li>
+						<div class="col-lg-4 col-md-5">
+							<div class="item_content">
+								<ul class="item_category ul_li text-uppercase">
+									<li><a href="#!">Style</a></li>
+									<li><a href="#!">Creative</a></li>
 								</ul>
+								<h4 class="item_title text_effect_wrap">
+									<span class="text_effect_wrap1">
+										<span class="text_effect_wrap2">
+											<span class="text_effect_wrap3">Learn More </span>
+										</span>
+									</span>
+									<span class="text_effect_wrap1">
+										<span class="text_effect_wrap2">
+											<span class="text_effect_wrap3">About </span>
+										</span>
+									</span>
+									<span class="text_effect_wrap1">
+										<span class="text_effect_wrap2">
+											<span class="text_effect_wrap3">New Hobbies</span>
+										</span>
+									</span>
+								</h4>
+								<a class="btn btn_border border_light text-uppercase" href="portfolio_details.html">View More</a>
 							</div>
-
-							<div class="col-lg-5 col-md-7 col-sm-6">
-								<div class="portfolio_tab_wrap tab-content">
-									<div class="tab-pane fade show active" id="tab_1" role="tabpanel">
-										<a class="item_image" href="portfolio_details.html">
-											<img src="assets/images/portfolio/portfolio_3.jpg" alt="image_not_found">
-										</a>
-									</div>
-									<div class="tab-pane fade" id="tab_2" role="tabpanel">
-										<a class="item_image" href="portfolio_details.html">
-											<img src="assets/images/portfolio/portfolio_3col_2.jpg" alt="image_not_found">
-										</a>
-									</div>
-									<div class="tab-pane fade" id="tab_3" role="tabpanel">
-										<a class="item_image" href="portfolio_details.html">
-											<img src="assets/images/portfolio/portfolio_3col_3.jpg" alt="image_not_found">
-										</a>
-									</div>
-									<div class="tab-pane fade" id="tab_4" role="tabpanel">
-										<a class="item_image" href="portfolio_details.html">
-											<img src="assets/images/portfolio/portfolio_3col_4.jpg" alt="image_not_found">
-										</a>
-									</div>
-									<div class="tab-pane fade" id="tab_5" role="tabpanel">
-										<a class="item_image" href="portfolio_details.html">
-											<img src="assets/images/portfolio/portfolio_3col_5.jpg" alt="image_not_found">
-										</a>
-									</div>
-									<div class="tab-pane fade" id="tab_6" role="tabpanel">
-										<a class="item_image" href="portfolio_details.html">
-											<img src="assets/images/portfolio/portfolio_3col_6.jpg" alt="image_not_found">
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="loadmore_btn_wrap">
-							<a class="btn btn_border border_light text-uppercase" href="portfolio_2column.html">View More</a>
 						</div>
 					</div>
 				</div>

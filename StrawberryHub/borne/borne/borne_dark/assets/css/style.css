@@ -2280,23 +2280,6 @@ button {
   padding-bottom: 15px;
 }
 
-.map_section {
-  height: 640px;
-  margin-left: 40px;
-  position: relative;
-}
-.map_section iframe {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
-#mapBox {
-  min-height: 700px;
-}
-
 /* 3.12 - Contact - end
 ================================================== */
 /* 3.13 - Portfolio - start

@@ -37,8 +37,13 @@
                 <label asp-for="Photo">Add an image</label>
                 <input asp-for="Photo" class="mb-3 form-control"
                        onchange="preview()">
+                <div class="col-md-10">
+                    <div class="mb-3 map_section">
+                        <img class="d-none" style="max-height:600px;" id="frame" src="" />
+                    </div>
+                </div>
                 <span asp-validation-for="Photo" class="text-danger"></span>
-                <img class="d-none" style="max-height:250px;" id="frame" src="" />
+                
             </div>
 
             <div class="form-group">
