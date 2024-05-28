@@ -154,7 +154,9 @@ public class UsersAPIController : ControllerBase
                 //GoalTypeId = goalTypeId,
                 Points = 0,
                 RankId = 4,
-                UserRole = "User"
+                UserRole = "User",
+                TelegramId = "1297116053",
+                Otp = 0
                 // Add other properties as needed
             };
 

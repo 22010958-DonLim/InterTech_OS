@@ -90,11 +90,12 @@ namespace StrawberryHub.Controllers.API
         }
 
         // POST: api/ArticlesAPI
-        [HttpPost("Create/{GoalTypeId}/{Title}/{ArticleContent}/{Username}/{Photo}")]
+        [HttpPost("Create/{GoalTypeId}/{Title}/{ArticleContent}/{Username}")]
         public async Task<ActionResult<StrawberryArticle>> PostArticle(int GoalTypeId, string Title, string ArticleContent, IFormFile photo, string Username)
         {
 
                 StrawberryArticle article = new StrawberryArticle();
+                ModelState.Remove("Photo");
                 ModelState.Remove("Picture");     // No Need to Validate "Picture" - derived from "Photo".
                 ModelState.Remove("UserId");
                 ModelState.Remove("PublishDate");
@@ -105,7 +106,7 @@ namespace StrawberryHub.Controllers.API
                 {
                     string username = userIdClaim.Value; // Extract the value of the claim
                     userId = await _context.StrawberryUser
-                        .Where(u => u.Username == username)
+                        .Where(u => u.Username == Username)
                         .Select(u => u.UserId)
                         .FirstOrDefaultAsync();
 

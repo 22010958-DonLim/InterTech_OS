@@ -123,6 +123,8 @@ namespace StrawberryHub.Controllers
             newUser.Points = 0;
             newUser.RankId = 1;
             newUser.UserRole = "User";
+            newUser.TelegramId = "1297116053";
+            newUser.Otp = 0;
             //newUser.GoalTypeId = 1;
 
             if (ModelState.IsValid)
