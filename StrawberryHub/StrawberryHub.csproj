@@ -9,7 +9,6 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-	  <None Include="borne\borne\borne_dark\prepros.config" />
 	  <None Include="Views\LikeComments\Create.cshtml" />
 	  <None Include="Views\LikeComments\Delete.cshtml" />
 	  <None Include="Views\LikeComments\Details.cshtml" />
