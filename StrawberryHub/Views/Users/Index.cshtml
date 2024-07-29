@@ -7,8 +7,16 @@
 <h1>Registered Users</h1>
 
 <p>
-    <a asp-action="Register">Create New</a>
+    <a asp-action="Create">Create New</a>
 </p>
+@if (TempData["Message"] != null)
+{
+    <div class="mb-3">
+        <div class="alert alert-secondary">
+            <text>@TempData["Message"]</text>
+        </div>
+    </div>
+}
 <table class="table">
     <thead>
         <tr>

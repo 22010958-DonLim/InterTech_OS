@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Telegram.Bot.Types;
 
 [Route("OSHub/[controller]")]
 [ApiController]
@@ -20,9 +21,32 @@ public class TasksAPIController : ControllerBase
 
     // GET: api/TasksAPI
     [HttpGet]
-    public async Task<ActionResult<string>> GetTasks()
+    public async Task<ActionResult<string>> GetTasks(int Userid)
     {
-        var tasks = await _context.StrawberryTask.Include(t => t.User).ToListAsync();
+        var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.Name);
+
+        var currentDate = DateTime.Now;
+        var startOfDay = currentDate.Date; // This ensures we're checking from the start of the day
+
+        // Get the list of tasks that the user has not completed today
+        var completedTasksToday = await _context.StrawberryUserTask
+            .Where(s => s.UserId == Userid &&
+                        s.CompletedDate.HasValue &&
+                        s.CompletedDate.Value.Date == startOfDay)
+            .Select(s => s.TaskId)
+            .ToListAsync();
+
+        // Get all tasks and filter out the ones that have been completed today
+        var tasksToShow = await _context.StrawberryTask
+            .Include(t => t.StrawberryUserTask)
+            .Where(t => !completedTasksToday.Contains(t.TaskId))
+            .Select(t => new
+            {
+                TaskId = t.TaskId,
+                TaskDescription = t.TaskDescription,
+                PointsReward = t.PointsReward
+            })
+            .ToListAsync();
 
         // Configure JsonSerializerOptions to handle object cycles
         var jsonOptions = new JsonSerializerOptions
@@ -31,8 +55,8 @@ public class TasksAPIController : ControllerBase
             // Add other options as needed
         };
 
-        // Serialize the tasks to JSON
-        var jsonTasks = JsonSerializer.Serialize(tasks, jsonOptions);
+        // Serialize the filtered tasks to JSON
+        var jsonTasks = JsonSerializer.Serialize(tasksToShow, jsonOptions);
 
         // Return the JSON result
         return Content(jsonTasks, "application/json");
@@ -42,7 +66,7 @@ public class TasksAPIController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<StrawberryHub.Models.StrawberryTask>> GetTask(int id)
     {
-        var task = await _context.StrawberryTask.Include(t => t.User).FirstOrDefaultAsync(m => m.TaskId == id);
+        var task = await _context.StrawberryTask.FirstOrDefaultAsync(m => m.TaskId == id);
 
         if (task == null)
         {

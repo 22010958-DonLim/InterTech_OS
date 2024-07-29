@@ -1,0 +1,91 @@
+﻿<!-- Leaderboard.cshtml -->
+@model StrawberryHub.Models.Leaderboard
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/leaderboard.css">
+</head>
+<body>
+<div class="hero">
+        <video autoplay loop muted plays-inline>
+            <source src="~/Images/nightL.mp4" type="video/mp4">
+        </video>
+        <main>
+            <div class="leaderboards-container">
+                <div class="leaderboard-column">
+                    <div id="header">
+                        <h1>Best Articles</h1>
+                    </div>
+                    <div id="leaderboard">
+                        <div class="ribbon"></div>
+                        <table>
+                            <!-- Replace the remaining sample data with dynamic content -->
+                            @for (var i = 0; i < ViewBag.MostLikedArticles.Count && i < 5; i++)
+                            {
+                                var user = ViewBag.MostLikedArticles[i];
+                                var users = ViewBag.TopArticleTitles[i];
+                                int number = i + 1;
+                                @if (number == 1)
+                                {
+                                    <tr style="background-color: #fc5a8d">
+                                        <td class="number">@number</td>
+                                        <td class="name">@users.Title</td>
+                                        <td class="points">@user.TotalLikes Likes <img class="gold-medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal" /></td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td class="number">@number</td>
+                                        <td class="name">@users.Title</td>
+                                        <td class="points">@user.TotalLikes Likes</td>
+                                    </tr>
+                                }
+                            }
+                        </table>
+                    </div>
+                </div>
+
+                <div class="leaderboard-column">
+                    <div id="header">
+                        <h1>Rank</h1>
+                    </div>
+                    <div id="leaderboard">
+                        <div class="ribbon"></div>
+                        <table>
+                            <!-- Replace the remaining sample data with dynamic content -->
+                            @for (var i = 0; i < ViewBag.TopUsers.Count && i < 5; i++)
+                            {
+                                var user = ViewBag.TopUsers[i];
+                                int number = i + 1;
+                                @if (number == 1)
+                                {
+                                    <tr style="background-color: #fc5a8d">
+                                        <td class="number">@number</td>
+                                        <td class="name">@user.Username</td>
+                                        <td class="points">@user.Points <img class="gold-medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal" /></td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td class="number">@number</td>
+                                        <td class="name">@user.Username</td>
+                                        <td class="points">@user.Points</td>
+                                    </tr>
+                                }
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+</div>
+</body>
+</html>

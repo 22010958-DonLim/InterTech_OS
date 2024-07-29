@@ -4,86 +4,108 @@
     Layout = "_Layout";
 }
 
-<div class="row">
-    <div class="col-sm-6">
-        <form asp-controller="Account" asp-action="Login" method="post">
-            <h3 class="display-4" style="color: white;">Welcome to OSHub</h3>
-            <div class="col-sm-5">
-                @if (ViewData["Message"] != null)
-                {
-                    <div class="mb-3">
-                        <div class="alert alert-secondary">
-                            <text>@ViewData["Message"]</text>
+<div class="hero">
+    <video autoplay loop muted plays-inline>
+        <source src="~/Images/woods.mp4" type="video/mp4">
+    </video>
+    <div class="row">
+        <div class="col-sm-6">
+            <form asp-controller="Account" asp-action="Login" method="post">
+                <h3 class="display-4" style="color: white;">Welcome to OSHub</h3>
+                <div class="col-sm-5">
+                    @if (ViewData["Message"] != null)
+                    {
+                        <div class="mb-3">
+                            <div class="alert alert-secondary">
+                                <text>@ViewData["Message"]</text>
+                            </div>
                         </div>
+                    }
+
+                    <div class="mb-3">
+                        <label asp-for="Username" class="form-label fw-bold" style="color: white;">Username :</label>
+                        <input asp-for="Username" class="form-control form-control-sm" placeholder="Username" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
                     </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label fw-bold" style="color: white;">Password :</label>
+                        <input asp-for="Password" class="form-control form-control-sm" placeholder="Password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="submit" class="btn btn-sm btn-primary" value="Sign In" />
+                    </div>
+
+                    <div>
+                        <p>Don't have an Account? <a asp-action="Register" asp-controller="Users" style="color: #fc5a8d">Register</a></p>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-6">
+            <style>
+                body {
+                    background-size: cover;
+                    margin: 0;
+                    padding: 0;
                 }
 
-                <div class="mb-3">
-                    <label asp-for="Username" class="form-label fw-bold" style="color: white;">Username :</label>
-                    <input asp-for="Username" class="form-control form-control-sm" placeholder="Username" />
-                    <span asp-validation-for="Username" class="text-danger"></span>
-                </div>
+                text-center {
+                    color: white; /* Set text color to white for elements with class 'text-center' */
+                }
 
-                <div class="mb-3">
-                    <label asp-for="Password" class="form-label fw-bold" style="color: white;">Password :</label>
-                    <input asp-for="Password" class="form-control form-control-sm" placeholder="Password" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
+                /* Additional styles for specific elements if needed */
+                h1, h4, p {
+                    color: white; /* Set text color to white for h1 and h4 elements */
+                }
 
-                <div class="mb-3">
-                    <input type="submit" class="btn btn-sm btn-primary" value="Sign In" />
-                </div>
+                h1, h4 {
+                    font-weight: bold;
+                    text-align: center;
+                }
 
-                <div>
-                    <p>Don't have an Account? <a asp-action="Register" asp-controller="Users">Register</a></p>
-                </div>
+                .text-center {
+                    text-align: center;
+                }
+
+                .hero {
+                    width: 100%;
+                    height: 100vh;
+                    position: relative;
+                    overflow: hidden; /* Prevents the video from overflowing the container */
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                    .hero video {
+                        position: fixed; /* Fixed position to cover the whole screen */
+                        top: 0;
+                        left: 0;
+                        width: 100vw; /* Viewport width */
+                        height: 100vh; /* Viewport height */
+                        object-fit: cover; /* Cover the entire viewport without distortion */
+                        z-index: -1; /* Ensure it stays in the background */
+                    }
+            </style>
+
+            <div class="text-center">
+                <h1 class="display-4">Welcome</h1>
+
+                <h4 class="display-4">About Us</h4>
+                <p>
+                    Welcome to our Strawberry Generation Wellness App!
+                    Dedicated to individuals born in strawberry years who may experience breakdowns and feel like giving up. But we are here
+                    to help you overcome these hurdles!
+
+                    Our purpose is to Empower “strawberries” with tips and activities to overcome vulnerability and cultivate resilience.
+                </p>
+
+                <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
             </div>
-        </form>
-    </div>
-
-    <div class="col-sm-6">
-        <style>
-            body {
-                background-image: url('/Images/strawberryImage.jpg');
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-                margin: 0;
-                padding: 0;
-            }
-
-            text-center {
-                color: white; /* Set text color to white for elements with class 'text-center' */
-            }
-
-            /* Additional styles for specific elements if needed */
-            h1, h4, p {
-                color: white; /* Set text color to white for h1 and h4 elements */
-            }
-
-            h1, h4 {
-                font-weight: bold;
-                text-align: center;
-            }
-
-            .text-center {
-                text-align: center;
-            }
-        </style>
-
-        <div class="text-center">
-            <h1 class="display-4">Welcome</h1>
-
-            <h4 class="display-4">About Us</h4>
-            <p>
-                Welcome to our Strawberry Generation Wellness App!
-                Dedicated to individuals born in strawberry years who may experience breakdowns and feel like giving up. But we are here
-                to help you overcome these hurdles!
-
-                Our purpose is to Empower “strawberries” with tips and activities to overcome vulnerability and cultivate resilience.
-            </p>
-
-            <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
         </div>
     </div>
 </div>

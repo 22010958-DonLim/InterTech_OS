@@ -32,51 +32,9 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <!-- Include Quill library -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <style>
-        :root {
-            --text-color-dark: white;
-            --bg-color-dark: black;
-            --text-color-light: black;
-            --bg-color-light: white;
-            --one-berry-color: #fc5a8d;
-            --link-color-light: black; /* Add this line */
-            --link-color-dark: white; /* Add this line */
-            --navbar-color-light: dimgrey; /* Add this line */
-            --navbar-color-dark: white; /* Add this line */
-        }
+    <link rel="stylesheet" href="~/css/layout.css">
 
-        body {
-            background-color: var(--bg-color-light);
-        }
 
-        body * {
-            color: var(--text-color-light);
-        }
-
-            body a { /* Add this block */
-                color: var(--link-color-light);
-            }
-
-        body.dark-mode {
-            background-color: var(--bg-color-dark);
-        }
-
-                body.dark-mode *:not(.one-berry) {
-            color: var(--text-color-dark);
-        }
-
-        .navbar-item {
-            color: black;
-        }
-        
-        .one-berry {
-            color: var(--one-berry-color);
-        }
-
-        .grey-button {
-            color: grey;
-        }
-    </style>
 
     <script>
         const WEB_RPNOTES = '@(Url.Content("~/RPNotes"))';
@@ -108,6 +66,48 @@
                 Back to top
             </a>
         </div>
+
+        <!-- live chat - start -->
+        <div class="livechat_wrapper">
+            <button class="livechat_btn" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+                <span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 0H2C0.9 0 0 0.9 0 2V20L4 16H18C19.1 16 20 15.1 20 14V2C20 0.9 19.1 0 18 0Z" fill="white" />
+                    </svg>
+                </span>
+                <small>Leave your feedback here!</small>
+            </button>
+        </div>
+
+        <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="feedbackModalLabel">Strawberry User's Feedback</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="feedbackForm">
+                            <label for="starRating" class="form-label">Rate your experience!</label>
+                            <div class="star-rating" id="starRating">
+                                <span class="star" data-rating="1">★</span>
+                                <span class="star" data-rating="2">★</span>
+                                <span class="star" data-rating="3">★</span>
+                                <span class="star" data-rating="4">★</span>
+                                <span class="star" data-rating="5">★</span>
+                            </div>
+                            <textarea style="color: black" id="feedbackMessage" name="message" rows="4" placeholder="Tell us about your experience" required class="form-control mt-3"></textarea>
+                            <input type="hidden" id="userId" name="userId" value="1">
+                            <input type="hidden" id="stars" name="stars" value="">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="submitFeedbacks" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="submitFeedback">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="preloader"></div>
         <header class="header_section style_2">
             <div class="header_container justify-content-between">
@@ -116,6 +116,17 @@
                         <img src="~/Images/OS_Icon.png" alt="StrawberryHub" height="60" width="60" />
                     </a>
                     <button id="theme-switcher" style="color: deeppink; font-family: 'Arial', sans-serif;">Switch Theme</button>
+                    @if (User.Identity!.IsAuthenticated && ViewBag.ShowDailyTaskButton == true)
+                    {
+                        <button class="text-decoration-none"
+                                data-bs-toggle="modal"
+                                data-bs-target="#newAttachmentModal"
+                                style="margin-left: 40px;">
+                            <svg width="50px" height="50px" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M811.885714 899.657143H234.057143c-73.142857 0-124.342857-58.514286-124.342857-124.342857V541.257143h775.314285c21.942857 0 36.571429 14.628571 36.571429 36.571428v204.8c0 65.828571-51.2 117.028571-109.714286 117.028572z" fill="#F4B1B2" /><path d="M760.685714 936.228571H263.314286c-102.4 0-182.857143-80.457143-182.857143-182.857142V292.571429c0-102.4 80.457143-182.857143 182.857143-182.857143h504.685714C870.4 109.714286 950.857143 190.171429 950.857143 292.571429v460.8c-7.314286 95.085714-87.771429 182.857143-190.171429 182.857142zM263.314286 160.914286c-73.142857 0-131.657143 58.514286-131.657143 131.657143v460.8c0 73.142857 58.514286 131.657143 131.657143 131.657142h504.685714c73.142857 0 131.657143-58.514286 131.657143-131.657142V292.571429c0-73.142857-58.514286-131.657143-131.657143-131.657143H263.314286z" fill="#D72822" /><path d="M731.428571 256V190.171429c0-73.142857-43.885714-131.657143-102.4-131.657143H387.657143c-58.514286 0-102.4 58.514286-102.4 131.657143V256H731.428571z" fill="#F4B1B2" /><path d="M731.428571 285.257143H263.314286v-21.942857-73.142857c0-87.771429 58.514286-160.914286 131.657143-160.914286h241.371428c73.142857 0 131.657143 73.142857 131.657143 160.914286v87.771428l-36.571429 7.314286z m-416.914285-58.514286h402.285714v-36.571428c0-58.514286-36.571429-102.4-80.457143-102.4H387.657143c-43.885714 0-80.457143 43.885714-80.457143 102.4v36.571428z" fill="#D72822" /><path d="M833.828571 285.257143H190.171429c-14.628571 0-29.257143-14.628571-29.257143-29.257143s14.628571-29.257143 29.257143-29.257143h643.657142c14.628571 0 29.257143 14.628571 29.257143 29.257143s-14.628571 29.257143-29.257143 29.257143z" fill="#D72822" /><path d="M378.88 546.157714l158.208 118.125715-30.573714 40.96L348.16 587.190857z" fill="#CB2A24" /><path d="M468.260571 674.304l261.851429-275.894857 37.083429 35.254857-261.851429 275.894857z" fill="#CB2A24" />
+                            </svg>
+                        </button>
+                    }
                 </div>
 
                 <div class="header_info_wrap">
@@ -127,17 +138,17 @@
                         {
                             <div class="main_menu_inner collapse navbar-collapse" id="main_menu_dropdown">
                                 <ul class="main_menu_list ul_li">
+                                    <li><a class="text-decoration-none"  style="font-size:1.2em" asp-area="" asp-controller="Users" asp-action="Leaderboard">LEADERBOARD</a></li>
                                     <li class="dropdown">
-                                        <a class="nav-link text-uppercase navbar-item" href="#" id="user_submenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <a class="nav-link text-uppercase navbar-item large-text" href="#" id="user_submenu" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size:1.2em">
                                             User
                                         </a>
                                         <ul class="submenu dropdown-menu" aria-labelledby="user_submenu">
                                             <li><a asp-area="" asp-controller="Users" asp-action="UserProfile">Profile</a></li>
-                                            <!-- Add more user profile related pages here -->
                                         </ul>
                                     </li>
                                     <li class="dropdown">
-                                        <a class="nav-link text-uppercase navbar-item" href="#" id="articles_submenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <a class="nav-link text-uppercase navbar-item large-text" href="#" id="articles_submenu" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size:1.2em">
                                             Article
                                         </a>
                                         <ul class="submenu dropdown-menu" aria-labelledby="articles_submenu">
@@ -148,20 +159,36 @@
                                     @if (User.IsInRole("Admin"))
                                     {
                                         <li class="dropdown">
-                                            <a class="nav-link text-uppercase navbar-item" href="#" id="admin_submenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <a class="nav-link text-uppercase navbar-item large-text" href="#" id="admin_submenu" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size:1.2em">
                                                 Admin
                                             </a>
                                             <ul class="submenu dropdown-menu" aria-labelledby="admin_submenu">
                                                 <li><a asp-area="" asp-controller="Users" asp-action="Index">Users</a></li>
-                                                <li><a asp-area="" asp-controller="Tasks" asp-action="Index">Tasks</a></li>
-                                                <li><a asp-area="" asp-controller="Reflections" asp-action="Index">Reflections</a></li>
                                                 <li><a asp-area="" asp-controller="Ranks" asp-action="Index">Ranks</a></li>
-                                                <li><a asp-area="" asp-controller="GoalTypes" asp-action="Index">Goal Types</a></li>
-                                                <li><a asp-area="" asp-controller="Goals" asp-action="Index">Goals</a></li>
-                                                <li><a asp-area="" asp-controller="EmergencySupports" asp-action="Index">Emergency Supports</a></li>
-                                                <li><a asp-area="" asp-controller="Articles" asp-action="Index">Articles</a></li>
-                                                <li><a asp-area="" asp-controller="LikeComments" asp-action="Index">Like/Comment</a></li>
-                                                <li><a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+                                                <li class="dropdown">
+                                                    <a href="#" id="portfolio_details_submenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">Tasks</a>
+                                                    <ul class="submenu dropdown-menu" aria-labelledby="portfolio_details_submenu">
+                                                        <li><a asp-area="" asp-controller="Tasks" asp-action="Index">Task List</a></li>
+                                                        <li><a asp-area="" asp-controller="UserTasks" asp-action="Index">User Completion Task List</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li class="dropdown">
+                                                    <a href="#" id="portfolio_details_submenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">Goal Preference</a>
+                                                    <ul class="submenu dropdown-menu" aria-labelledby="portfolio_details_submenu">
+                                                        <li><a asp-area="" asp-controller="GoalTypes" asp-action="Index">Assign New Goal Preference</a></li>
+                                                        <li><a asp-area="" asp-controller="Goals" asp-action="Index">User Goal Preference</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li class="dropdown">
+                                                    <a href="#" id="portfolio_details_submenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">Articles</a>
+                                                    <ul class="submenu dropdown-menu" aria-labelledby="portfolio_details_submenu">
+                                                        <li><a asp-area="" asp-controller="Articles" asp-action="Index">Article Record</a></li>
+                                                        <li><a asp-area="" asp-controller="StrawberryLikes" asp-action="Index">Article Like</a></li>
+                                                        <li><a asp-area="" asp-controller="StrawberryComments" asp-action="Index"> Article Comment</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li><a asp-area="" asp-controller="StrawberryFeedbacks" asp-action="Index">User Feedback</a></li>
+                                                <li><a asp-area="" asp-controller="Articles" asp-action="GenerateContent">Generate Articles</a></li>
                                             </ul>
                                         </li>
                                     }
@@ -174,22 +201,22 @@
                         <ul class="header_contact_info ul_li_block">
                             <li>
                                 <a href="#!">
-                                    <span class="fs-5" style="color: hotpink; font-family: 'Arial', sans-serif;">
+                                    <span class="text-decoration-none fs-5" style="color: #fc5a8d; font-family: 'Arial', sans-serif;">
                                         Welcome @User.Identity.Name<br>
                                     </span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#!" style="text-align: center; display: block;">
-                                    <span class="fs-6" style="color: hotpink; font-family: 'Arial', sans-serif;">
+                                    <span class="fs-6" style="color: #fc5a8d; font-family: 'Arial', sans-serif;">
                                         (@User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value)
                                     </span>
                                 </a>
                             </li>
                         </ul>
-                        <div class="text-center">
+                        <div class="text-decoration-none text-center">
                             <a asp-controller="Account" asp-action="Logoff"
-                           asp-route-returnUrl="Home" class="btn btn-link fs-6 grey-button">
+                           asp-route-returnUrl="Home" class="btn btn-link fs-6 grey-button" style="color: #fc5a8d">
                                 Sign Off
                             </a>
                         </div>
@@ -198,7 +225,7 @@
                     {
                         <div class="text-center">
                             <a asp-controller="Account" asp-action="Login"
-                           asp-route-returnUrl="Home" class="btn btn-link fs-6 grey-button">
+                           asp-route-returnUrl="Home" class="btn btn-link fs-6 grey-button" style="color: #fc5a8d">
                                 Login
                             </a>
                         </div>
@@ -232,6 +259,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <!--<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> -->
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     <script>
         document.getElementById('theme-switcher').addEventListener('click', function () {
             document.body.classList.toggle('dark-mode');
@@ -243,6 +271,78 @@
     <script src="~/assets/js/bootstrap.min.js"></script>
     <script src="~/assets/js/jquery-plugins-collection.js"></script>
     <script src="~/assets/js/main.js"></script>
+    @*<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>*@
+    <script>
+        $(document).ready(function () {
+            const starRating = $('#starRating');
+            const stars = starRating.find('.star');
+            const feedbackMessage = $('#feedbackMessage');
+            const starsInput = $('#stars');
+
+            $('.livechat_btn').on('click', function () {
+                $('#feedbackModal').modal('show');
+            });
+
+            stars.on('click', function () {
+                const rating = $(this).data('rating');
+                setRating(rating);
+            });
+
+            function setRating(rating) {
+                starsInput.val(rating);
+                stars.each(function () {
+                    $(this).toggleClass('active', $(this).data('rating') <= rating);
+                });
+            }
+
+            $('#submitFeedback').on('click', function () {
+                if (!starsInput.val()) {
+                    alert('Please select a rating');
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("CreateFeedback", "StrawberryFeedbacks")',
+                    type: 'POST',
+                    data: {
+                        Stars: parseInt($('#stars').val()),
+                        Message: $('#feedbackMessage').val()
+                    },
+                    success: function (result) {
+                        if (result.success) {
+                            alert('Thank you for your feedback!');
+                            forceCloseModal();
+                        } else {
+                            alert(result.message || 'Unknown error occurred');
+                        }
+                    },
+                    error: function () {
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            });
+
+            function resetForm() {
+                $('#stars').val('');
+                $('.star').removeClass('active');
+                $('#feedbackMessage').val('');
+                $('#feedbackModal').modal('hide');
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+            }
+
+            function forceCloseModal() {
+                $('#feedbackModal').modal('hide');
+                $('body').removeClass('modal-open').css('padding-right', '');
+                $('.modal-backdrop').remove();
+                setTimeout(function () {
+                    if ($('.modal-backdrop').length > 0) {
+                        $('.modal-backdrop').remove();
+                    }
+                }, 500);
+            }
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
     @RenderSection("BootstrapTableScripts", required: false)
 </body>

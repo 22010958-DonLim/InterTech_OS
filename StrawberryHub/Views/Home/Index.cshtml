@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-@model List<StrawberryArticle>
+@model List<StrawberryTask>
 
 <!-- Check if TempData["Success"] exists -->
 @if (TempData["Success"] != null)
@@ -11,6 +11,9 @@
 		@TempData["Success"]
 	</div>
 }
+<head>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
 
 <!-- Include the new theme's HTML content -->
 <!-- You can replace the dummy text with data from your model -->
@@ -22,8 +25,11 @@
 			<div class="container">
 				<div class="row align-items-center">
 					<div class="col-lg-4 col-md-6 order-last">
-						<div class="banner_image">
-							<img src="assets/images/banner/KidsFuture.jpg" alt="image_not_found">
+						<div class="banner_image" style="color: #404040; background-color: #A9A9A9;">
+							<video autoplay loop muted plays-inline>
+								<source src="~/Images/woods.mp4" type="video/mp4">
+							</video>
+							<!--<img src="assets/images/banner/WomanHomePage.jpg" alt="image_not_found"> -->
 							<div class="round_text">
 								<svg width="145" height="150" viewBox="0 0 145 150" fill="none" xmlns="http://www.w3.org/2000/svg">
 
@@ -111,6 +117,71 @@
 		</section>
 		<!-- about_section - end
 		================================================== -->
+		<!-- team_section - start
+				================================================== -->
+		<section class="team_section section_space pb-0">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-5 col-md-5">
+						<div class="section_title">
+							<h2 class="small_title">
+								Our Team
+								<span class="line"></span>
+							</h2>
+							<h3 class="big_title text_effect_wrap">
+								<span class="text_effect_wrap1">
+									<span class="text_effect_wrap2">
+										<span class="text_effect_wrap3">Read Articles </span>
+									</span>
+								</span>
+								<span class="text_effect_wrap1">
+									<span class="text_effect_wrap2">
+										<span class="text_effect_wrap3">Created from</span>
+									</span>
+								</span>
+								<span class="text_effect_wrap1">
+									<span class="text_effect_wrap2">
+										<span class="text_effect_wrap3">Our Admins</span>
+									</span>
+								</span>
+							</h3>
+							<a class="btn_text" asp-action="AdminArticle" asp-controller="Articles">
+								<span>See all Articles</span>
+								<svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path d="M10 0V7.50063H9.16833V1.42131L0.587991 10L0 9.41015L8.57868 0.833125H2.49418V0H10Z" fill="white" />
+								</svg>
+							</a>
+						</div>
+					</div>
+
+					<div class="col-lg-7 col-md-7">
+						<div class="team_carousel_wrap">
+							<div class="team_carousel row" data-slick='{"dots": false, "arrows": false}'>
+								@if (ViewBag.TopAdminArticles != null)
+								{
+									@foreach (var article in ViewBag.TopAdminArticles)
+									{
+										<div class="slider_item col">
+											<div class="team_grid_layout">
+												<div class="team_person_image">
+													<img src="~/photos/@article.Picture" alt="image_not_found">
+												</div>
+												<div class="team_content">
+													<h3 class="team_person_name">@article.Title</h3>
+													<span class="team_person_title text-uppercase">@article.PublishedDate.ToString("MMM dd, yyyy")</span>
+												</div>
+											</div>
+										</div>
+									}
+								}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+				<!-- team_section - end
+				================================================== -->
 		<!-- portfolio_section - start
 						================================================== -->
 		<section class="portfolio_section section_space pb-0">
@@ -118,7 +189,7 @@
 				<div class="portfolio_split_layout">
 					<div class="row align-items-center">
 						<div class="col-lg-8 col-md-7">
-							<a class="item_image" href="portfolio_details.html">
+							<a class="item_image" asp-action="Stress" asp-controller="Articles">
 								<img src="assets/images/banner/StressFreeImage.jpg" alt="image_not_found">
 							</a>
 						</div>
@@ -145,7 +216,7 @@
 										</span>
 									</span>
 								</h4>
-								<a class="btn btn_border border_light text-uppercase" href="portfolio_details.html">View More</a>
+								<a class="btn btn_border border_light text-uppercase" asp-action="Stress" asp-controller="Articles">View More</a>
 							</div>
 						</div>
 					</div>
@@ -154,7 +225,7 @@
 				<div class="portfolio_split_layout">
 					<div class="row align-items-center">
 						<div class="col-lg-8 col-md-7 order-last">
-							<a class="item_image" href="portfolio_details.html">
+							<a class="item_image" asp-action="Mental" asp-controller="Articles">
 								<img src="assets/images/banner/MentalWellnessImage.jpg" alt="image_not_found">
 							</a>
 						</div>
@@ -181,7 +252,7 @@
 										</span>
 									</span>
 								</h4>
-								<a class="btn btn_border border_light text-uppercase" href="portfolio_details.html">View More</a>
+								<a class="btn btn_border border_light text-uppercase" asp-action="Mental" asp-controller="Articles">View More</a>
 							</div>
 						</div>
 					</div>
@@ -190,7 +261,7 @@
 				<div class="portfolio_split_layout">
 					<div class="row align-items-center">
 						<div class="col-lg-8 col-md-7">
-							<a class="item_image" href="portfolio_details.html">
+							<a class="item_image" asp-action="NewHobbies" asp-controller="Articles">
 								<img src="assets/images/banner/Singaporebooth.jpg" alt="image_not_found">
 							</a>
 						</div>
@@ -217,7 +288,7 @@
 										</span>
 									</span>
 								</h4>
-								<a class="btn btn_border border_light text-uppercase" href="portfolio_details.html">View More</a>
+								<a class="btn btn_border border_light text-uppercase" asp-action="NewHobbies" asp-controller="Articles">View More</a>
 							</div>
 						</div>
 					</div>
@@ -230,3 +301,37 @@
 	
 </body>
 
+<div class="modal" id="newAttachmentModal" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" style="color:black">Daily Task</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" />
+			</div>
+			<div class="modal-body">
+				<div class="row mb-2">
+					<form enctype="multipart/form-data" id="fmAttachment">
+						@if (ViewBag.TasksToShow != null)
+						{
+							@foreach (var task in ViewBag.TasksToShow)
+							{
+								<li style="margin-bottom: 10px;">
+									<label style="color: black" for="task-@task.TaskId" value="@task.PointsReward">@task.TaskDescription</label>
+									<input type="checkbox" id="task-@task.TaskId" style="vertical-align: middle; margin-right: 10px;" />
+								</li>
+							}
+						}
+						else
+						{
+							<p>Congratulations! You have finished all you tasks! See you tmr!</p>
+						}
+					</form>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary borderR" data-bs-dismiss="modal" style="background-color:#fc5a8d; color:white">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

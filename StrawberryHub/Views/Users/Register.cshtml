@@ -3,27 +3,43 @@
     Layout = "_Layout";
 }
 
-<form asp-controller="Users" asp-action="Register" method="post">
+<form asp-controller="Users" asp-action="Register" method="post" enctype="multipart/form-data">
 
 
     <div class="container">
 
-        @if (ViewData["Message"] != null)
+        @if (TempData["Message"] != null)
         {
             <div class="mb-3">
-                <div class="alert alert-secondary">
-                    <text>@ViewData["Message"]</text>
+                <div class="alert alert-secondary" style="background-color: pink; border-color: #ff69b4; color: #721c24;">
+                    <text>@TempData["Message"]</text>
                 </div>
             </div>
         }
 
-        <h4><b>Register User</b></h4>
+        <div class="container" style="font-family: 'Calibre';">
+            <h1 class="page_title text-white">
+                <span class="d-block">Register </span>
+                <span class="d-block">An Account.</span>
+            </h1>
+        </div>
 
         <div class="form-container">
             <div class="mb-3">
+                <input type="hidden" asp-for="Picture" data-val="false"/>
+                <input type="hidden" asp-for="TelegramId" />
+                <input type="hidden" asp-for="Otp" />
+                <input type="hidden" asp-for="OtpCount" />
+
+            <div class="mb-3">
+                <label asp-for="Photo" class="control-label">Add an image</label>
+                    <input asp-for="Photo" class="form-control-file" onchange="preview()" data-val="false">
+                <span asp-validation-for="Photo" class="text-danger"></span>
+            </div>
                 <label asp-for="Username" class="form-label fw-bold"></label>
                 <input asp-for="Username" class="form-control form-control-sm" />
                 <span asp-validation-for="Username" class="text-danger"></span>
+                <span id="username-availability"></span>
             </div>
 
             <div class="mb-3">
@@ -42,6 +58,7 @@
                 <label asp-for="Email" class="form-label fw-bold">Email Address :</label>
                 <input asp-for="Email" class="form-control form-control-sm" />
                 <span asp-validation-for="Email" class="text-danger"></span>
+                <span id="email-validation"></span>
             </div>
 
             <div class="mb-3">
@@ -71,9 +88,81 @@
 
             <div class="mb-3">
                 <input type="submit" class="btn btn-sm btn-primary" value="Register" />
-                <a asp-controller="Users" asp-action="Index" class="btn btn-back">Back to List</a>
+                <a asp-controller="Account" asp-action="Login" class="btn btn-back">Back to Login Page</a>
             </div>
         </div>
 
     </div>
 </form>
+<div class="col-md-6">
+    <img id="frame" src="" class="img-fluid mt-3 d-none" />
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        let typingTimer;
+        const doneTypingInterval = 500; // ms
+
+        $('#Username').on('keyup', function () {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(checkUsernameAvailability, doneTypingInterval);
+        });
+
+    $(document).ready(function () {
+        let typingTimer;
+        const doneTypingInterval = 500; // ms
+
+        $('#Email').on('keyup', function () {
+             clearTimeout(typingTimer);
+             typingTimer = setTimeout(validateEmail, doneTypingInterval);
+        });
+    
+    function preview() {
+            var frame = document.getElementById("frame");
+            frame.src = URL.createObjectURL(event.target.files[0]);
+            frame.className = "img-fluid mt-3";
+        }
+
+
+        function checkUsernameAvailability() {
+            const username = $('#Username').val();
+            if (username.length > 0) {
+                $.ajax({
+                    url: '@Url.Action("CheckUsername", "Users")',
+                    type: 'GET',
+                    data: { username: username },
+                    success: function (response) {
+                        if (response.isAvailable) {
+                            $('#username-availability').text('Username is available').css('color', 'green');
+                        } else {
+                            $('#username-availability').text('Username is already taken').css('color', 'red');
+                        }
+                    }
+                });
+            } else {
+                $('#username-availability').text('');
+            }
+        }
+    });
+
+        function validateEmail() {
+            const email = $('#Email').val();
+            if (email.length > 0) {
+                $.ajax({
+                    url: '@Url.Action("ValidateEmail", "Users")',
+                    type: 'GET',
+                    data: { email: email },
+                    success: function (response) {
+                        if (response.isValid) {
+                            $('#email-validation').text(response.message).css('color', 'green');
+                        } else {
+                            $('#email-validation').text(response.message).css('color', 'red');
+                        }
+                    }
+                });
+            } else {
+                $('#email-validation').text('');
+            }
+        }
+    });
+    </script>

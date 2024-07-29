@@ -1,0 +1,193 @@
+:root {
+    --text-color-dark: white;
+    --bg-color-dark: #17171A;
+    --text-color-light: black;
+    --bg-color-light: white;
+    --one-berry-color: #fc5a8d;
+    --link-color-light: black;
+    --link-color-dark: white;
+    --navbar-color-light: dimgrey;
+    --navbar-color-dark: white;
+}
+
+body {
+    background-color: var(--bg-color-light);
+}
+
+    body * {
+        color: var(--text-color-light);
+    }
+
+    body a {
+        color: var(--link-color-light);
+    }
+
+    body.dark-mode {
+        background-color: var(--bg-color-dark);
+        color: var(--text-color-dark);
+    }
+
+        body.dark-mode a {
+            color: var(--link-color-dark);
+        }
+
+        body.dark-mode *:not(.one-berry):not(a) {
+            color: var(--text-color-dark);
+        }
+
+.navbar-item {
+    color: var(--navbar-color-light);
+}
+
+body.dark-mode .navbar-item {
+    color: var(--navbar-color-dark);
+}
+
+.one-berry {
+    color: var(--one-berry-color);
+}
+
+.grey-button {
+    color: grey;
+}
+
+.borderR {
+    border-radius: 10px;
+    color: #BABABA;
+    padding: 10px;
+    width: 110px;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    transition-duration: 0.4s;
+    font-weight: bold;
+}
+
+    .borderR:hover {
+        background-color: White;
+        color: hotpink;
+    }
+
+.large-text {
+    font-size: 5em;
+    font-weight: bold;
+}
+
+.modal {
+    display: none;
+}
+
+    .modal.show {
+        display: block;
+    }
+
+.modal-dialog {
+    max-width: 500px;
+    margin: 1.75rem auto;
+}
+
+.livechat_wrapper {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.livechat_btn {
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    .livechat_btn span {
+        margin-right: 10px;
+    }
+
+#feedbackForm {
+    width: 100%;
+    background-color: white;
+    border: 1px solid #ff3e66;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.star-rating {
+    font-size: 24px;
+    color: #ddd;
+}
+
+    .star-rating .star {
+        cursor: pointer;
+    }
+
+        .star-rating .star.active {
+            color: #ff3e66;
+        }
+
+textarea {
+    width: 100%;
+    margin-top: 10px;
+    resize: vertical;
+}
+
+#submitFeedback {
+    margin-top: 10px;
+    background-color: #ff3e66;
+    color: white;
+    border: none;
+    padding: 10px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#submitFeedbacks {
+    margin-top: 10px;
+    background-color: grey;
+    color: white;
+    border: none;
+    padding: 10px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+/* Ensure Bootstrap modal backdrop works correctly */
+.modal-backdrop {
+    z-index: 1040;
+}
+
+/* Ensure modal is above the backdrop */
+.modal {
+    z-index: 1050;
+}
+
+/* Dark mode styles for modal */
+body.dark-mode .modal-content {
+    background-color: var(--bg-color-dark);
+    color: var(--text-color-dark);
+}
+
+body.dark-mode #feedbackForm {
+    background-color: var(--bg-color-dark);
+    color: var(--text-color-dark);
+    border-color: var(--one-berry-color);
+}
+
+body.dark-mode .star-rating {
+    color: #555;
+}
+
+    body.dark-mode .star-rating .star.active {
+        color: var(--one-berry-color);
+    }
+
+/* Ensure buttons are visible in dark mode */
+body.dark-mode .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+body.dark-mode .btn-primary {
+    background-color: var(--one-berry-color);
+    color: white;
+}

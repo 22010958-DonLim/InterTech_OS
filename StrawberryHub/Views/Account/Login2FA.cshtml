@@ -1,18 +1,65 @@
 ﻿@model StrawberryHub.Models.LoginOTP
 
-<h2>Enter OTP</h2>
+<style>
+    .otp-input {
+        width: 150px; /* Adjust the width as needed */
+    }
 
-<form asp-action="VerifyOTP">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="UserId"/>
-    <input type="hidden" asp-for="Username" />
-    <input type="hidden" asp-for="Password"/>
-    <div class="form-group">
-        <label asp-for="OTP" class="control-label"></label>
-        <input asp-for="OTP" class="form-control" />
-        <span asp-validation-for="OTP" class="text-danger"></span>
+    .hero {
+        width: 100%;
+        height: 100vh;
+        position: relative;
+        overflow: hidden; /* Prevents the video from overflowing the container */
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Aligns content to the top */
+        padding-top: 0px; /* Adjust this value to move the form down slightly from the top */
+    }
+
+        .hero video {
+            position: fixed; /* Fixed position to cover the whole screen */
+            top: 0;
+            left: 0;
+            width: 100vw; /* Viewport width */
+            height: 100vh; /* Viewport height */
+            object-fit: cover; /* Cover the entire viewport without distortion */
+            z-index: -1; /* Ensure it stays in the background */
+        }
+
+    .container {
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 300px; /* Optional: Restricts the form's maximum width */
+        margin-top: 0; /* Adjust this value as needed to bring the form higher */
+    }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden; /* Prevents horizontal scroll */
+    }
+
+</style>
+
+<div class="hero">
+    <video autoplay loop muted plays-inline>
+        <source src="~/Images/woods.mp4" type="video/mp4">
+    </video>
+    <div class="container">
+        <h2 style="color:antiquewhite">Enter OTP</h2>
+        <form asp-action="VerifyOTP">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="UserId" />
+            <div class="form-group">
+                <label asp-for="OTP" class="control-label" style="color:antiquewhite"></label>
+                <input asp-for="OTP" class="form-control otp-input" />
+                <span asp-validation-for="OTP" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Username" />
+            <input type="hidden" asp-for="Password" />
+            <div class="form-group">
+                <input type="submit" value="Verify OTP" class="btn btn-primary" />
+            </div>
+        </form>
     </div>
-    <div class="form-group">
-        <input type="submit" value="Verify OTP" class="btn btn-primary" />
-    </div>
-</form>
+</div>

@@ -1,14 +1,16 @@
 {
   "dependencies": {
-    "mssql1": {
-      "type": "mssql"
-    },
     "secrets1": {
       "type": "secrets"
     },
     "mssql2": {
       "type": "mssql",
       "connectionId": "ConnectionStrings:DBStrawberry"
+    },
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:DefaultConnection",
+      "dynamicId": null
     }
   }
 }

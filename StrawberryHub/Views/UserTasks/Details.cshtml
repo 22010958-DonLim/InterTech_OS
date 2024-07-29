@@ -1,0 +1,42 @@
+﻿@model StrawberryHub.Models.StrawberryUserTask
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>StrawberryUserTask</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Points)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Points)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CompletedDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CompletedDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StrawberryTask)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StrawberryTask.TaskId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StrawberryUser)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StrawberryUser.Username)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.CompletedId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

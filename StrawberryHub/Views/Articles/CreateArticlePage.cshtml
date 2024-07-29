@@ -1,7 +1,7 @@
 ﻿@model StrawberryHub.Models.StrawberryArticle
 
 @{
-	ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -10,24 +10,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Create Article - Borne - Agency Portfolio Template</title>
+    <title>Create Article</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 
 <body>
     <div class="container" style="font-family: 'Calibre';">
-            <h1 class="page_title text-white">
-                <span class="d-block">Create </span>
-                <span class="d-block">An Article.</span>
-            </h1>
-        </div>
+        <h1 class="page_title text-white">
+            <span class="d-block">Create </span>
+            <span class="d-block">An Article.</span>
+        </h1>
+    </div>
     <div class="container pt-1">
         <div class="row">
             <div class="col-md-6">
-                <form asp-controller="Articles" asp-action="CreateArticlePage" enctype="multipart/form-data">
+                <form id="articleForm" asp-controller="Articles" asp-action="CreateArticlePage" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                     <input type="hidden" asp-for="UserId" />
+                    <input type="hidden" asp-for="PublishedDate" data-val="false"/>
 
                     <div class="form-group">
                         <label asp-for="GoalTypeId" class="control-label">Goal Type ID</label>
@@ -36,7 +37,7 @@
 
                     <div class="form-group">
                         <label asp-for="Title" class="control-label">Title</label>
-                        <input asp-for="Title" class="form-control" />
+                        <input id="Title" asp-for="Title" class="form-control" />
                         <span asp-validation-for="Title" class="text-danger"></span>
                     </div>
 
@@ -45,13 +46,6 @@
                         <textarea asp-for="ArticleContent" class="form-control" rows="6"></textarea>
                         <span asp-validation-for="ArticleContent" class="text-danger"></span>
                     </div>
-
-                    <div class="form-group">
-                        <label asp-for="PublishedDate" class="control-label">Published Date</label>
-                        <input asp-for="PublishedDate" class="form-control" />
-                        <span asp-validation-for="PublishedDate" class="text-danger"></span>
-                    </div>
-
                     <div class="form-group">
                         <label asp-for="Photo" class="control-label">Add an image</label>
                         <input asp-for="Photo" class="form-control-file" onchange="preview()">
@@ -59,22 +53,168 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="submit" value="Create" class="btn btn-primary" />
+                        <input type="submit" value="Create" class="btn btn-primary" style="background-color: #fc5a8d;" />
                     </div>
                 </form>
+                <button id="generateButton" class="btn btn-primary" onclick="generateContent()" style="background-color: #fc5a8d;">Generate Image (<span id="attemptsLeft">3</span> attempts left)</button>
+                <button id="resetAttemptsButton" class="btn btn-secondary" onclick="resetAttempts()">Reset Attempts</button>
+                <div id="loadingIndicator" style="display: none;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p>Generating content, please wait...</p>
+                </div>
             </div>
-
+            <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
             <div class="col-md-6">
                 <img id="frame" src="" class="img-fluid mt-3 d-none" />
             </div>
         </div>
     </div>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        // Call this function when the page loads and after each generation attempt
+        $(document).ready(function () {
+            updateAttemptsLeftDisplay();
+        });
+
+        function resetAttempts() {
+            localStorage.removeItem('generateImageAttempts');
+            localStorage.removeItem('firstAttemptTime');
+            updateAttemptsLeftDisplay();
+            alert("Your attempts have been reset. You now have 3 new attempts.");
+        }
+
+        function checkAttempts() {
+            let attempts = localStorage.getItem('generateImageAttempts');
+            let firstAttemptTime = localStorage.getItem('firstAttemptTime');
+
+            if (!attempts) {
+                attempts = 0;
+            }
+
+            if (!firstAttemptTime) {
+                firstAttemptTime = Date.now();
+                localStorage.setItem('firstAttemptTime', firstAttemptTime);
+            }
+
+            if (attempts >= 3) {
+                let timePassed = Date.now() - parseInt(firstAttemptTime);
+                if (timePassed < 24 * 60 * 60 * 1000) { // 24 hours in milliseconds
+                    alert("You have used up your 3 attempts. Please wait 24 hours before trying again.");
+                    return false;
+                } else {
+                    // Reset attempts and time if 24 hours have passed
+                    localStorage.setItem('generateImageAttempts', '0');
+                    localStorage.setItem('firstAttemptTime', Date.now().toString());
+                    return true;
+                }
+            }
+
+            return true;
+        }
+
+        function incrementAttempts() {
+            let attempts = localStorage.getItem('generateImageAttempts');
+            attempts = attempts ? parseInt(attempts) + 1 : 1;
+            localStorage.setItem('generateImageAttempts', attempts.toString());
+        }
+
         function preview() {
             var frame = document.getElementById("frame");
             frame.src = URL.createObjectURL(event.target.files[0]);
             frame.className = "img-fluid mt-3";
+        }
+
+        function generateContent() {
+            if (!checkAttempts()) {
+                return;
+            }
+            $('#loadingIndicator').show();
+            $('#errorMessage').hide();
+            $('#generateButton').prop('disabled', true);
+
+            const generatedTitle = $('#Title').val();
+
+            $.ajax({
+                url: '@Url.Action("GenerateImg", "Articles")',
+                type: 'POST',
+                data: {
+                    title: generatedTitle
+                },
+                timeout: 60000, // 60 seconds timeout
+                success: function (result) {
+                    if (result.success) {
+                        // Display and set the generated image
+                        incrementAttempts();
+                        updateAttemptsLeftDisplay();
+                        if (result.generatedImage) {
+                            var frame = document.getElementById("frame");
+                            frame.src = result.generatedImage;
+                            frame.className = "img-fluid mt-3";
+                            frame.style.display = "block"; // Ensure the image is visible
+                            $('#hiddenGeneratedImage').val(result.generatedImage);
+
+                            fetch(result.generatedImage)
+                                .then(res => res.blob())
+                                .then(blob => {
+                                    const file = new File([blob], "generated-image.png", { type: "image/png" });
+
+                                    // Create a FileList object
+                                    const dataTransfer = new DataTransfer();
+                                    dataTransfer.items.add(file);
+
+                                    // Set the file input's files
+                                    document.querySelector('input[name="Photo"]').files = dataTransfer.files;
+                                });
+
+                            // Create a hidden input for the generated image if it doesn't exist
+                            if ($('#hiddenGeneratedImageInput').length === 0) {
+                                $('<input>').attr({
+                                    type: 'hidden',
+                                    id: 'hiddenGeneratedImageInput',
+                                    name: 'GeneratedImageData',
+                                    value: result.generatedImage
+                                }).appendTo('form');
+                            } else {
+                                $('#hiddenGeneratedImageInput').val(result.generatedImage);
+                            }
+                        }
+
+                    } else {
+                        $('#errorMessage').text(result.errorMessage).show();
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $('#errorMessage').text('Error: ' + textStatus + ' - ' + errorThrown).show();
+                },
+                complete: function () {
+                    $('#loadingIndicator').hide();
+                    $('#generateButton').prop('disabled', false);
+                    $('#modifyButton').prop('disabled', false);
+                }
+            });
+        }
+
+        function updateAttemptsLeftDisplay() {
+            let attempts = localStorage.getItem('generateImageAttempts');
+            attempts = attempts ? parseInt(attempts) : 0;
+            let attemptsLeft = Math.max(0, 3 - attempts);
+            $('#attemptsLeft').text(attemptsLeft);
+        }
+
+        function updateAttemptsLeftDisplay() {
+            let attempts = localStorage.getItem('generateImageAttempts');
+            attempts = attempts ? parseInt(attempts) : 0;
+            let attemptsLeft = Math.max(0, 3 - attempts);
+            $('#attemptsLeft').text(attemptsLeft);
+        }
+
+        function resetAttempts() {
+            localStorage.removeItem('generateImageAttempts');
+            localStorage.removeItem('firstAttemptTime');
+            updateAttemptsLeftDisplay();
+            alert("Your attempts have been reset. You now have 3 new attempts.");
         }
     </script>
 </body>

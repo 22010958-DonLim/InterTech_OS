@@ -97,15 +97,6 @@ namespace StrawberryHub.Controllers
             IFormCollection form = HttpContext.Request.Form;
 
             string thePassword = form["Password"].ToString().Trim();
-            //string thePassword = user.UserPassword;
-
-            // Assuming user.UserPassword is a byte array
-            // byte[] passwordBytes = user.UserPassword;
-
-            // Convert byte array to string using UTF-8 encoding
-            //string thePassword = Encoding.UTF8.GetString(passwordBytes);
-
-
             byte[] passwordHash;
             using (var sha1 = SHA1.Create())
             {
@@ -244,13 +235,9 @@ namespace StrawberryHub.Controllers
                 var goalsToRemove = _context.StrawberryGoal.Where(g => g.UserId == id);
                 _context.StrawberryGoal.RemoveRange(goalsToRemove);
 
-                //Remove the UserID in Task as well (Task contain foregin Key of UserID)
-                var tasksToRemove = _context.StrawberryTask.Where(t => t.UserId == id);
-                _context.StrawberryTask.RemoveRange(tasksToRemove);
-
                 _context.StrawberryUser.Remove(user);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

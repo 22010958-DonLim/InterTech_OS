@@ -1,0 +1,273 @@
+* {
+    font-size: 62, 5%;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+body {
+    background-color: #fbfaff;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+main {
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 0.5rem;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: transparent;
+    /* Remove any box-shadow if present */
+    box-shadow: none;
+}
+
+.container {
+    display: flex;
+    flex-direction: column; /* or row, depending on your layout */
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+    width: 100%;
+    eight: 600px;
+}
+
+
+#header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2.5rem 2rem;
+    background-color: white;
+    -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
+    box-shadow: 0px 5px 15px 8px #e4e7fb;
+}
+
+.share {
+    width: 4.5rem;
+    height: 3rem;
+    background-color: #f55e77;
+    border: 0;
+    border-bottom: 0.2rem solid #c0506a;
+    border-radius: 2rem;
+    cursor: pointer;
+}
+
+    .share:active {
+        border-bottom: 0;
+    }
+
+    .share i {
+        color: #fff;
+        font-size: 2rem;
+    }
+
+h1 {
+    font-family: "Rubik", sans-serif;
+    font-size: 1.7rem;
+    color: #141a39;
+    text-transform: uppercase;
+    cursor: default;
+}
+
+#leaderboard {
+    width: 100%;
+    position: relative;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0px 5px 15px 8px rgba(228, 231, 251, 0.8);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.leaderboard-header {
+    background-color: #e6f2ff;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.leaderboards-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 40px; /* Increase gap for more space */
+    position: relative; /* For absolute positioning of the divider */
+    background-color: transparent;
+}
+
+    .leaderboards-container::after {
+        content: '';
+        position: absolute;
+        top: 10%; /* Start a bit below the top */
+        bottom: 10%; /* End a bit above the bottom */
+        left: 50%;
+        width: 1px;
+        background-color: #e0e0e0; /* Light grey color, adjust as needed */
+    }
+
+.leaderboard-column {
+    flex: 1;
+    max-width: calc(50% - 10px);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    color: #141a39;
+    cursor: default;
+}
+
+tr {
+    transition: all 0.2s ease-in-out;
+    border-radius: 0.2rem;
+}
+
+    tr:not(:first-child):hover {
+        background-color: #fff;
+        transform: scale(1.1);
+        -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
+        box-shadow: 0px 5px 15px 8px #e4e7fb;
+    }
+
+    tr:nth-child(odd) {
+        background-color: #f9f9f9;
+    }
+
+    tr:nth-child(1) {
+        color: #fff;
+    }
+
+td {
+    height: 5rem;
+    font-family: "Rubik", sans-serif;
+    font-size: 1.4rem;
+    padding: 1rem 2rem;
+    position: relative;
+}
+
+.number {
+    width: 1rem;
+    font-size: 2.2rem;
+    font-weight: bold;
+    text-align: left;
+}
+
+.name {
+    text-align: left;
+    font-size: 1.2rem;
+}
+
+.points {
+    font-weight: bold;
+    font-size: 1.3rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+    .points:first-child {
+        width: 10rem;
+    }
+
+.gold-medal {
+    height: 3rem;
+    margin-left: 1.5rem;
+}
+
+.ribbon {
+    display: none;
+}
+
+    .ribbon::before {
+        content: "";
+        height: 1.5rem;
+        width: 1.5rem;
+        bottom: -0.8rem;
+        left: 0.35rem;
+        transform: rotate(45deg);
+        background-color: #5c5be5;
+        position: absolute;
+        z-index: -1;
+    }
+
+    .ribbon::after {
+        content: "";
+        height: 1.5rem;
+        width: 1.5rem;
+        bottom: -0.8rem;
+        right: 0.35rem;
+        transform: rotate(45deg);
+        background-color: #5c5be5;
+        position: absolute;
+        z-index: -1;
+    }
+
+#buttons {
+    width: 100%;
+    margin-top: 3rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.exit {
+    width: 11rem;
+    height: 3rem;
+    font-family: "Rubik", sans-serif;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    color: #7e7f86;
+    border: 0;
+    background-color: #fff;
+    border-radius: 2rem;
+    cursor: pointer;
+}
+
+    .exit:hover {
+        border: 0.1rem solid #5c5be5;
+    }
+
+.continue {
+    width: 11rem;
+    height: 3rem;
+    font-family: "Rubik", sans-serif;
+    font-size: 1.3rem;
+    color: #fff;
+    text-transform: uppercase;
+    background-color: #5c5be5;
+    border: 0;
+    border-bottom: 0.2rem solid #3838b8;
+    border-radius: 2rem;
+    cursor: pointer;
+}
+
+    .continue:active {
+        border-bottom: 0;
+    }
+
+.hero {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden; /* Prevents the video from overflowing the container */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+}
+
+    .hero video {
+        position: fixed; /* Fixed position to cover the whole screen */
+        top: 0;
+        left: 0;
+        width: 100vw; /* Viewport width */
+        height: 100vh; /* Viewport height */
+        object-fit: cover; /* Cover the entire viewport without distortion */
+        z-index: -1; /* Ensure it stays in the background */
+    }

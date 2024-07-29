@@ -16,13 +16,7 @@
                 @Html.DisplayNameFor(model => model.TaskDescription)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsCompleted)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.PointsReward)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
             </th>
             <th></th>
         </tr>
@@ -34,13 +28,7 @@
                 @Html.DisplayFor(modelItem => item.TaskDescription)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsCompleted)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.PointsReward)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserId)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.TaskId">Edit</a> |

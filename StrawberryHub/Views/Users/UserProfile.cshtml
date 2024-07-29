@@ -5,41 +5,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Modern CSS Basics - Instagram Profile Page (Syntax - Class)</title>
+    <title>@Model.Username Profile Page</title>
     <link rel="stylesheet" href="~/css/styles.css" />
-
-<style>
-        .profile-header {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start; /* Changed from center to flex-start */
-            justify-content: center;
-        }
-        .user-articles {
-            border-top: 1px solid grey; /* Change color as needed */
-            padding-top: 20px; /* Add some space between the border and the content */
-
-        }
-</style>
+    <link rel="stylesheet" href="~/css/UserProfile.css" />
 </head>
 
 <body>
     <main>
         <header>
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
             <div class="header-wrap">
                 <div class="profile-pic">
-                    <img src="~/images/user.jpeg" alt="profile-logo" />
+                    <img src="~/photos/@Model.Picture" alt="profile-logo" />
                 </div>
                 <div class="profile-info">
                     <div class="title row">
                         <h2>@Model.Username</h2>
-                        <button class="primary primary-sh">Edit Profile</button>
+                        <div class="button-container">
+                            <a asp-action="EditProfile" asp-route-id="@Model.UserId" class="btn btn-primary edit-profile-btn">Edit Profile</a>
+                            <a asp-action="ChangePassword" asp-route-id="@Model.UserId" class="btn btn-secondary change-password-btn" style="background-color: #fc5a8d">Change Password</a>
+                        </div>
                     </div>
                     <div class="desktop-only">
                         <div class="details row">
                             <ul>
-                                <li><span>Rank:</span> @Model.RankName</li>
-                                <li><span>Points:</span> @Model.Points</li>
+                                <li><span><b>Rank:</b></span> @Model.RankName</li>
+                                <li><span><b>Points:</b></span> @Model.Points</li>
                             </ul>
                         </div>
                         <div class="descriptions row last">
@@ -57,7 +53,7 @@
                 {
 
                 <div class="element-item category gallery-item">
-                    <a class="portfolio_fullimage_layout" href="@Url.Action("Details", "Articles", new { id = article.ArticleId })">
+                    <a class="portfolio_fullimage_layout" href="@Url.Action("ArticleDetail", "Articles", new { id = article.ArticleId })">
                         <img src="~/photos/@article.Picture" alt="gallery-post">
                         <span class="item_content item-content">
                             <strong class="item_title">@article.Title</strong>

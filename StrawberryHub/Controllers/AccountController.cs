@@ -4,6 +4,9 @@ using System.Text.Unicode;
 using System.Text;
 using System.Data;
 using Telegram.Bot.Types;
+using Microsoft.EntityFrameworkCore;
+using StrawberryHub.Models;
+using System.Security.Cryptography;
 
 namespace StrawberryHub.Controllers;
 
@@ -72,8 +75,15 @@ public class AccountController : Controller
                  AND Password = HASHBYTES('SHA1', '{1}')";
 
         var rows = _dbSvc.GetTable(sqlLogin, user.Username, user.Password).Rows;
-        var used = _dbCtx.StrawberryUser
-            .Where(u => u.Username == user.Username)
+		byte[] passwordHash;
+		using (var sha1 = SHA1.Create())
+		{
+			passwordHash =
+				sha1.ComputeHash(Encoding.UTF8.GetBytes(user.Password));
+		}
+
+		var used = _dbCtx.StrawberryUser
+            .Where(u => u.Username == user.Username && u.Password == passwordHash)
             .FirstOrDefault();
 
         if (used == null)
@@ -129,16 +139,16 @@ public class AccountController : Controller
     public IActionResult VerifyOTP(LoginOTP userOtp)
     {
         const string sqlVerifyOtp = @"
-    SELECT COUNT(*) FROM StrawberryUser
-    WHERE UserId = '{0}' AND Otp = '{1}'";
+            SELECT COUNT(*) FROM StrawberryUser
+            WHERE UserId = '{0}' AND Otp = '{1}'";
 
         var rows = _dbSvc.GetTable(sqlVerifyOtp, userOtp.UserId, userOtp.OTP).Rows;
 
         if (rows.Count > 0)
         {
             const string sqlResetOtp = @"
-        UPDATE StrawberryUser SET Otp = 0, OtpCount = 0
-        WHERE UserId = '{0}'";
+                UPDATE StrawberryUser SET Otp = 0, OtpCount = 0
+                WHERE UserId = '{0}'";
 
             // Use parameters directly in the ExecSQL method
             _dbSvc.ExecSQL(sqlResetOtp, userOtp.UserId);
@@ -146,7 +156,7 @@ public class AccountController : Controller
             // Login successful, redirect to home page or any other desired page
             const string sqlLogin =
                            @"SELECT UserId, Username, UserRole FROM StrawberryUser WHERE Username = '{0}' 
-                 AND Password = HASHBYTES('SHA1', '{1}')";
+                            AND Password = HASHBYTES('SHA1', '{1}')";
 
             // Convert byte array to string using UTF-8 encoding
             //string thePassword = Encoding.UTF8.GetString(user.Password);
@@ -173,6 +183,55 @@ public class AccountController : Controller
                 if (returnUrl != null && Url.IsLocalUrl(returnUrl))
                 {
                     return Redirect(returnUrl);
+                }
+
+                var currentDate = DateTime.Now;
+                var startOfDay = currentDate.Date;
+                var loginTaskId = 1; // Replace with the actual ID for "Login" task
+
+                var hasLoggedInToday = _dbCtx.StrawberryUserTask
+                    .Any(s => s.UserId == userOtp.UserId &&
+                              s.TaskId == loginTaskId &&
+                              s.CompletedDate.HasValue &&
+                              s.CompletedDate.Value.Date == startOfDay);
+
+                if (!hasLoggedInToday)
+                {
+                    // Record the task completion in StrawberryUserTask
+                    var task = _dbCtx.StrawberryTask.Find(loginTaskId);
+                    if (task != null)
+                    {
+                        var newUserTask = new StrawberryUserTask
+                        {
+                            TaskId = loginTaskId,
+                            UserId = userOtp.UserId,
+                            Points = task.PointsReward,
+                            CompletedDate = currentDate
+                        };
+                        _dbCtx.StrawberryUserTask.Add(newUserTask);
+
+                        // Update the user's points in StrawberryUser table
+                        var user = _dbCtx.StrawberryUser.Find(userOtp.UserId);
+                        if (user != null)
+                        {
+                            user.Points += task.PointsReward;
+                            // Check if the user has enough points to rank up
+                            var nextRank = _dbCtx.StrawberryRank
+                                .Where(r => r.MinPoints <= user.Points && r.MaxPoints >= user.Points)
+                                .OrderBy(r => r.RankId)
+                                .FirstOrDefault();
+
+                            if (nextRank != null && nextRank.RankId > user.RankId)
+                            {
+                                // Update the user's rank
+                                user.RankId = nextRank.RankId;
+                            }
+
+                            _dbCtx.Entry(user).State = EntityState.Modified;
+                        }
+                    }
+
+                    _dbCtx.SaveChanges();
                 }
 
                 return RedirectToAction(REDIRECT_ACTN, REDIRECT_CNTR);

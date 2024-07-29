@@ -56,53 +56,53 @@
 			================================================== -->
 			<!-- portfolio_section - start
 			================================================== -->
-			<section class="portfolio_section section_space pt-0">
-				<div class="container">
-					<div class="filter_nav_wrap">
+		<section class="portfolio_section section_space pt-0">
+			<div class="container">
+				<div class="filter_nav_wrap">
 					@{
 						var stressManagementCount = Model.Count(a => a.GoalTypeId == 1);
 						var mentalWellnessCount = Model.Count(a => a.GoalTypeId == 2);
 						var newHobbiesCount = Model.Count(a => a.GoalTypeId == 3);
 						// Add more counts as needed
 					}
-						<h3 class="filter_nav_title text-uppercase">Filter by:</h3>
-						<ul class="filter-btns-group button-group ul_li">
-							<li><button class="button active" data-filter="*">All<sup>@Model.Count</sup></button></li>
-						<li><button class="button" data-filter=".stressManagement">Stress Management<sup>@stressManagementCount</sup></button></li>
-						<li><button class="button" data-filter=".mentalWellness">Mental Wellness<sup>@mentalWellnessCount</sup></button></li>
-						<li><button class="button" data-filter=".newHobbies">New Interest<sup></sup>@newHobbiesCount</button></li>
-						</ul>
-					</div>
-					<div class="element_grid">
+					<h3 class="filter_nav_title text-uppercase">Filter by:</h3>
+					<ul class="filter-btns-group button-group ul_li">
+						<li><button class="button active" data-filter="*">All<sup>@Model.Count</sup></button></li>
+						<li><button class="button" data-filter=".stress-management">Stress Management<sup>@stressManagementCount</sup></button></li>
+						<li><button class="button" data-filter=".mental-wellness">Mental Wellness<sup>@mentalWellnessCount</sup></button></li>
+						<li><button class="button" data-filter=".new-hobbies">New Interest<sup>@newHobbiesCount</sup></button></li>
+					</ul>
+				</div>
+				<div class="element_grid">
 					@foreach (var article in Model)
 					{
 						string category = "";
 						switch (article.GoalTypeId)
 						{
 							case 1:
-								category = "stressManagement";
+								category = "stress-management";
 								break;
 							case 2:
-								category = "mentalWellness";
+								category = "mental-wellness";
 								break;
 							case 3:
-								category = "newHobbies";
+								category = "new-hobbies";
 								break;
 								// Add more cases as needed
 						}
-						<div class="element-item category" data-category=@category>
-							<a class="portfolio_fullimage_layout" href="@Url.Action("Details", "Articles", new { id = article.ArticleId })">
+						<div class="element-item @category">
+							<a class="portfolio_fullimage_layout" href="@Url.Action("ArticleDetail", "Articles", new { id = article.ArticleId })">
 								<img src="~/photos/@article.Picture" alt="image_not_found" style="max-width: 1260px; max-height: 900px;">
 								<span class="item_content item-content">
 									<strong class="item_title">@article.Title</strong>
-									<small class="item_categories text-uppercase">@category</small>
+									<small class="item_categories text-uppercase">@category.Replace("-", " ")</small>
 								</span>
 							</a>
 						</div>
 					}
-					</div>
 				</div>
-			</section>
+			</div>
+		</section>
 			<!-- portfolio_section - end
 			================================================== -->
 
@@ -114,58 +114,7 @@
 		<footer class="footer_section">
 			<div class="container">
 
-				<h2 class="biggest_title text-center">A modern creative agency</h2>
-
-				<div class="footer_widget_area">
-					<div class="row">
-						<div class="col-lg-5 col-md-12">
-							<div class="footer_widget">
-								<div class="footer_copyright">
-									<div class="footer-logo">
-										<img src="assets/images/logo/logo_white_1x.png" srcset="assets/images/logo/logo_white_2x.png 2x" alt="logo_not_found">
-									</div>
-									<p class="mb-0">© 2021  all right reserved</p>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-lg-3 col-md-4 col-sm-4">
-							<div class="footer_widget footer_contact_info">
-								<h3 class="footer_widget_title text-uppercase">Contact</h3>
-								<ul class="ul_li_block">
-									<li>
-										<span class="d-block">Gullu nitroso antanito st,</span> 110 Catania, New york
-									</li>
-									<li><a href="#!">+39 348 9195991</a></li>
-									<li><a href="#!">hello@danilodemarco.com</a></li>
-								</ul>
-							</div>
-						</div>
-
-						<div class="col-lg-2 col-md-4 col-sm-4">
-							<div class="footer_widget footer_office_time">
-								<h3 class="footer_widget_title text-uppercase">Office Time</h3>
-								<ul class="ul_li_block">
-									<li>9AM - 5PM</li>
-									<li>(sunday closed)</li>
-								</ul>
-							</div>
-						</div>
-
-						<div class="col-lg-2 col-md-4 col-sm-4">
-							<div class="footer_widget social_text_layout">
-								<h3 class="footer_widget_title text-uppercase">Social Links</h3>
-								<ul class="ul_li_block">
-									<li><a href="#!">Facebook</a></li>
-									<li><a href="#!">Twitter</a></li>
-									<li><a href="#!">Linkedin</a></li>
-									<li><a href="#!">Pinterest</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-
+				<h2 class="biggest_title text-center">One Berry at a Time</h2>
 			</div>
 		</footer>
 		<!-- footer_section - end

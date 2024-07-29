@@ -1,0 +1,146 @@
+﻿@model StrawberryHub.Models.EditProfileViewModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container" style="font-family: 'Calibre';">
+        <h1 class="page_title text-white">
+            <span class="d-block">Edit </span>
+            <span class="d-block">Profile </span>
+        </h1>
+    </div>
+    <div class="container pt-1">
+        <div class="row">
+            <div class="col-md-6">
+                <form asp-action="EditProfile" enctype="multipart/form-data" novalidate>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input type="hidden" asp-for="UserId" />
+                    <input type="hidden" asp-for="Points" data-val="false"/>
+                    <input type="hidden" asp-for="RankId" data-val="false" />
+                    <input type="hidden" asp-for="Password" data-val="false" />
+                    <input type="hidden" asp-for="Picture" data-val="false" />
+                    <input type="hidden" asp-for="Username" data-val="false" />
+
+                    <div class="col-6 mb-3">
+                        <label asp-for="Photo">Edit image</label>
+                        <input value="~/Photos/@Model.Picture" asp-for="Photo" class="mb-3 form-control" onchange="previewImage(this)" data-val="false">
+                        <span asp-validation-for="Photo" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="control-label"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LastName" class="control-label"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Select Goal Types :</label>
+
+                        <div class="form-group">
+                            <label class="control-label">Goal Types</label>
+                            @if (Model.GoalTypes != null && Model.GoalTypes.Any())
+                            {
+                                @for (int i = 0; i < Model.GoalTypes.Count; i++)
+                                {
+                                    <div class="form-check">
+                                        <input type="hidden" asp-for="@Model.GoalTypes[i].GoalTypeId" />
+                                        <input type="hidden" asp-for="@Model.GoalTypes[i].Types" />
+                                        <input class="form-check-input" type="checkbox" asp-for="@Model.GoalTypes[i].IsSelected" />
+                                        <label class="form-check-label" asp-for="@Model.GoalTypes[i].IsSelected">
+                                            @Model.GoalTypes[i].Types
+                                        </label>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p>No goal types available.</p>
+                            }
+                         </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <img id="ImgPhoto" src="~/Photos/@Model.Picture" class="img-fluid" alt="Article Image" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <a asp-action="UserProfile" asp-controller="Users" class="btn btn-secondary">Back to Profile</a>
+    </div>
+    @section Scripts {
+        <script>
+            function previewImage(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById('ImgPhoto').src = e.target.result;
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+                $(document).ready(function () {
+                    let typingTimer;
+                    const doneTypingInterval = 500; // ms
+
+                    $('#Email').on('keyup', function () {
+                        clearTimeout(typingTimer);
+                        typingTimer = setTimeout(validateEmail, doneTypingInterval);
+                    });
+
+                function validateEmail() {
+                    const email = $('#Email').val();
+                    if (email.length > 0) {
+                        $.ajax({
+                            url: '@Url.Action("ValidateEmail", "Users")',
+                            type: 'GET',
+                            data: { email: email },
+                            success: function (response) {
+                                if (response.isValid) {
+                                    $('#email-validation').text(response.message).css('color', 'green');
+                                } else {
+                                    $('#email-validation').text(response.message).css('color', 'red');
+                                }
+                            }
+                        });
+                    } else {
+                        $('#email-validation').text('');
+                    }
+                }
+            });
+        </script>
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+</body>
+
+</html>

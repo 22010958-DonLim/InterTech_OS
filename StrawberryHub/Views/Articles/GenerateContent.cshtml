@@ -1,0 +1,340 @@
+﻿@model StrawberryHub.Models.StrawberryArticle
+
+@{
+    ViewData["Title"] = "Create";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Create Article</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div class="container" style="font-family: 'Calibre';">
+        <h1 class="page_title text-white">
+            <span class="d-block">Create </span>
+            <span class="d-block">An Article.</span>
+        </h1>
+    </div>
+    <div class="container pt-1">
+        <div class="row">
+            <!-- AI Content Generation Section -->
+            <div class="col-md-6">
+                <div class="container mt-5">
+                    <h1>Generate Article Content</h1>
+                    <div id="contentContainer" class="mt-4">
+                        <div id="loadingIndicator" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p>Generating content, please wait...</p>
+                        </div>
+                        <div id="modifyIndicator" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p>Modifying content, please wait...</p>
+                        </div>
+                        <div id="generatedContent" style="display: none;">
+                            <h2 id="generatedTitle" class="mb-3"></h2>
+                            <div id="generatedBody" class="mb-4" style="white-space: pre-wrap;"></div>
+                        </div>
+                        <div id="searchResults" style="display: none;">
+                            <h3>Related Links</h3>
+                            <ul id="searchLinks"></ul>
+                        </div>
+                        <div id="modifyContent">
+                            <label for="userPrompt">User Prompt:</label>
+                            <input id="userPrompt" cstyle = "color: black" lass="form-control form-control-sm" placeholder="Enter your prompt">
+                            <!--<button type="button" id="submitPromptButton" class="btn btn-primary mt-3" onclick="modifyContent()">Submit Prompt</button> -->
+                        </div>
+                        <div id="savekeeper">
+                            <input type="hidden" id="hiddenGeneratedTitle" value="">
+                            <input type="hidden" id="hiddenGeneratedBody" value="">
+                        </div>
+                        <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
+                    </div>
+                    <button id="generateButton" class="btn btn-primary" onclick="generateContent()">Generate New Content</button>
+                    <button type="button" id="modifyButton" class="btn btn-primary" onclick="modifyContent()">Modify Content</button>
+                    <button type="button" id="modifyPicButton" class="btn btn-primary" onclick="modifyPhoto()">Modify Picture</button>
+                </div>
+            </div>
+
+            <!-- Article Creation Form Section -->
+            <div class="col-md-6">
+                <form id="articleForm" asp-controller="Articles" asp-action="CreateArticlePage" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input type="hidden" asp-for="UserId" />
+                    <input type="hidden" asp-for="PublishedDate" />
+
+                    <div class="form-group">
+                        <label asp-for="GoalTypeId" class="control-label">Goal Type ID</label>
+                        <select style = "color: black" asp-for="GoalTypeId" class="form-control" asp-items="ViewBag.GoalTypeId"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Title" class="control-label">Title</label>
+                        <input style="color: black" asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ArticleContent" class="control-label">Article Content</label>
+                        <textarea style = "color: black" asp-for="ArticleContent" class="form-control" rows="6"></textarea>
+                        <span asp-validation-for="ArticleContent" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Photo" class="control-label">Add an image</label>
+                        <input asp-for="Photo" class="form-control-file" onchange="preview()">
+                        <span asp-validation-for="Photo" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" style="background-color: #fc5a8d;" />
+                    </div>
+                </form>
+                <img id="frame" src="" class="img-fluid mt-3 d-none" />
+            </div>
+        </div>
+    </div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function generateContent() {
+            $('#loadingIndicator').show();
+            $('#generatedContent').hide();
+            $('#errorMessage').hide();
+            $('#generateButton').prop('disabled', true);
+            $('#modifyButton').prop('disabled', true);
+
+            $.ajax({
+                url: '@Url.Action("GeneratedContent", "Articles")',
+                type: 'GET',
+                timeout: 60000, // 60 seconds timeout
+                success: function (result) {
+                    if (result.success) {
+                        $('#generatedTitle').text(result.generatedTitle || 'No title generated');
+                        $('#generatedBody').html(result.generatedContent.replace(/\n/g, '<br>') || 'No content generated');
+                        $('#hiddenGeneratedTitle').val(result.generatedTitle || 'No title generated');
+                        $('#hiddenGeneratedBody').val(result.generatedContent.replace(/\n/g, '<br>') || 'No content generated');
+                        $('#generatedContent').show();
+
+                            // Populate form fields
+                            $('input[name="Title"]').val(result.generatedTitle);
+                            $('textarea[name="ArticleContent"]').val(result.generatedContent);
+
+                            // Display and set the generated image
+                            if (result.generatedImage) {
+                                var frame = document.getElementById("frame");
+                                frame.src = result.generatedImage;
+                                frame.className = "img-fluid mt-3";
+                                frame.style.display = "block"; // Ensure the image is visible
+                                $('#hiddenGeneratedImage').val(result.generatedImage);
+
+                                fetch(result.generatedImage)
+                                    .then(res => res.blob())
+                                    .then(blob => {
+                                        const file = new File([blob], "generated-image.png", { type: "image/png" });
+
+                                        // Create a FileList object
+                                        const dataTransfer = new DataTransfer();
+                                        dataTransfer.items.add(file);
+
+                                        // Set the file input's files
+                                        document.querySelector('input[name="Photo"]').files = dataTransfer.files;
+                                    });
+
+                                // Create a hidden input for the generated image if it doesn't exist
+                                if ($('#hiddenGeneratedImageInput').length === 0) {
+                                    $('<input>').attr({
+                                        type: 'hidden',
+                                        id: 'hiddenGeneratedImageInput',
+                                        name: 'GeneratedImageData',
+                                        value: result.generatedImage
+                                    }).appendTo('form');
+                                } else {
+                                    $('#hiddenGeneratedImageInput').val(result.generatedImage);
+                                }
+
+                                if (result.relatedLinks && result.relatedLinks.length > 0) {
+                                    console.log('Related Links:', result.relatedLinks);  // Log the entire relatedLinks array
+                                    $('#searchLinks').empty();
+                                    result.relatedLinks.forEach(link => {
+                                        console.log('Link object:', link);  // Log each link object
+                                        console.log('Link URL:', link.url);
+                                        console.log('Link Title:', link.title);
+                                        $('#searchLinks').append(`<li><a href="${link.url}" target="_blank">${link.title}</a></li>`);
+                                    });
+                                    $('#searchResults').show();
+                                } else {
+                                    console.log('No related links found');
+                                    $('#searchResults').hide();
+                                }
+                            }
+           
+                    } else {
+                        $('#errorMessage').text(result.errorMessage).show();
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $('#errorMessage').text('Error: ' + textStatus + ' - ' + errorThrown).show();
+                },
+                complete: function () {
+                    $('#loadingIndicator').hide();
+                    $('#generateButton').prop('disabled', false);
+                    $('#modifyButton').prop('disabled', false);
+                }
+            });
+        }
+
+        function modifyContent() {
+            const EP_EX_API = '@(Url.Content("~/api/article"))';
+
+            $('#modifyIndicator').show();
+            $('#generatedContent').hide();
+            $('#errorMessage').hide();
+            $('#submitPromptButton').prop('disabled', true);
+            $('#generateButton').prop('disabled', true);
+            $('#modifyButton').prop('disabled', true);
+
+            const userPrompt = $('#userPrompt').val();
+            const generatedTitle = $('#hiddenGeneratedTitle').val();
+            const generatedBody = $('#hiddenGeneratedBody').val();
+            const url = `${EP_EX_API}/Modify/${userPrompt}/${generatedTitle}/${generatedBody}`;
+
+            $.ajax({
+                url: '@Url.Action("ModifyContent", "Articles")',
+                type: 'POST',
+                data: {
+                    userPrompt: userPrompt,
+                    generatedTitle: generatedTitle,
+                    generatedBody: generatedBody
+                },
+                timeout: 60000, // 60 seconds timeout
+                success: function (result) {
+                    if (result.success) {
+                        $('#generatedTitle').text(result.generatedTitles || 'No title generated');
+                        $('#generatedBody').html(result.generatedContent.replace(/\n/g, '<br>') || 'No content generated');
+                        $('#generatedContent').show();
+                    } else {
+                        $('#errorMessage').text(result.errorMessage).show();
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error:', jqXHR.status, jqXHR.statusText, errorThrown);
+                    $('#errorMessage').text(`Error: ${jqXHR.status} - ${jqXHR.statusText} - ${errorThrown}`).show();
+                },
+                complete: function () {
+                    $('#modifyIndicator').hide();
+                    $('#submitPromptButton').prop('disabled', false);
+                    $('#generateButton').prop('disabled', false);
+                    $('#modifyButton').prop('disabled', false);
+                }
+            });
+        }
+
+            function modifyPhoto() {
+                $('#modifyIndicator').show();
+                $('#generatedContent').hide();
+                $('#errorMessage').hide();
+                $('#submitPromptButton').prop('disabled', true);
+                $('#generateButton').prop('disabled', true);
+                $('#modifyButton').prop('disabled', true);
+                $('#modifyPicButton').prop('disabled', true);
+
+                const userPrompt = $('#userPrompt').val();
+                const generatedTitle = $('#hiddenGeneratedTitle').val();
+
+                $.ajax({
+                    url: '@Url.Action("ModifyPhoto", "Articles")',
+                    type: 'POST',
+                    data: {
+                        userPrompt: userPrompt,
+                        title: generatedTitle,
+                    },
+                    timeout: 60000, // 60 seconds timeout
+                    success: function (result) {
+                        if (result.success) {
+                            // Display and set the generated image
+                            if (result.generatedImage) {
+                                $('#generatedContent').show();
+                                var frame = document.getElementById("frame");
+                                frame.src = result.generatedImage;
+                                frame.className = "img-fluid mt-3";
+                                frame.style.display = "block"; // Ensure the image is visible
+                                $('#hiddenGeneratedImage').val(result.generatedImage);
+
+                                fetch(result.generatedImage)
+                                    .then(res => res.blob())
+                                    .then(blob => {
+                                        const file = new File([blob], "modified-image.png", { type: "image/png" });
+
+                                        // Create a FileList object
+                                        const dataTransfer = new DataTransfer();
+                                        dataTransfer.items.add(file);
+
+                                        // Set the file input's files
+                                        document.querySelector('input[name="Photo"]').files = dataTransfer.files;
+                                    });
+
+                                // Create a hidden input for the generated image if it doesn't exist
+                                if ($('#hiddenGeneratedImageInput').length === 0) {
+                                    $('<input>').attr({
+                                        type: 'hidden',
+                                        id: 'hiddenGeneratedImageInput',
+                                        name: 'GeneratedImageData',
+                                        value: result.generatedImage
+                                    }).appendTo('form');
+                                } else {
+                                    $('#hiddenGeneratedImageInput').val(result.generatedImage);
+                                }
+
+                            } else {
+                                $('#errorMessage').text('Generated image URL is empty').show();
+                            }
+                        } else {
+                            console.error('Error from server:', result);
+                            $('#errorMessage').text(result.error || 'Unknown error occurred').show();
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error('AJAX Error Status:', jqXHR.status);
+                        console.error('AJAX Error Text Status:', textStatus);
+                        console.error('AJAX Error Thrown:', errorThrown);
+                        console.error('AJAX Error Response Text:', jqXHR.responseText);
+                        try {
+                            var errorObj = JSON.parse(jqXHR.responseText);
+                            console.error('Parsed Error Object:', errorObj);
+                        } catch (e) {
+                            console.error('Could not parse error response as JSON');
+                        }
+                        $('#errorMessage').text(`Error: ${jqXHR.status} - ${textStatus} - ${errorThrown}`).show();
+                    },
+                    complete: function () {
+                        $('#modifyIndicator').hide();
+                        $('#loadingIndicator').hide();
+                        $('#submitPromptButton').prop('disabled', false);
+                        $('#generateButton').prop('disabled', false);
+                        $('#modifyButton').prop('disabled', false);
+                        $('#modifyPicButton').prop('disabled', false);
+
+                    }
+                });
+            }
+            function preview() {
+                var frame = document.getElementById("frame");
+                frame.src = URL.createObjectURL(event.target.files[0]);
+                frame.className = "img-fluid mt-3";
+            }
+    </script>
+}
+</body>

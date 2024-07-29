@@ -1,0 +1,108 @@
+﻿@model List<StrawberryArticle>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+
+	<title>Strawberry Articles</title>
+	<style>
+		/* This will set the color of the item title and categories in light mode */
+		body .item_title, body .item_categories {
+			color: black;
+		}
+
+		/* This will set the color of the item title and categories in dark mode */
+		body.dark-mode .item_title, body.dark-mode .item_categories {
+			color: black;
+		}
+	</style>
+
+</head>
+
+
+<body>
+		<!-- backtotop - start -->
+		<div class="backtotop">
+			<a href="#" class="scroll">
+				Back to top
+			</a>
+		</div>
+		<!-- backtotop - end -->
+		<!-- header_section - start
+		================================================== -->
+		
+		<!-- main body - start
+		================================================== -->
+		<main>
+
+			<!-- breadcrumb_section - start
+			================================================== -->
+			<section class="breadcrumb_section">
+				<div class="container">
+					<h1 class="page_title text-white">
+						<span class="d-block">Admin </span>
+						<span class="d-block">Article</span>
+					</h1>
+					<p class="mb-0">
+					These articles are generated from our creative admins to give daily post on maintaining stress management, mental wellness, and find new interest!
+					</p>
+				</div>
+			</section>
+			<!-- breadcrumb_section - end
+			================================================== -->
+			<!-- portfolio_section - start
+			================================================== -->
+			<section class="portfolio_section section_space pt-0">
+				<div class="container">
+					<div class="element_grid">
+					@foreach (var article in Model)
+					{
+						string category = "";
+						switch (article.GoalTypeId)
+						{
+							case 1:
+								category = "stressManagement";
+								break;
+							case 2:
+								category = "mentalWellness";
+								break;
+							case 3:
+								category = "newHobbies";
+								break;
+								// Add more cases as needed
+						}
+						<div class="element-item category" data-category=@category>
+							<a class="portfolio_fullimage_layout" href="@Url.Action("ArticleDetail", "Articles", new { id = article.ArticleId })">
+								<img src="~/photos/@article.Picture" alt="image_not_found" style="max-width: 1260px; max-height: 900px;">
+								<span class="item_content item-content">
+									<strong class="item_title">@article.Title</strong>
+									<small class="item_categories text-uppercase">@category</small>
+								</span>
+							</a>
+						</div>
+					}
+					</div>
+				</div>
+			</section>
+			<!-- portfolio_section - end
+			================================================== -->
+
+		</main>
+		<!-- main body - end
+		================================================== -->
+		<!-- footer_section - start
+		================================================== -->
+		<footer class="footer_section">
+			<div class="container">
+			<h2 class="biggest_title text-center">One Berry at a Time</h2>
+			</div>
+		</footer>
+		<!-- footer_section - end
+		================================================== -->
+
+</body>
+</html>

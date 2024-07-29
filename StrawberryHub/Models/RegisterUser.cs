@@ -17,11 +17,15 @@ public class RegisterUser
 
     public string? LastName { get; set; }
 
-    public string? Email { get; set; }
+	[DataType(DataType.EmailAddress)]
+	public string? Email { get; set; }
 
     public int? Points { get; set; }
 
     public int? RankId { get; set; }
+
+    [ValidateNever]
+    public IFormFile Photo { get; set; } = null!;
 
 
 

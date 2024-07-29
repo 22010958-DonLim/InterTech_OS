@@ -17,6 +17,7 @@ public partial class StrawberryArticle
 
     public DateTime PublishedDate { get; set; }
 
+    [ValidateNever]
     public IFormFile Photo { get; set; } = null!;
 
     public string Picture { get; set; } = null!;
@@ -30,6 +31,9 @@ public partial class StrawberryArticle
     public virtual StrawberryUser StrawberryUser { get; set; } = null!;
 
     [ValidateNever]
-    public virtual ICollection<StrawberryLikeComment> StrawberryLikeComments { get; set; } = new List<StrawberryLikeComment>();
+    public virtual ICollection<StrawberryComment> StrawberryComment { get; set; } = new List<StrawberryComment>();
+
+    [ValidateNever]
+    public virtual ICollection<StrawberryLike> StrawberryLike { get; set; } = new List<StrawberryLike>();
 
 }

@@ -281,7 +281,8 @@ public class UsersAPIController : ControllerBase
             var allArticles = _context.StrawberryArticle
                 .Include(u => u.GoalType)
                 .Include(u => u.StrawberryUser)
-                .Include(u => u.StrawberryLikeComments)
+                .Include(u => u.StrawberryLike)
+                .Include(u => u.StrawberryComment)
                 .ToList();
 
             // Project articles into custom object
@@ -297,8 +298,8 @@ public class UsersAPIController : ControllerBase
                     UserId = article.UserId,
                     Username = article.StrawberryUser.Username,
                     Picture = article.Picture,
-                    TotalLikes = article.StrawberryLikeComments.Count(l => l.Likes == 1), // Count the likes
-                    TotalComments = article.StrawberryLikeComments.Count(c => c.CommentText != null) // Count the comments
+                    TotalLikes = article.StrawberryLike.Count(l => l.Likes == 1), // Count the likes
+                    TotalComments = article.StrawberryComment.Count(c => c.CommentText != null) // Count the comments
                 })
                 .ToList();
 

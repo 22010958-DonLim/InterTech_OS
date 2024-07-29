@@ -14,23 +14,24 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<StrawberryArticle> StrawberryArticle { get; set; }
 
-    public virtual DbSet<StrawberryEmergencySupport> StrawberryEmergencySupport { get; set; }
+    public virtual DbSet<StrawberryComment> StrawberryComment { get; set; }
+
+    public virtual DbSet<StrawberryFeedback> StrawberryFeedback { get; set; }
 
     public virtual DbSet<StrawberryGoal> StrawberryGoal { get; set; }
 
     public virtual DbSet<StrawberryGoalType> StrawberryGoalType { get; set; }
 
-    public virtual DbSet<StrawberryLikeComment> StrawberryLikeComment { get; set; }
+    public virtual DbSet<StrawberryLike> StrawberryLike { get; set; }
 
     public virtual DbSet<StrawberryRank> StrawberryRank { get; set; }
-
-    public virtual DbSet<StrawberryReflection> StrawberryReflection { get; set; }
 
     public virtual DbSet<StrawberryTask> StrawberryTask { get; set; }
 
     public virtual DbSet<StrawberryUser> StrawberryUser { get; set; }
+	public virtual DbSet<StrawberryUserTask> StrawberryUserTask { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<StrawberryArticle>(entity =>
         {
@@ -53,18 +54,45 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("FK__Strawberr__UserI__2739D489");
         });
 
-        modelBuilder.Entity<StrawberryEmergencySupport>(entity =>
+        modelBuilder.Entity<StrawberryComment>(entity =>
         {
-            entity.HasKey(e => e.EmergencySupportId).HasName("PK__Strawber__812C07C5E1A56D8D");
+            entity.HasKey(e => e.CommentId).HasName("PK__Strawber__C3B4DFCA089D729B");
 
-            entity.Property(e => e.Message).IsUnicode(false);
-            entity.Property(e => e.Timestamp).HasColumnType("datetime");
+            entity.Property(e => e.CommentDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CommentText)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.StrawberryArticle).WithMany(p => p.StrawberryComment)
+                .HasForeignKey(d => d.ArticleId)
+                .HasConstraintName("FK__Strawberr__Artic__681373AD");
+
+            entity.HasOne(d => d.StrawberryUser).WithMany(p => p.StrawberryComment)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__Strawberr__UserI__671F4F74");
+        });
+
+        modelBuilder.Entity<StrawberryFeedback>(entity =>
+        {
+            entity.HasKey(e => e.FeedbackId).HasName("PK__Strawber__6A4BEDD6B8C836C9");
+
+            entity.HasOne(d => d.User).WithMany(p => p.StrawberryFeedback)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__Strawberr__UserI__1B9317B3");
         });
 
         modelBuilder.Entity<StrawberryGoal>(entity =>
         {
             entity.HasKey(e => e.GoalId).HasName("PK__Strawber__8A4FFFD171B438F2");
-        });
+
+			entity.HasOne(d => d.GoalType).WithMany(p => p.Goal)
+				.HasForeignKey(d => d.GoalTypeId)
+				.HasConstraintName("FK__Strawberr__GoalT__4B7734FF");
+
+			entity.HasOne(d => d.User).WithMany(p => p.Goal)
+				.HasForeignKey(d => d.UserId)
+				.HasConstraintName("FK__Strawberr__UserI__4A8310C6");
+		});
 
         modelBuilder.Entity<StrawberryGoalType>(entity =>
         {
@@ -75,22 +103,20 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Type).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<StrawberryLikeComment>(entity =>
+        modelBuilder.Entity<StrawberryLike>(entity =>
         {
-            entity.HasKey(e => e.CommentId).HasName("PK__Strawber__C3B4DFCA69D54E85");
+            entity.HasKey(e => e.LikeId).HasName("PK__Strawber__A2922C14C86CAC84");
 
-            entity.Property(e => e.CommentText).IsUnicode(false);
-            entity.Property(e => e.CommentTimestamp).HasColumnType("datetime");
-            entity.Property(e => e.LikeTimestamp).HasColumnType("datetime");
             entity.Property(e => e.Likes).HasDefaultValueSql("((0))");
+            entity.Property(e => e.LikeDateTime).HasColumnType("datetime");
 
-            entity.HasOne(d => d.StrawberryArticle).WithMany(p => p.StrawberryLikeComments)
+            entity.HasOne(d => d.StrawberryArticle).WithMany(p => p.StrawberryLike)
                 .HasForeignKey(d => d.ArticleId)
-                .HasConstraintName("FK__Strawberr__Artic__2CF2ADDF");
+                .HasConstraintName("FK__Strawberr__Artic__6442E2C9");
 
-            entity.HasOne(d => d.StrawberryUser).WithMany(p => p.StrawberryLikeComment)
+            entity.HasOne(d => d.StrawberryUser).WithMany(p => p.StrawberryLike)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Strawberr__UserI__2BFE89A6");
+                .HasConstraintName("FK__Strawberr__UserI__634EBE90");
         });
 
         modelBuilder.Entity<StrawberryRank>(entity =>
@@ -104,21 +130,13 @@ public partial class AppDbContext : DbContext
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<StrawberryReflection>(entity =>
-        {
-            entity.HasKey(e => e.ReflectionId).HasName("PK__Strawber__5D73947ADF9ADBDA");
-
-            entity.Property(e => e.Content).IsUnicode(false);
-            entity.Property(e => e.Date).HasColumnType("date");
-        });
-
         modelBuilder.Entity<StrawberryTask>(entity =>
         {
-            entity.HasKey(e => e.TaskId).HasName("PK__Strawber__7C6949B1ADE6F83B");
+			entity.HasKey(e => e.TaskId).HasName("PK__Strawber__7C6949B1ADE6F83B");
 
-            entity.Property(e => e.IsCompleted).HasDefaultValueSql("((0))");
-            entity.Property(e => e.TaskDescription).IsUnicode(false);
-        });
+			entity.Property(e => e.TaskDescription).IsUnicode(false);
+
+		});
 
         modelBuilder.Entity<StrawberryUser>(entity =>
         {
@@ -151,20 +169,40 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Username)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.Picture)
+               .HasMaxLength(70)
+               .IsUnicode(false);
+            modelBuilder.Entity<StrawberryUser>()
+                .Ignore(e => e.Photo);
             //entity.Property(e => e.GoalTypeId)
-                //.HasMaxLength(50)
-                //.IsUnicode(false);
+            //.HasMaxLength(50)
+            //.IsUnicode(false);
 
             //entity.HasOne(d => d.StrawberryGoalType).WithMany(p => p.StrawberryUsers)
-                //.HasForeignKey(d => d.GoalTypeId)
-                //.HasConstraintName("FK__Strawberr__GoalT__7F2BE32F");
+            //.HasForeignKey(d => d.GoalTypeId)
+            //.HasConstraintName("FK__Strawberr__GoalT__7F2BE32F");
 
             entity.HasOne(d => d.StrawberryRank).WithMany(p => p.StrawberryUsers)
                 .HasForeignKey(d => d.RankId)
                 .HasConstraintName("FK__Strawberr__RankI__04E4BC85");
         });
 
-        OnModelCreatingPartial(modelBuilder);
+		modelBuilder.Entity<StrawberryUserTask>(entity =>
+		{
+			entity.HasKey(e => e.CompletedId).HasName("PK__Strawber__48D815B814A2BE2B");
+
+			entity.Property(e => e.CompletedDate).HasColumnType("datetime");
+
+			entity.HasOne(d => d.StrawberryTask).WithMany(p => p.StrawberryUserTask)
+				.HasForeignKey(d => d.TaskId)
+				.HasConstraintName("FK__Strawberr__TaskI__6AEFE058");
+
+			entity.HasOne(d => d.StrawberryUser).WithMany(p => p.StrawberryUserTask)
+				.HasForeignKey(d => d.UserId)
+				.HasConstraintName("FK__Strawberr__UserI__6BE40491");
+		});
+
+		OnModelCreatingPartial(modelBuilder);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

@@ -22,8 +22,9 @@ namespace StrawberryHub.Controllers
         // GET: Tasks
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.StrawberryTask.Include(t => t.User);
-            return View(await appDbContext.ToListAsync());
+            var strawberryTasks = await _context.StrawberryTask
+                    .ToListAsync();
+            return View(strawberryTasks);
         }
 
         // GET: Tasks/Details/5
@@ -35,7 +36,6 @@ namespace StrawberryHub.Controllers
             }
 
             var task = await _context.StrawberryTask
-                .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.TaskId == id);
             if (task == null)
             {
@@ -65,13 +65,13 @@ namespace StrawberryHub.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.StrawberryUser, "UserId", "UserId", task.UserId);
             return View(task);
         }
 
         // GET: Tasks/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
             if (id == null || _context.StrawberryTask == null)
             {
                 return NotFound();
@@ -82,7 +82,6 @@ namespace StrawberryHub.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.StrawberryUser, "UserId", "UserId", task.UserId);
             return View(task);
         }
 
@@ -118,7 +117,6 @@ namespace StrawberryHub.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.StrawberryUser, "UserId", "UserId", task.UserId);
             return View(task);
         }
 
@@ -131,7 +129,6 @@ namespace StrawberryHub.Controllers
             }
 
             var task = await _context.StrawberryTask
-                .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.TaskId == id);
             if (task == null)
             {
